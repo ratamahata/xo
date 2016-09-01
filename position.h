@@ -2,13 +2,15 @@
 #ifndef positionH
 #define positionH
 //---------------------------------------------------------------------------
-#include "position.h"
+
 #include "tnode.h"
 #include "SimplyNumbers.h"
 #include "Hashtable.h"
 
+#define fsize 15 //field size
+
 struct PositionHistory
-{ unsigned char en[20], nm;
+{ unsigned char en[16], nm;
   int symmX, symmY, symmW, symmXYW;
 };
 
@@ -23,6 +25,11 @@ public:
 
         TNode *node;
         int count;
+
+        unsigned char kl[fsize*fsize], // 0 == empty, disabled
+                                       // 1 == empty, enabled
+                id;                       // 0 == 'x',first
+
 };
 
 //---------------------------------------------------------------------------

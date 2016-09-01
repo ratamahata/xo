@@ -255,7 +255,7 @@ short int Al_ext::put(TNodeLink *link) {
             for (int i=-1; i<2; i++)
               for (int j=-1; j<2; j++)
                 if ((!i)&&(!j)) continue;
-                else if (enable(x+i*d,y+j*d))
+                else if (enable( x+i*d,y+j*d))
                 history[count].en[t++] = (y+j*d)*fsize+x+i*d;
   }
 
@@ -343,7 +343,7 @@ int Al_ext::put(int N0, bool& swapX, bool& swapY, bool& swapW) {
     if (notfound) {
         N = N0;
         int old = N;
-                if (attempt < 1 && history[count-1].symmX == 0 && x!= 7) {
+                if (attempt < 1 && history[count-1].symmX  == 0 && x!= 7) {
                     N = y*15+(14-x);
                     attempt = 1;
                     swX = true; swY = false; swW = false;

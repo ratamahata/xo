@@ -1,4 +1,4 @@
-#include "position.h"
+ #include "position.h"
 
 Position::Position(SimplyNumbers *simplyGen, Hashtable *movesHash) {
         this->simplyGen = simplyGen;
@@ -50,7 +50,7 @@ bool Position::forward(int N0, bool& swapX, bool& swapY, bool& swapW) {
   swapY = swapY ^= swW ? swX : swY;
   swapW = swapW ^= swW;
 
-/*
+
   if (count == 0) {
           history[count].symmX = 0;
           history[count].symmY = 0;
@@ -83,7 +83,7 @@ bool Position::forward(int N0, bool& swapX, bool& swapY, bool& swapW) {
         d = link->move==i? 0 : (kl[i] == kl[link->move]) ? -1 : 1;
         history[count].symmXYW = history[count-1].symmXYW + d;
   }
-*/
+
 
   //assert cursor==lastmove;
   ++count;

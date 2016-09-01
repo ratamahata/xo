@@ -416,7 +416,7 @@ void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
  }
 };
 //---------------------------------------------------------------------------
-void __fastcall TMainForm::gridClick(TObject *Sender)
+void __fastcall TMainForm::gridClick  (TObject *Sender)
 { if (viewmode)
   { if ((grid->Row == 12)&&(grid->Col<9)&&(grid->Col>2))
        ShellExecute(NULL,NULL,"http:\\\\xogame.chat.ru",NULL,NULL,SW_SHOWDEFAULT);

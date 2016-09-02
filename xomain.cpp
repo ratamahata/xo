@@ -39,6 +39,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
    }
 
   int childs0 = 0;
+  unsigned long beginTime = GetTickCount();
   while (!f->exitRequested) {
 
         if (f->xo == NULL) {
@@ -260,15 +261,25 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
               sprintf(f->msg4, f->xo->movesHash->miss3 > 0 || f->xo->movesHash->miss4 > 0
                         ? "Hash collisions %d / %d" : "\0\0", f->xo->movesHash->miss3, f->xo->movesHash->miss4);
 
-
+/*
               double updateFreq = TNode::updatesCount
                         ? 100 * TNode::updatesCount / (double)(TNode::updatesCount + TNode::skippedCount)
                         : 0;
-
               sprintf(f->msg5, "Dev: %.3f%% : %d / %d",
                         updateFreq,
                         (int)TNode::avgDiff,
                         (int)TNode::avgSquareDiff);
+*/
+
+              if (f->xo != NULL) {
+                unsigned long time = GetTickCount() - beginTime;
+
+                sprintf(f->msg5, "RTime: %.3f%%",
+                        100 * f->xo->rateTime / (float)time,
+                        (int)TNode::avgDiff,
+                        (int)TNode::avgSquareDiff);
+              }
+
 
               f->xRating = f->xo->id
                 ? f->xo->lastmove->rating

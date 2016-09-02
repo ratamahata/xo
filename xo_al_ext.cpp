@@ -1,6 +1,7 @@
 //---------------------------------------------------------------------------
 //#include <vcl.h>
 #include <math.h>
+#include <vcl.h>
 #include "hashtable.h"
 #pragma hdrstop
 
@@ -20,6 +21,7 @@ long long TNode::updatesCount = 0;
 long long TNode::skippedCount = 0;
 
 Al_ext::Al_ext(int gameMode) {
+    rateTime = 0;
     simplyGen = new SimplyNumbers();
     this->gameMode = gameMode;
     movesHash = new Hashtable();
@@ -52,8 +54,9 @@ TNode *Al_ext::createNode(THash hashCodeX, THash hashCodeO, int age, TRating rat
 //==================================================================
 
 void Al_ext::rate(TNode *src, TNodeLink *dest) { //fills {totalRating,x3,x4,o3,o4} of dest;
+  static const int vec[4][2] = {{1,1},{1,-1},{1,0},{0,1}};
 
-static const int vec[4][2] = {{1,1},{1,-1},{1,0},{0,1}};
+  unsigned long beginTime = GetTickCount();
 
   TNode *destNode = dest->node;
 
@@ -231,6 +234,10 @@ exit:
 
 
   destNode->rating = ret;
+
+  unsigned long delta = GetTickCount() - beginTime;
+  rateTime += delta;
+
 };
 
 //==================================================================
@@ -564,11 +571,13 @@ void Al_ext::expand() {
 
   for(int i=0; i<directChildsCount; ++i) {
 
+#ifdef DEBUG_VER
     if (kl[buf[i]] >= 2) {
         //should never happen
         directChildsCount = directChildsCount;
         continue;
     }
+#endif
 
     THash hashCodeX = cursor->hashCodeO;
     THash hashCodeO = cursor->hashCodeX * simplyGen->getHash(buf[i]);
@@ -597,6 +606,7 @@ void Al_ext::expand() {
         link->node = new TNode();
         link->node->age = cursor->age + 1;
         link->node->firstParent = cursor;
+
 #ifdef DEBUG_VER
         if (cursor->totalDirectChilds == 0) {
                 //should never happen

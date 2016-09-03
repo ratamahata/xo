@@ -20,11 +20,12 @@ struct CursorHistory {
 
 class Cursor {
 private:
+protected:
+        CursorHistory history[255];
         SimplyNumbers *simplyGen;
         Hashtable *movesHash;
         TMove moves[fsize*fsize];
-protected:
-        CursorHistory history[255];
+
 public:
         Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash);
         CursorHistory *current();
@@ -41,16 +42,5 @@ public:
 
 };
 
-//can flip board
-class UserCursor : Cursor {
-public:
-        bool *swapX, *swapY, *swapW;
-
-        UserCursor(SimplyNumbers *simplyGen, Hashtable *movesHash,
-                 bool *swapX, bool *swapY, bool *swapW);
-
-        bool put(TMove N);//can flip board
-
-};
 
 #endif

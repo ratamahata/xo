@@ -30,6 +30,8 @@ class Al_ext : public Al{
   unsigned int recalc_deviation_count;
   unsigned int calc_deviation_count;
 
+  unsigned long rateTime;
+
   //bool balance;
   int gameMode;//0 = Go - Moku, 1 = 5-in-a-row, 2 = Renjue
 

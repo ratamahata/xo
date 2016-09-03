@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="xo.exe"/>
+    <OBJFILES value="xo.obj xo_al.obj xomain.obj xo_al_ext.obj debug.obj setup.obj 
+      hashtable.obj tnode.obj simplynumbers.obj cursor.obj Evaluator.obj 
+      Builder.obj GameBoard.obj Relator.obj"/>
+    <RESFILES value="xo.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) xomain.dfm debug.dfm setup.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="vclx.lib bcbsmp.lib vcl.lib rtl.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib bcbsmp.lib vclx.lib"/>
+    <PACKAGES value="vclx.bpi rtl.bpi vcl.bpi dbrtl.bpi vcldb.bpi bdertl.bpi vcldbx.bpi 
+      bcbsmp.bpi dclocx.bpi qrpt.bpi teeui.bpi vclsmp.bpi teedb.bpi tee.bpi 
+      ibsmp.bpi dss.bpi nmfast.bpi inetdb.bpi inet.bpi dsnap.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="DEBUG_VER;_DEBUG"/>
+    <SYSDEFINES value="NO_STRICT"/>
+    <MAINSOURCE value="xo.cpp"/>
+    <INCLUDEPATH value="&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot;;C:\Windows\system32;&quot;c:\program files\borland\cbuilder3\projects&quot;;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot;;C:\Windows\system32;&quot;c:\program files\borland\cbuilder3\projects&quot;;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
+    <WARNOPTSTR value=""/>
+    <OTHERFILES value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot; 
+      -IC:\Windows\system32 -I&quot;c:\program files\borland\cbuilder3\projects&quot; 
+      -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -DDEBUG_VER -D_DEBUG 
+      -boa"/>
+    <CFLAG1 value="-Od -H=c:\PROGRA~2\borland\CBUILD~1\lib\vcl35.csm -Hc -Vx -Ve -Tkh30000 
+      -X- -r- -pr -a1 -6 -b- -d -k -y -v -vi- -c -tW -tWM"/>
+    <CFLAG2 value=""/>
+    <CFLAG3 value=""/>
+    <PFLAGS value="-$Y+ -$W -$O- -$A8 -v -M -JPHNE"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zi"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+    <IFLAGS value=""/>
+    <OTHERFILES value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+    <OTHERFILES value=""/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="xo.cpp" FORMNAME="" UNITNAME="xo" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="xo_al.cpp" FORMNAME="" UNITNAME="xo_al" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="xomain.cpp" FORMNAME="MainForm" UNITNAME="xomain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="xo.res" FORMNAME="" UNITNAME="xo" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="xo_al_ext.cpp" FORMNAME="" UNITNAME="xo_al_ext" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="debug.cpp" FORMNAME="DebugForm" UNITNAME="debug" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="setup.cpp" FORMNAME="SetupForm" UNITNAME="setup" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="hashtable.cpp" FORMNAME="" UNITNAME="hashtable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="tnode.cpp" FORMNAME="" UNITNAME="tnode" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="simplynumbers.cpp" FORMNAME="" UNITNAME="simplynumbers" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="cursor.cpp" FORMNAME="" UNITNAME="cursor" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Evaluator.cpp" FORMNAME="" UNITNAME="Evaluator" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Builder.cpp" FORMNAME="" UNITNAME="Builder" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="GameBoard.cpp" FORMNAME="" UNITNAME="GameBoard" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Relator.cpp" FORMNAME="" UNITNAME="Relator" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=1
+MajorVer=1
+MinorVer=0
+Release=0
+Build=1
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1049
+CodePage=1251
+
+[Version Info Keys]
+CompanyName=
+FileDescription=X &amp; O game
+FileVersion=1.0.0.1
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=X &amp; O
+ProductVersion=1.0.0.0
+Comments=for updates visit http:\\xogame.chat.ru
+
+[Excluded Packages]
+c:\program files (x86)\borland\cbuilder6\Bin\dclite60.bpl=Borland Integrated Translation Environment
+
+[HistoryLists\hlIncludePath]
+Count=3
+Item0=C:\Windows\system32;c:\program files\borland\cbuilder3\projects;$(BCB)\include;$(BCB)\include\vcl
+Item1=c:\program files\borland\cbuilder3\projects;$(BCB)\include;$(BCB)\include\vcl
+Item2=$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=3
+Item0=C:\Windows\system32;c:\program files\borland\cbuilder3\projects;$(BCB)\lib\obj;$(BCB)\lib
+Item1=c:\program files\borland\cbuilder3\projects;$(BCB)\lib\obj;$(BCB)\lib
+Item2=$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=7
+Item0=DEBUG_VER;_DEBUG
+Item1=_DEBUG
+Item2=DEBUG_VER
+Item3=BALANCE
+Item4=BALANCE;_DEBUG
+Item5=_RTLDLL;DEBUG_VER;USEPACKAGES
+Item6=_RTLDLL;USEPACKAGES;DEBUG_VER
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+  </IDEOPTIONS>
+</PROJECT>

@@ -20,7 +20,8 @@ void Relator::calculateChilds() {
 
             TNode* n = movesHash->get(hashCodeX, hashCodeO, current()->node->age + 1);
             if (n != NULL) {
-                childs.relative[childs.count++] = n;
+                childs.move[childs.count] = i;
+                childs.node[childs.count++] = n;
             }
         }
     }
@@ -53,7 +54,8 @@ void Relator::calculateParents() {
 
             TNode* n = movesHash->get(hashCodeX, hashCodeO, current()->node->age + 1);
             if (n != NULL) {
-                parents.relative[childs.count++] = n;
+                parents.move[parents.count] = i;
+                parents.node[parents.count++] = n;
             }
         }
     }

@@ -23,10 +23,13 @@ Cursor::Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash) {
         count = 0;
 };
 
+//=============================================================================
+
 inline Cursor::CursorHistory *Cursor::current() {
         return &(history[count]);
 }
 
+//=============================================================================
 //Increment the Cursor to next move N. Returns true on success, otherwise - false.
 bool Cursor::forward(TMove N) {
 
@@ -40,16 +43,21 @@ bool Cursor::forward(TMove N) {
         return false;//no entry, return error
   }
 
-  if (kl[N] > 3) {//TODO
-    return (bool)N / 0;
-  }
+  return forward(N, nextNode);
+}
+
+//=============================================================================
+bool Cursor::forward(TMove N, TNode* node) {
+
+//  if (kl[N] > 3) {//TODO
+//    return (bool)N / 0;
+//  }
 
   int x = N % 15, y = N / 15;
   bool swX = false, swY = false, swW = false;
 
 
   //begin: forward cursor
-  node = current()->node = nextNode;
   kl[N] = ((count&1)+1)<<2;
   moves [count] = N;
   ++count;
@@ -103,6 +111,8 @@ bool Cursor::forward(TMove N) {
   return true;
 };
 
+//=============================================================================
+
 //set cursor to one move back
 bool Cursor::back() {
   if (count == 0) {
@@ -114,6 +124,8 @@ bool Cursor::back() {
   --count;
   return true;
 }
+
+//=============================================================================
 
 bool Cursor::isAlllowed(TMove N) {
                 int x = N%fsize - 7;

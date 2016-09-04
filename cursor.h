@@ -30,10 +30,10 @@ protected:
         Hashtable *movesHash;
         TMove moves[fsize*fsize];
 
-public:
         Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash);
         inline CursorHistory *current();
         bool forward(TMove N);
+        bool forward(TMove N, TNode* node);
         bool back();
         bool isAlllowed(TMove N);
 

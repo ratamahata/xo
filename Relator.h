@@ -11,13 +11,14 @@ class Relator : public Evaluator {
 
         class RelativeBucket {
                 public:
-                TNode* relative[MAX_RELATIVES];
                 int count;
+                TNode* node[MAX_RELATIVES];
+                TMove move[MAX_RELATIVES];
         };
 
+        protected:
         RelativeBucket childs, parents;
 
-        public:
         void calculateChilds();
         void calculateParents();
 };

@@ -9,8 +9,16 @@
 
 class Builder : public Relator {
 
+        int chooseNodeToExpand();
+        void expand();
+
         protected:
         Builder(SimplyNumbers*, Hashtable* );
+
+
+        public:
+        void buildTree();
+
 };
 
 #endif

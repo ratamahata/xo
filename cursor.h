@@ -6,29 +6,33 @@
 #include "SimplyNumbers.h"
 #include "Hashtable.h"
 
-#define fsize 15 //field size
+#define fsize 15  //field size
+#define TOTAL_CELLS 225 //fsize*fsize, cells total
+
+#define MAX_ENABLERS 16
 //---------------------------------------------------------------------------
 
-struct CursorHistory {
-  CursorHistory();
-  TMove en[16],//"Enabled" moves buffer
-        move;
-  int enCount;//count of actually "Enabled" moves
-  int symmX, symmY, symmXY, symmW, symmXW, symmYW, symmXYW;
-  TNode *node;
-};
-
 class Cursor {
+
+  struct CursorHistory {
+    CursorHistory();
+    TMove en[MAX_ENABLERS],//"Enabled" moves buffer
+          move;
+    int enCount;//count of actually "Enabled" moves
+    int symmX, symmY, symmXY, symmW, symmXW, symmYW, symmXYW;
+    TNode *node;
+  };
+
 private:
 protected:
-        CursorHistory history[255];
+        CursorHistory history[TOTAL_CELLS];
         SimplyNumbers *simplyGen;
         Hashtable *movesHash;
         TMove moves[fsize*fsize];
 
 public:
         Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash);
-        CursorHistory *current();
+        inline CursorHistory *current();
         bool forward(TMove N);
         bool back();
         bool isAlllowed(TMove N);

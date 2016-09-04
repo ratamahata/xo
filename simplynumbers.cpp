@@ -19,23 +19,21 @@ unsigned long SimplyNumbers::getHash(TMove move) {
     return b;
   }
   unsigned int next;
-  while (next <= 2) {
-    if (simplyNumbers[0]) {
-        next = simplyNumbers[simplyCounter];
-        ++simplyCounter;
-        bool isComposite;
-        do {
-          ++next;
-          isComposite = false;
-          for(int i=0; i<simplyCounter; ++i)
-              if (next/simplyNumbers[i]*simplyNumbers[i] == next) {
-                  isComposite = true;
-                  break;
-              }
-        } while (isComposite);
-    } else {
-        next = 2;
-    }
+  if (simplyNumbers[0]) {
+      next = simplyNumbers[simplyCounter];
+      ++simplyCounter;
+      bool isComposite;
+      do {
+        ++next;
+        isComposite = false;
+        for(int i=0; i<simplyCounter; ++i)
+            if (next/simplyNumbers[i]*simplyNumbers[i] == next) {
+                isComposite = true;
+                break;
+            }
+      } while (isComposite);
+  } else {
+      next = 2;
   }
   return hashValues[move] = simplyNumbers[simplyCounter] = next;
 };

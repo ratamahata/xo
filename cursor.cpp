@@ -11,7 +11,7 @@
 
 //#pragma package(smart_init)
 
-CursorHistory::CursorHistory() {
+Cursor::CursorHistory::CursorHistory() {
         setmem((void*)en, 0, sizeof(CursorHistory));
 };
 
@@ -23,7 +23,7 @@ Cursor::Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash) {
         count = 0;
 };
 
-CursorHistory *Cursor::current() {
+inline Cursor::CursorHistory *Cursor::current() {
         return &(history[count]);
 }
 
@@ -112,6 +112,7 @@ bool Cursor::back() {
   for(int t=0; t<current()->enCount; t++)
         kl[current()->en[t]] = 0;
   --count;
+  return true;
 }
 
 bool Cursor::isAlllowed(TMove N) {

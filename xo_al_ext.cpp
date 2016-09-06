@@ -753,7 +753,7 @@ TNodeLink *Al_ext::chooseNodeToExpand() {
           for (int i = 0; i < cursor->totalDirectChilds; ++i) {
             TNodeLink *link = &(cursor->childs[i]);
             TNode *node = link->node;
-            int ttc = node->ratingToTotalChilds(first->node);
+            int ttc = node->ratingToTotalChilds();
             int ret = node->totalChilds > 60000 ? ttc*ttc : ttc;
             float f = ret/ (float)(1+node->totalChilds);
 //            if (node->totalChilds > 500000) {

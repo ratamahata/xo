@@ -139,7 +139,7 @@ int TNode::checkChilds(int recursion) {
 
 //==================================================================
 
-int TNode::ratingToTotalChilds(TNode *firstNode) {
+int TNode::ratingToTotalChilds() {
 
 //  if (age == 1 && rating < -firstNode->rating*1.01 && hashCodeX == 1 && hashCodeO <=3
 //        && firstNode->rating > 0 && this != firstNode) {

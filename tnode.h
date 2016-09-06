@@ -24,7 +24,7 @@ typedef signed short int TRating;
       TNode();
       void update(short int newRating, unsigned int addedChilds);
       int chooseFactor(TNode *firstNode);
-      int ratingToTotalChilds(TNode *firstNode);
+      int ratingToTotalChilds();
       int getAge();
       TNodeLink* getLink(TNodeLink *first);
       int removeChild(TNode *child);

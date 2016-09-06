@@ -55,7 +55,7 @@ void TDebugForm::tostr(TNodeLink *link, char* buf) {
         link->move%15 - 7, link->move/15 - 7,
         tree->simplyGen->getHash(link->move),
         (unsigned long)link->node->hashCodeX, (unsigned long)link->node->hashCodeO,
-        node->rating, node->ratingToTotalChilds(node),
+        node->rating, node->ratingToTotalChilds(),
         (int)node->x2, (int)node->x3, (int)node->x4, (int)node->o2, (int)node->o3, (int)node->o4,
         node->totalDirectChilds,
         node->totalChilds > 2000 ? node->totalChilds / 1000 : node->totalChilds,

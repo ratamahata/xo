@@ -46,20 +46,20 @@ void Builder::buildTree() {
 //==================================================================
 
 int Builder::chooseNodeToExpand() {
-  TNode *cursor = current()->node;
+  //TNode *cursor = current()->node;
   float f0 = -99999;
-  float f01 = -99999;
+//  float f01 = -99999;
 
   int choosen = -1;
-  int choosen1 = -1;
-  int choosen1prev = -1;
+//  int choosen1 = -1;
+  //int choosen1prev = -1;
 
   calculateChilds();
 //  do {
         for (int i = 0; i < childs.count; ++i) {
             TNode *node = childs.node[i];
             int ttc = node->ratingToTotalChilds();
-            int ret = node->totalChilds > 60 000 ? ttc*ttc : ttc;
+            int ret = (node->totalChilds > 60000) ? ttc*ttc : ttc;
             float f = ret/ (float)(1+node->totalChilds);
 //            if (node->totalChilds > 500000) {
 //                f = f*ttc;
@@ -68,11 +68,11 @@ int Builder::chooseNodeToExpand() {
               choosen = i;
               f0 = f;
             }
-            if (ret > f01) {
-                choosen1prev = choosen1;
-                choosen1 = i;
-                f01 = ret;
-            }
+//            if (ret > f01) {
+//                choosen1prev = choosen1;
+//                choosen1 = i;
+//                f01 = ret;
+//            }
         }
 //          if (choosen1->node->rating < 10000 && choosen1->node->rating > -10000 && !(first->node->totalChilds % 5)) {
 //                        if (choosen1prev != NULL && choosen1prev->node->rating < 10000 && choosen1prev->node->rating > -10000) {

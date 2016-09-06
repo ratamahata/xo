@@ -54,7 +54,6 @@ bool Cursor::forward(TMove N, TNode* node) {
 //  }
 
   int x = N % 15, y = N / 15;
-  bool swX = false, swY = false, swW = false;
 
 
   //begin: forward cursor

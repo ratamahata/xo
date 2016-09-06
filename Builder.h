@@ -3,14 +3,14 @@
 #ifndef BuilderH
 #define BuilderH
 //---------------------------------------------------------------------------
-#include "Relator.h"
+#include "Expander.h"
 
 
 
-class Builder : public Relator {
+
+class Builder : public Expander {
 
         int chooseNodeToExpand();
-        void expand();
 
         protected:
         Builder(SimplyNumbers*, Hashtable* );

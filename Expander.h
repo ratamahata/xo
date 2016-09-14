@@ -10,7 +10,8 @@ class Expander : public Relator {
 
 
         protected:
-        //Builder(SimplyNumbers*, Hashtable* );
+        Expander(SimplyNumbers *simplyGen, Hashtable *movesHash);
+        int max_count;
         void expand();
 
 };

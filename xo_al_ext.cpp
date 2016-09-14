@@ -826,6 +826,7 @@ void Al_ext::buildTree() {
   }
   */
   //assert cursor==lastmove;
+
 }
 
 

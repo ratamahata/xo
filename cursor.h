@@ -14,6 +14,15 @@
 
 class Cursor {
 
+#define MAX_RELATIVES 200
+
+        class RelativeBucket {
+                public:
+                int count;
+                TNode* node[MAX_RELATIVES];
+                TMove move[MAX_RELATIVES];
+        };
+
   struct CursorHistory {
     CursorHistory();
     TMove en[MAX_ENABLERS],//"Enabled" moves buffer
@@ -21,6 +30,7 @@ class Cursor {
     int enCount;//count of actually "Enabled" moves
     int symmX, symmY, symmXY, symmW, symmXW, symmYW, symmXYW;
     TNode *node;
+    RelativeBucket parents;
   };
 
 private:

@@ -7,20 +7,29 @@
 
 class Relator : public Evaluator {
 
-#define MAX_RELATIVES 200
+//-------------------------------------
+        protected:
 
-        class RelativeBucket {
+        class MovesBucket {
                 public:
                 int count;
-                TNode* node[MAX_RELATIVES];
                 TMove move[MAX_RELATIVES];
         };
 
-        protected:
-        RelativeBucket childs, parents;
+        Relator(SimplyNumbers*, Hashtable* );
+        RelativeBucket childs;
+        MovesBucket newChilds;
 
         void calculateChilds();
-        void calculateParents();
+        void findMovesToExpand();
+        void calculateParents(TNode *node);
+
+//-------------------------------------
+        private:
+        inline bool unique(TMove move);
+        inline bool allow(int move);
+
+
 };
 
 #endif

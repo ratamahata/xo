@@ -20,6 +20,7 @@ class Relator : public Evaluator {
         RelativeBucket childs;
         MovesBucket newChilds;
 
+        Cursor::RelativeBucket getParents(TNode *node);
         void calculateChilds();
         void findMovesToExpand();
         void calculateParents(TNode *node);

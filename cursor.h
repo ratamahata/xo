@@ -14,8 +14,9 @@
 
 class Cursor {
 
-#define MAX_RELATIVES 200
+#define MAX_RELATIVES 224 // == (fsize*fsize - 1)
 
+public:
         class RelativeBucket {
                 public:
                 int count;

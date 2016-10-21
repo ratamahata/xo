@@ -30,8 +30,8 @@ void Expander ::expand() {
   for(int i=0; i<newChilds.count; ++i) {
 
     TMove move = newChilds.move[i];
-    THash hashCodeX = current()->node->hashCodeO;
-    THash hashCodeO = current()->node->hashCodeX * simplyGen->getHash(move);
+    THash hashCodeX = cursor->hashCodeO;
+    THash hashCodeO = cursor->hashCodeX * simplyGen->getHash(move);
 
     TNode *node = new TNode();
     node->age = cursor->age + 1;
@@ -44,7 +44,7 @@ void Expander ::expand() {
 
   short int oldRating = cursor->rating;
   if (!cursor->fixedRating) {
-        cursor->rating = (TRating)(0.4*(double)cursor->rating-0.6*(double)max_rating);
+        cursor->rating = (TRating)(0.4*(double)oldRating-0.6*(double)max_rating);
   }
 
   cursor->totalChilds = newChilds.count;
@@ -52,6 +52,7 @@ void Expander ::expand() {
 // TODO:
 //  updatedParentsCounter = 0;
 //  updateParents(cursor, cursor->totalChilds, oldRating);
+  current()->           
 
   if (count > max_count) max_count = count;
 };

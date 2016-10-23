@@ -26,32 +26,42 @@ void Relator::calculateChilds() {
 };
 
 //=============================================================================
-void Relator::updateParents() {
-    for(int i = 1; i < count; ++i) {
-        history[i].removed = false;
-    }
-    for(int i = 1; i < count; ++i) {
-            updateParents(current()->node, i, 0);
+void Relator::updateParents(int addedChilds) {
+    for(int i = 0; i < count-1; ++i) {
+        updateParents(current()->node, i, 0, count-2, count-1);
     }
 };
 
 //=============================================================================
-void Relator::updateParents(TNode *node, int depth, int removed) {
-    if (depth == removed) {
-        //TODO update node
-        return;
-    }
-    int i = count-1;
-    if (removed%2) --i;
+void Relator::updateParents(TNode *node, int depth, int removed, int maxEven, int maxOdd, int addedChilds) {
+    bool odd = removed%2;
+    int max = odd ? maxOdd : maxEven;
+    int i = odd ? count-2: count-1;
     for(; i > 0; i -= 2) {
         if (!history[i].removed) {
-            history[i].removed = true;
             TNode *n = getParent(node, history[i].move);
-            updateParents(n, depth, removed+1);
-            history[i].removed = false;
+            if (n != NULL) {
+                int childs = i<=max? addedChilds : 0;
+                if (depth > removed) {
+                    history[i].removed = true;
+                    if (odd) {
+                        maxOdd = i-2;
+                    } else {
+                        maxEven = i-2;
+                    }
+                    updateParents(n, depth, removed+1, maxEven, maxOdd, childs);
+                    history[i].removed = false;
+                } else {
+                    updateNode(n, node, childs);
+                }
+            }
         }
     }
 };
+
+void Relator::updateNode(TNode *node, TNode *from, int addedChilds) {
+
+}
 
 //---------------------------------------------------------------------------
 

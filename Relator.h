@@ -23,13 +23,18 @@ class Relator : public Evaluator {
         Cursor::RelativeBucket getParents(TNode *node);
         void calculateChilds();
         void findMovesToExpand();
-        void calculateParents(TNode *node);
+        void updateParents();
 
 //-------------------------------------
         private:
         inline bool unique(TMove move);
         inline bool allow(int move);
 
+        //these are used fro parent calculation
+        void updateParents(TNode *node, int depth, int removed);
+        TNode* getParent(TNode *node, TMove move);
+        int minRemovedEven;
+        int minRemovedOdd;
 
 };
 

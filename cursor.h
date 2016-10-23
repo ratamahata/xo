@@ -32,6 +32,7 @@ public:
     int symmX, symmY, symmXY, symmW, symmXW, symmYW, symmXYW;
     TNode *node;
     RelativeBucket parents;
+    bool removed;
   };
 
 private:
@@ -49,7 +50,7 @@ protected:
         bool isAlllowed(TMove N);
 
 
-        int count;
+        int count;//count of moves made
 
         unsigned char kl[fsize*fsize]; // 0 == empty, disabled
                                        // 1 == empty, enabled

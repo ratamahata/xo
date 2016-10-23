@@ -52,7 +52,7 @@ void Expander ::expand() {
 // TODO:
 //  updatedParentsCounter = 0;
 //  updateParents(cursor, cursor->totalChilds, oldRating);
-  current()->           
+//  current()->           
 
   if (count > max_count) max_count = count;
 };

@@ -9,16 +9,14 @@
 
 #pragma package(smart_init)
 
-
-void Relator::calculateChilds() {
+void Relator::calculateChilds() {//TODO use single iteration
     childs.count = 0;
+    TNode *node = current()->node;
     for (int i = 0; i < TOTAL_CELLS; ++i) {
         if (kl[i]==1) {
-
-            THash hashCodeX = current()->node->hashCodeO;
-            THash hashCodeO = current()->node->hashCodeX * simplyGen->getHash(i);
-
-            TNode* n = movesHash->get(hashCodeX, hashCodeO, current()->node->age + 1);
+            THash hashCodeX = node->hashCodeO;
+            THash hashCodeO = node->hashCodeX * simplyGen->getHash(i);
+            TNode* n = movesHash->get(hashCodeX, hashCodeO, node->age + 1);
             childs.move[childs.count] = i;
             childs.node[childs.count++] = n;
         }
@@ -35,13 +33,11 @@ void Relator::updateParents(int addedChilds) {
 //=============================================================================
 void Relator::updateParents(TNode *node, int depth, int removed, int maxEven, int maxOdd, int addedChilds) {
     bool odd = removed%2;
-    int max = odd ? maxOdd : maxEven;
-    int i = odd ? count-2: count-1;
+    int i = odd ? maxOdd : maxEven;
     for(; i > 0; i -= 2) {
         if (!history[i].removed) {
             TNode *n = getParent(node, history[i].move);
             if (n != NULL) {
-                int childs = i<=max? addedChilds : 0;
                 if (depth > removed) {
                     history[i].removed = true;
                     if (odd) {
@@ -49,10 +45,10 @@ void Relator::updateParents(TNode *node, int depth, int removed, int maxEven, in
                     } else {
                         maxEven = i-2;
                     }
-                    updateParents(n, depth, removed+1, maxEven, maxOdd, childs);
+                    updateParents(n, depth, removed+1, maxEven, maxOdd, addedChilds);
                     history[i].removed = false;
                 } else {
-                    updateNode(n, node, childs);
+                    updateNode(n, node, addedChilds);
                 }
             }
         }
@@ -97,7 +93,7 @@ TNode* Relator::getParent(TNode *node, TMove move) {
 
 //----------------------------------------------------------------------------
 
-void Relator::findMovesToExpand() {
+void Relator::findMovesToExpand() {//TODO use single iteration
     newChilds.count = 0;
     for (int i = 0; i < TOTAL_CELLS; ++i) {
         if (kl[i]==1) {

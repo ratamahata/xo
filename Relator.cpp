@@ -9,24 +9,32 @@
 
 #pragma package(smart_init)
 
-void Relator::calculateChilds() {//TODO use single iteration
+TNode* Relator::getChild(TNode *parent, TMove childMove) {
+   THash hashCodeX = parent->hashCodeO;
+   THash hashCodeO = parent->hashCodeX * simplyGen->getHash(childMove);
+   return movesHash->get(hashCodeX, hashCodeO, parent->age + 1);
+}
+
+void Relator::calculateChilds() {
     childs.count = 0;
     TNode *node = current()->node;
     for (int i = 0; i < TOTAL_CELLS; ++i) {
         if (kl[i]==1) {
-            THash hashCodeX = node->hashCodeO;
-            THash hashCodeO = node->hashCodeX * simplyGen->getHash(i);
-            TNode* n = movesHash->get(hashCodeX, hashCodeO, node->age + 1);
-            childs.move[childs.count] = i;
-            childs.node[childs.count++] = n;
+            TNode* n = getChild(node, i);
+            if (n != NULL) {
+                childs.move[childs.count] = i;
+                childs.node[childs.count++] = n;
+            }
         }
     }
 };
 
+
+
 //=============================================================================
 void Relator::updateParents(int addedChilds) {
     for(int i = 0; i < count-1; ++i) {
-        updateParents(current()->node, i, 0, count-2, count-1);
+        updateParents(current()->node, i, 0, count-2, count-1, addedChilds);
     }
 };
 
@@ -56,7 +64,29 @@ void Relator::updateParents(TNode *node, int depth, int removed, int maxEven, in
 };
 
 void Relator::updateNode(TNode *node, TNode *from, int addedChilds) {
-
+    short int max_rating = -32600;
+    for (int i = 0; i < TOTAL_CELLS; ++i) {
+        if (kl[i]==0) {
+            continue;
+        } else if (kl[i]>1) {
+            bool occupied = false;
+            for (int j = 0; j = count-1; ++j) {
+                if (history[j].move == i && !history[j].removed) {
+                    occupied = true;
+                    break;
+                }
+            }
+            if (occupied) {
+                continue;
+            }
+        }
+        TNode *child = getChild(node, i);
+        if (child != NULL && child->rating > max_rating) {
+            max_rating = child->rating;
+        }
+    }
+    node->rating = - max_rating;
+    node->totalChilds += addedChilds;
 }
 
 //---------------------------------------------------------------------------

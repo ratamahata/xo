@@ -29,6 +29,23 @@ inline Cursor::CursorHistory *Cursor::current() {
         return &(history[count]);
 }
 
+TNode *Cursor::getFirstNode() {
+        return history[0].node;
+}
+
+TNode *Cursor::lastMove() {
+        return current()->node;
+}
+
+void *Cursor::restart() {
+  while(count > 1) {
+     back();
+  }
+  lastmove = first->node;
+}
+
+
+
 //=============================================================================
 //Increment the Cursor to next move N. Returns true on success, otherwise - false.
 bool Cursor::forward(TMove N) {
@@ -89,9 +106,20 @@ bool Cursor::forward(TMove N, TNode* node) {
         current()->symmXYW = history[count-1].symmXYW + d;
   //end: update symmetries history
 
-
   //begin: update "enablers" history
     current()->enCount = 0;
+
+    if (gameMode == 1 &&  link->node->age == 1) {
+        for (int i=-3; i<=3; i++)
+            for (int j=-3; j<=3; j++)
+                if (i==-3||i==3||j==-3||j==3)
+                int x1 = 7+i, y1 = 7+j;
+                if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[y1*fsize+x1] == 0) {
+//                  history[count].en[t++] = (7+j)*fsize+7+i;
+                    kl[y1*fsize+x1] = 1;
+                    current()->en[current()->enCount++] = y1*fsize+x1;
+                }
+    } else {
         int max = count > 1 ? 3 : 2;
         for (int d=1; d<max; d++)
             for (int i=-1; i<2; i++)
@@ -99,12 +127,12 @@ bool Cursor::forward(TMove N, TNode* node) {
                 if ((!i)&&(!j)) continue;
                 else {
                     int x1 = x+i*d, y1 = y+j*d;
-                    if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[y*fsize+x] == 0) {
-                        kl[y*fsize+x] = 1;
+                    if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[y1*fsize+x1] == 0) {
+                        kl[y1*fsize+x1] = 1;
                         current()->en[current()->enCount++] = y1*fsize+x1;
                     }
                 }
-
+    }
   //end: update "enablers" history
 
   return true;

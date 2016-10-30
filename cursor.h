@@ -35,6 +35,12 @@ public:
     bool removed;
   };
 
+  int gameMode;//0 = Go - Moku, 1 = 5-in-a-row, 2 = Renjue
+  int count;//count of moves made
+
+  TNode *getFirstNode();
+  TNode *lastMove();
+
 private:
 protected:
         CursorHistory history[TOTAL_CELLS];
@@ -48,10 +54,6 @@ protected:
         bool forward(TMove N, TNode* node);
         bool back();
         bool isAlllowed(TMove N);
-
-
-        int count;//count of moves made
-
         unsigned char kl[fsize*fsize]; // 0 == empty, disabled
                                        // 1 == empty, enabled
 // 0 == 'x',first

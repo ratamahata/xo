@@ -57,7 +57,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
         bool changed = true;
 
         short int critRating = f->xo->getFirstNode()->rating*1.8;
-        short int r = f->xo->lastmove->rating;
+        short int r = f->xo->lastMove()->rating;
         if (critRating < 0) {
                 critRating *= -1;
         }
@@ -115,7 +115,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                 int res,i;
                 res = f->xo->put(f->userMoveRequested, f->swapX, f->swapY, f->swapW);
                 if (res != -99999) {
-                        int totl = f->xo->lastmove->totalChilds;
+                        int totl = f->xo->lastMove()->totalChilds;
                         f->resultRecieved = res;
                         if ((res < 32600)&&(f->ComboBoxMode->ItemIndex == 1)) {
                             f->moveRequested = true;
@@ -124,16 +124,16 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                 f->userMoveRequested = 255;
 
         } else if (f->moveRequested &&
-                (wizardMode || f->xo->lastmove->totalChilds >= childPerMove
-                        || f->xo->lastmove->rating < -20000
-                        || f->xo->lastmove->rating > 20000
-                        || f->xo->lastmove->totalDirectChilds == 1)) {
+                (wizardMode || f->xo->lastMove()->totalChilds >= childPerMove
+                        || f->xo->lastMove()->rating < -20000
+                        || f->xo->lastMove()->rating > 20000
+                        || f->xo->lastMove()->totalDirectChilds == 1)) {
 
           f->moveRequested = false;
           flowRating = r;
           f->resultRecieved = f->xo->move();
-          childs0 = f->xo->lastmove->totalChilds;
-          r = f->xo->lastmove->rating;
+          childs0 = f->xo->lastMove()->totalChilds;
+          r = f->xo->lastMove()->rating;
         } else if (f->takeBackRequested) {
             f->takeBackRequested = false;
 
@@ -160,7 +160,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                 f->xo->lastmove = f->xo->cursorLink->node;
             }
 
-            r = f->xo->lastmove->rating;
+            r = f->xo->lastMove()->rating;
         }
 
         //********* STEP 3   autoplay stuff ***************
@@ -176,7 +176,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                 }
         }
 
-        unsigned int lastCount = f->xo->lastmove->totalChilds;
+        unsigned int lastCount = f->xo->lastMove()->totalChilds;
         if (wizardMode >= 0 && (f->ComboBoxMode->ItemIndex > 1)
                 && (lastCount >= (mediumicPlay
                                         ? f->CSpinEditChilds->Value*1000
@@ -188,8 +188,8 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
         //********* STEP 4   tree grow ***************
 
         if (lastCount <  maxChilds
-                        && f->xo->lastmove->rating < 32300
-                        && f->xo->lastmove->rating > -32300
+                        && f->xo->lastMove()->rating < 32300
+                        && f->xo->lastMove()->rating > -32300
                         && f->CheckBoxGrow->Checked) {
           f->xo->buildTree();
           changed = false;
@@ -224,22 +224,22 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
               int decr;
               int i=0;
 
-              for(i=0; i<f->xo->lastmove->totalDirectChilds; ++i) {
-                int r = f->xo->lastmove->childs[i].node->chooseFactor(firstNode);
+              for(i=0; i<f->xo->lastMove()->totalDirectChilds; ++i) {
+                int r = f->xo->lastMove()->childs[i].node->chooseFactor(firstNode);
                 if (r<min) min = r;
                 if (r>max) max = r;
               }
 
               memset(f->xo->dkl, 0, fsize*fsize);
-              for(i=0; i<f->xo->lastmove->totalDirectChilds; ++i) {
-                TNodeLink* link = &(f->xo->lastmove->childs[i]);
+              for(i=0; i<f->xo->lastMove()->totalDirectChilds; ++i) {
+                TNodeLink* link = &(f->xo->lastMove()->childs[i]);
                 int r = link->node->chooseFactor(firstNode);
                 decr = min-1;
                 f->xo->dkl[link->move] = 30+(r-decr)*225/(max-decr);
               }
               f->movesCount = f->xo->count;
               int i1 = firstNode->totalChilds;
-              int i2 = f->xo->lastmove->totalChilds;
+              int i2 = f->xo->lastMove()->totalChilds;
 
               sprintf(f->msg1, "Childs count: %d%c / %d%c",
                             i1 / (i1 > 2000000 ? 1000000 : 1000), (i1 > 2000000 ? 'M' : 'K'),
@@ -247,7 +247,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
 
               sprintf(f->msg2, "Rating: %d / %d",
                         f->xo->first->node->rating,
-                        f->xo->lastmove->rating);
+                        f->xo->lastMove()->rating);
 
               sprintf(f->msg3, "Max path length: %d",
                         f->xo->max_count);
@@ -282,8 +282,8 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
 
 
               f->xRating = f->xo->id
-                ? f->xo->lastmove->rating
-                : -f->xo->lastmove->rating;
+                ? f->xo->lastMove()->rating
+                : -f->xo->lastMove()->rating;
 
               f->Invalidate();
               f->grid->Invalidate();
@@ -579,7 +579,7 @@ void __fastcall TMainForm::gridMouseMove(TObject *Sender, TShiftState Shift,
 
   if (viewmode && (sy==12) && (sx<9) && (sx>2)) {
         grid->Cursor = crHandPoint;
-  } else if (SetupForm->balance && xo->lastmove->age==1 && sx>4&&sx<10&&sy>4&&sy<10) {
+  } else if (SetupForm->balance && xo->lastMove()->age==1 && sx>4&&sx<10&&sy>4&&sy<10) {
         grid->Cursor = crNo;
   } else {
      grid->Cursor = crDefault;
@@ -658,7 +658,8 @@ void __fastcall TMainForm::FormShow(TObject *Sender)
   if (CheckBoxGrow->Checked) return;
   CheckBoxGrow->Checked  = true;
 
-  xo = new Al_ext(SetupForm->balance);
+  //xo = new Al_ext(SetupForm->balance);
+  xo = new Builder(new SimplyNumbers(), new Hashtable, SetupForm->balance);
   movesCount = xo->count;
   xo->mindepth = 1;
   

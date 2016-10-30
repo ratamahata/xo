@@ -9,8 +9,9 @@
 #include <Grids.hpp>
 #include <mmsystem.h>
 //---------------------------------------------------------------------------
-#include "xo_al.h"
-#include "xo_al_ext.h"
+//#include "xo_al.h"
+//#include "xo_al_ext.h"
+#include "builder.h"
 #include "setup.h"
 #include "debug.h"
 #include <ExtCtrls.hpp>
@@ -69,7 +70,8 @@ private:	// User declarations
     int transform(int move); 
 
 public:		// User declarations
-    Al_ext *xo;
+//    Al_ext *xo;
+    Builder *xo;
     int lang,//1 = Eng, 2 = Rus
         viewmode,//0 = game, 1 = about info
         time_lev;

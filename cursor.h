@@ -40,6 +40,7 @@ public:
 
   TNode *getFirstNode();
   TNode *lastMove();
+  void restart();
 
 private:
 protected:

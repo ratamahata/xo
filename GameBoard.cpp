@@ -11,7 +11,7 @@
 
 
 GameBoard::GameBoard(SimplyNumbers *simplyGen, Hashtable *movesHash,
-                 bool *swapXp, bool *swapYp, bool *swapWp) : Builder(simplyGen, movesHash) {
+                 bool *swapXp, bool *swapYp, bool *swapWp, int gameMode) : Builder(simplyGen, movesHash, gameMode) {
         swapX = swapXp;
         swapY = swapYp;
         swapW = swapWp;

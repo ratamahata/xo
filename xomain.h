@@ -11,7 +11,7 @@
 //---------------------------------------------------------------------------
 //#include "xo_al.h"
 //#include "xo_al_ext.h"
-#include "builder.h"
+#include "gameBoard.h"
 #include "setup.h"
 #include "debug.h"
 #include <ExtCtrls.hpp>
@@ -71,7 +71,7 @@ private:	// User declarations
 
 public:		// User declarations
 //    Al_ext *xo;
-    Builder *xo;
+    GameBoard *xo;
     int lang,//1 = Eng, 2 = Rus
         viewmode,//0 = game, 1 = about info
         time_lev;

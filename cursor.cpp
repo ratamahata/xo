@@ -37,11 +37,11 @@ TNode *Cursor::lastMove() {
         return current()->node;
 }
 
-void *Cursor::restart() {
+void Cursor::restart() {
   while(count > 1) {
      back();
   }
-  lastmove = first->node;
+  //lastmove = first->node;
 }
 
 

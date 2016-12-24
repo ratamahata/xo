@@ -113,7 +113,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
             f->xo->restart();
         } else if (f->userMoveRequested != 255) {
                 int res,i;
-                res = f->xo->put(f->userMoveRequested, f->swapX, f->swapY, f->swapW);
+                res = f->xo->put(f->userMoveRequested);
                 if (res != -99999) {
                         int totl = f->xo->lastMove()->totalChilds;
                         f->resultRecieved = res;
@@ -659,7 +659,9 @@ void __fastcall TMainForm::FormShow(TObject *Sender)
   CheckBoxGrow->Checked  = true;
 
   //xo = new Al_ext(SetupForm->balance);
-  xo = new Builder(new SimplyNumbers(), new Hashtable, SetupForm->balance);
+  xo = new GameBoard(new SimplyNumbers(), new Hashtable,
+          f->swapX, f->swapY, f->swapW,
+          SetupForm->balance);
   movesCount = xo->count;
   xo->mindepth = 1;
   

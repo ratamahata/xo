@@ -13,7 +13,7 @@ public:
         bool *swapX, *swapY, *swapW;
 
         GameBoard(SimplyNumbers *simplyGen, Hashtable *movesHash,
-                 bool *swapX, bool *swapY, bool *swapW);
+                 bool *swapX, bool *swapY, bool *swapW, int gameMode);
 
         bool put(TMove N);//can flip board
 

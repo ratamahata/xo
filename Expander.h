@@ -8,10 +8,11 @@
 
 class Expander : public Relator {
 
-
-        protected:
-        Expander(SimplyNumbers *simplyGen, Hashtable *movesHash);
+public:
         int max_count;
+
+protected:
+        Expander(SimplyNumbers *simplyGen, Hashtable *movesHash);
         void expand();
 
 };

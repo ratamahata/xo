@@ -9,6 +9,8 @@
 
 #pragma package(smart_init)
 
+Relator::Relator(SimplyNumbers* sn, Hashtable* ht) : Evaluator(sn, ht){};
+
 TNode* Relator::getChild(TNode *parent, TMove childMove) {
    THash hashCodeX = parent->hashCodeO;
    THash hashCodeO = parent->hashCodeX * simplyGen->getHash(childMove);
@@ -160,7 +162,7 @@ inline bool Relator::unique(TMove move) {
 //balanced games, currently supported 1st player
 //to make 2nd move in central 5x5 square
 inline bool Relator::allow(int move) {
-  if (gameMode == 1 && this->cursorLink->node->age == 1) {
+  if (gameMode == 1 && this->lastMove()->age == 1) {
         int x = move % 15 - 7, y = move / 15 - 7;
         return ! (x < 3 && x > -3 && y < 3 && y > -3);
   }

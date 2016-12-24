@@ -153,11 +153,11 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
             }
 
             if (f->xo->count > 1) {
-                f->xo->takeback();
+                f->xo->back();
 //                if (f->ComboBoxMode->ItemIndex ==1 && f->xo->count > 1) {
 //                        f->xo->takeback();
 //                }
-                f->xo->lastmove = f->xo->cursorLink->node;
+                //f->xo->lastmove = f->xo->cursorLink->node; //TODO is it needed?
             }
 
             r = f->xo->lastMove()->rating;
@@ -230,12 +230,12 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                 if (r>max) max = r;
               }
 
-              memset(f->xo->dkl, 0, fsize*fsize);
+              memset(f->dkl, 0, fsize*fsize);
               for(i=0; i<f->xo->lastMove()->totalDirectChilds; ++i) {
                 TNodeLink* link = &(f->xo->lastMove()->childs[i]);
                 int r = link->node->chooseFactor(firstNode);
                 decr = min-1;
-                f->xo->dkl[link->move] = 30+(r-decr)*225/(max-decr);
+                f->dkl[link->move] = 30+(r-decr)*225/(max-decr);
               }
               f->movesCount = f->xo->count;
               int i1 = firstNode->totalChilds;
@@ -246,7 +246,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                             i2 / (i2 > 2000000 ? 1000000 : 1000), (i2 > 2000000 ? 'M' : 'K'));
 
               sprintf(f->msg2, "Rating: %d / %d",
-                        f->xo->first->node->rating,
+                        f->xo->getFirstNode()->rating,
                         f->xo->lastMove()->rating);
 
               sprintf(f->msg3, "Max path length: %d",
@@ -271,17 +271,17 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                         (int)TNode::avgSquareDiff);
 */
 
+/* TODO
               if (f->xo != NULL) {
                 unsigned long time = GetTickCount() - beginTime;
-
                 sprintf(f->msg5, "RTime: %.3f%%",
                         100 * f->xo->rateTime / (float)time,
                         (int)TNode::avgDiff,
                         (int)TNode::avgSquareDiff);
               }
+*/
 
-
-              f->xRating = f->xo->id
+              f->xRating = f->xo->count%2
                 ? f->xo->lastMove()->rating
                 : -f->xo->lastMove()->rating;
 
@@ -366,7 +366,9 @@ void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
   Rect = grid->CellRect(Col,Row);
   int N = transform(Row * grid->ColCount + Col);
   bool found = false;
-  bool foundLast = (((TNodeLink*)(xo->history[movesCount-1].link))->move == N);
+  bool foundLast = false;
+  /* TODO last move
+  bool foundLast = (((TNodeLink*)(xo->history[movesCount-1].node->))->move == N);
   if (foundLast) {
         found = true;
   } else {
@@ -376,7 +378,7 @@ void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
                         break;
                 }
         }
-  }
+  }*/
 
   switch (viewmode)
   { case 0: {
@@ -402,9 +404,9 @@ void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
       grid->Canvas->LineTo(Rect.Left+2,Rect.Bottom-3);
     }
     if (CheckBoxSH->Checked) {//draw hint
-      grid->Canvas->Pen->Width = xo->dkl[N] > 250 ? penW / 1.1 : penW / 1.5;
-      if (xo->dkl[N]>=1) {
-        int d = 255 - xo->dkl[N];
+      grid->Canvas->Pen->Width = dkl[N] > 250 ? penW / 1.1 : penW / 1.5;
+      if (dkl[N]>=1) {
+        int d = 255 - dkl[N];
         grid->Canvas->Pen->Color = (Graphics::TColor) RGB(d, 255, d);
         float zf = penW*2;
         if (movesCount%2) {
@@ -451,9 +453,9 @@ if (xo->count)
     i = GetTickCount();
     while(GetTickCount()-i < 100);
     if ((CheckBoxAM->Checked)&&(xo->count)) xo->takeback();
-    for (i = 0; i<225; xo->dkl[i++]=0);
+    for (i = 0; i<225; dkl[i++]=0);
     if (xo->count)
-    xo->dkl[xo->history[xo->count-1].nm] = 4;
+    dkl[xo->history[xo->count-1].nm] = 4;
     setka->Invalidate();
   }*/
 }
@@ -467,10 +469,10 @@ void __fastcall TMainForm::aftermove()
   int res = resultRecieved;
   resultRecieved = 0;
   char f[] = "o.wav\0         \0";
-  if (xo->id) f[0] = 'x';
+  if (xo->count%2) f[0] = 'x';
 //  Application->ProcessMessages();
   PlaySound(f,NULL,SND_FILENAME|SND_ASYNC);
-  StatusBar->Panels->Items[0]->Text = (AnsiString)(xo->id ? 'O':'X')
+  StatusBar->Panels->Items[0]->Text = (AnsiString)(xo->count%2 ? 'O':'X')
                                   + DBank->Items->Strings[21 + lang];
   if (res >= 32600)
   { PlaySound("gameover.wav",NULL,SND_FILENAME|SND_ASYNC);
@@ -480,12 +482,12 @@ void __fastcall TMainForm::aftermove()
   int i=1;
   char pr = ' ';
   AnsiString s = DBank->Items->Strings[25 + lang];
-  itoa((xo->ntime+50)/1000,s.c_str()+i++,10);
+//  itoa((xo->ntime+50)/1000,s.c_str()+i++,10);
   for(; i< 12; i++)
     if (*(s.c_str()+i) == 0) break;
   *(s.c_str()+i++) = '.';
-  itoa((xo->ntime - ((xo->ntime+50)/1000)*1000 + 50)/100,s.c_str()+i++,10);
-  if (xo->maxdepth != xo->_maxdepth) pr = '!';
+//  itoa((xo->ntime - ((xo->ntime+50)/1000)*1000 + 50)/100,s.c_str()+i++,10);
+//  if (xo->maxdepth != xo->_maxdepth) pr = '!';
   for(; i< 15; i++)
     if (*(s.c_str()+i) == 0) *(s.c_str()+i) = pr;
 //  itoa(totl, s.c_str()+30, 10);
@@ -660,10 +662,10 @@ void __fastcall TMainForm::FormShow(TObject *Sender)
 
   //xo = new Al_ext(SetupForm->balance);
   xo = new GameBoard(new SimplyNumbers(), new Hashtable,
-          f->swapX, f->swapY, f->swapW,
-          SetupForm->balance);
+          &swapX, &swapY, &swapW,
+          (SetupForm->balance ? 1 : 0));
   movesCount = xo->count;
-  xo->mindepth = 1;
+//  xo->mindepth = 1;
   
 }
 //---------------------------------------------------------------------------

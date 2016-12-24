@@ -37,7 +37,7 @@ public:		// User declarations
     void treeOutput(TNodeLink *link, int depth);
     void tostr(TNodeLink *link, char* buf);
     TNodeLink *getRoot();
-    Al_ext *tree;
+    GameBoard *tree;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TDebugForm *DebugForm;

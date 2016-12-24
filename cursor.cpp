@@ -109,15 +109,16 @@ bool Cursor::forward(TMove N, TNode* node) {
   //begin: update "enablers" history
     current()->enCount = 0;
 
-    if (gameMode == 1 &&  link->node->age == 1) {
+    if (gameMode == 1 &&  lastMove()->age == 1) {
         for (int i=-3; i<=3; i++)
             for (int j=-3; j<=3; j++)
-                if (i==-3||i==3||j==-3||j==3)
-                int x1 = 7+i, y1 = 7+j;
-                if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[y1*fsize+x1] == 0) {
-//                  history[count].en[t++] = (7+j)*fsize+7+i;
-                    kl[y1*fsize+x1] = 1;
-                    current()->en[current()->enCount++] = y1*fsize+x1;
+                if (i==-3||i==3||j==-3||j==3) {
+                        int x1 = 7+i, y1 = 7+j;
+                        if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[y1*fsize+x1] == 0) {
+//                              history[count].en[t++] = (7+j)*fsize+7+i;
+                                kl[y1*fsize+x1] = 1;
+                                current()->en[current()->enCount++] = y1*fsize+x1;
+                        }
                 }
     } else {
         int max = count > 1 ? 3 : 2;

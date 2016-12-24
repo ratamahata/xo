@@ -13,7 +13,7 @@ class Builder : public Expander {
         int chooseNodeToExpand();
 
         protected:
-        Builder(SimplyNumbers*, Hashtable* );
+        Builder(SimplyNumbers*, Hashtable*, int gameMode );
 
 
         public:

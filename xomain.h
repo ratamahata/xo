@@ -67,7 +67,7 @@ __published:	// IDE-managed Components
         void __fastcall FormShow(TObject *Sender);
 private:	// User declarations
 
-    int transform(int move); 
+    int transform(int move);
 
 public:		// User declarations
 //    Al_ext *xo;
@@ -89,6 +89,8 @@ public:		// User declarations
     int userMoveRequested;
     int movesCount;
 
+    unsigned char dkl[fsize*fsize];
+    
     char msg1[200];
     char msg2[200];
     char msg3[200];

@@ -41,23 +41,29 @@ public:
   TNode *getFirstNode();
   TNode *lastMove();
   void restart();
+  bool back();
+
+  Hashtable *movesHash;
+  CursorHistory history[TOTAL_CELLS];
+
+
+  SimplyNumbers *simplyGen;
+  TMove moves[fsize*fsize]; //ordered history of moves
+
+  TMove kl[fsize*fsize]; // moves on field
+
 
 private:
 protected:
-        CursorHistory history[TOTAL_CELLS];
-        SimplyNumbers *simplyGen;
-        Hashtable *movesHash;
-        TMove moves[fsize*fsize];
+
+
+
 
         Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash);
         inline CursorHistory *current();
         bool forward(TMove N);
         bool forward(TMove N, TNode* node);
-        bool back();
         bool isAlllowed(TMove N);
-        unsigned char kl[fsize*fsize]; // 0 == empty, disabled
-                                       // 1 == empty, enabled
-// 0 == 'x',first
 
 };
 

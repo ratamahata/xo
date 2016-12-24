@@ -9,17 +9,11 @@
 
 #pragma package(smart_init)
 
-Builder::Builder(SimplyNumbers* s, Hashtable* h, int gameMode);
-        : Relator(s, h){
+Builder::Builder(SimplyNumbers* s, Hashtable* h, int gameMode)
+        : Expander(s, h){
 
     this->gameMode = gameMode;
-//    max_count = 0;
-//    cursorLink = first = new TNodeLink();
-    first->node = lastmove = new TNode();
-    first->node->age = count;
-//    first->node->rating = gameMode>0 ? 0 : FIRST_RATING;
-    first->move = 112;
-    put(first);
+    forward(112);
     expand();
 };
 

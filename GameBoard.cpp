@@ -41,3 +41,37 @@ bool GameBoard::put(TMove N) {
                 return forward(y*15+x);
 };
 
+
+int GameBoard::move() {
+//TODO
+/*
+ int f0 = -99999;
+  TNode *choosen = 0;
+  TNodeLink *choosenLink = 0;
+  int totl = cursorLink->node->totalDirectChilds;
+  if (totl == 0) {
+        return -32600;
+  }
+
+  for (int i = 0; i < totl; ++i) {
+    TNodeLink *link = &(cursorLink->node->childs[i]);
+    TNode *node = link->node;
+    int f = node->chooseFactor(node);
+    if (f>f0 || f0 == -99999) {
+      choosen = node;
+      choosenLink = link;
+      f0=f;
+    }
+  }
+  if (choosen == NULL) {
+  //should never happen??
+        return -32600;
+  }
+
+  lastmove=choosen;
+  put(choosenLink);
+  return choosen->rating;
+  */
+
+  return 0;
+};

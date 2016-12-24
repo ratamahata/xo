@@ -30,17 +30,18 @@ void __fastcall TDebugForm::BuildClick(TObject *Sender) {
 void TDebugForm::output() {
   char buf[200];
   sprintf(buf, "items total: %d, lastExpanded: %d, max_count: %d",
-    tree->first->node->totalChilds,
+    tree->getFirstNode()->totalChilds,
     0,//tree->lastExpanded->move,
     tree->max_count);
   Memo1->Lines->Add( buf);
 
+  /* TODO
   for(int i=0; i<tree->lastmove->totalDirectChilds; ++i) {
     TNodeLink link = tree->lastmove->childs[i];
 
     tostr(&link, buf);
     Memo1->Lines->Add( buf);
-  }
+  }*/
 }
 
 void TDebugForm::tostr(TNodeLink *link, char* buf) {
@@ -66,7 +67,8 @@ TNodeLink *TDebugForm::getRoot() {
         if (tree == NULL) {
           tree = MainForm->xo;
         }
-        return CheckBoxLM->Checked ? tree->lastmove->getLink(tree->first) : tree->first;
+//        return CheckBoxLM->Checked ? tree->lastmove->getLink(tree->first) : tree->first;
+return NULL;//TODO
 }
 
 void TDebugForm::treeOutput(TNodeLink *link, int depth) {
@@ -156,7 +158,7 @@ void __fastcall TDebugForm::ButtonCleanClick(TObject *Sender)
       tree = MainForm->xo;
     }
 
-    int count = tree->cleanTree(tree->lastmove);
+    int count = 0; //tree->cleanTree(tree->lastmove); //TODO
     char s[100] = "      cleaned !!!";
     itoa(count, s, 10);
     Application->MessageBox(s, "Message", 0);
@@ -169,7 +171,7 @@ void __fastcall TDebugForm::CheckClick(TObject *Sender)
       tree = MainForm->xo;
     }
 
-    int count = tree->first->node->checkChilds(0);
+    int count = 0;//tree->first->node->checkChilds(0); //TODO
     char s[100] = "      violations !!!";
     itoa(count, s, 10);
     Application->MessageBox(s, "Message", 0);

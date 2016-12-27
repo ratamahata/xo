@@ -15,6 +15,10 @@ GameBoard::GameBoard(SimplyNumbers *simplyGen, Hashtable *movesHash,
         swapX = swapXp;
         swapY = swapYp;
         swapW = swapWp;
+
+    TNode *node = createNode(1, 1, 0);
+    forward(112, node);
+    expand();
 };
 
 bool GameBoard::put(TMove N) {

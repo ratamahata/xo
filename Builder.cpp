@@ -13,8 +13,6 @@ Builder::Builder(SimplyNumbers* s, Hashtable* h, int gameMode)
         : Expander(s, h){
 
     this->gameMode = gameMode;
-    forward(112);
-    expand();
 };
 
 

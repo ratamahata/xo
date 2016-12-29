@@ -45,8 +45,10 @@ void Expander ::expand() {
         cursor->rating = (TRating)(0.4*(double)oldRating-0.6*(double)max_rating);
   }
 
-  cursor->totalChilds = newChilds.count;
+    cursor->totalDirectChilds = cursor->totalChilds = newChilds.count;
 
+
+  updateParents(newChilds.count);
 // TODO:
 //  updatedParentsCounter = 0;
 //  updateParents(cursor, cursor->totalChilds, oldRating);

@@ -74,8 +74,8 @@ bool Cursor::forward(TMove N, TNode* node) {
 
 
   //begin: forward cursor
-  ++count;
   kl[N] = ((count&1)+1)<<2;
+  ++count;
   moves [count] = N;
   current()->node = node; 
 

@@ -20,7 +20,7 @@ Cursor::CursorHistory::CursorHistory() {
 Cursor::Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash) {
         this->simplyGen = simplyGen;
         this->movesHash = movesHash;
-        count = 0;
+        count = -1;
 };
 
 //=============================================================================
@@ -74,9 +74,10 @@ bool Cursor::forward(TMove N, TNode* node) {
 
 
   //begin: forward cursor
+  ++count;
   kl[N] = ((count&1)+1)<<2;
   moves [count] = N;
-  ++count;
+  current()->node = node; 
 
   //begin: update simmetries history
         int d = 0,i;

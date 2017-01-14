@@ -20,13 +20,13 @@ Cursor::CursorHistory::CursorHistory() {
 Cursor::Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash) {
         this->simplyGen = simplyGen;
         this->movesHash = movesHash;
-        count = -1;
+        count = 0;
 };
 
 //=============================================================================
 
 inline Cursor::CursorHistory *Cursor::current() {
-        return &(history[count]);
+        return &(history[count-1]);
 }
 
 TNode *Cursor::getFirstNode() {
@@ -77,38 +77,41 @@ bool Cursor::forward(TMove N, TNode* node) {
   kl[N] = ((count&1)+1)<<2;
   ++count;
   moves [count] = N;
-  current()->node = node; 
+
+  CursorHistory *curr = current(), *prev = &(history[count-2]);
+  curr->node = node;
+  curr->move = N;
 
   //begin: update simmetries history
         int d = 0,i;
         d = x==7 ? 0 : (kl[y*15+(14-x)] == kl[N]) ? -1 : 1;
-        current()->symmX = history[count-1].symmX + d;
+        curr->symmX = prev->symmX + d;
 
         d = y==7 ? 0 : (kl[(14-y)*15+x] == kl[N]) ? -1 : 1;
-        current()->symmY = history[count-1].symmY + d;
+        curr->symmY = prev->symmY + d;
 
         i = (14-y)*15+(14-x);
         d = N==i? 0 : (kl[i] == kl[N]) ? -1 : 1;
-        current()->symmXY = history[count-1].symmXY + d;
+        curr->symmXY = prev->symmXY + d;
 
         d = x==y ? 0 : (kl[x*15+y] == kl[N]) ? -1 : 1;
-        current()->symmW = history[count-1].symmW + d;
+        curr->symmW = prev->symmW + d;
 
         i=(14-x)*15+y;
         d = N==i? 0 : (kl[i] == kl[N]) ? -1 : 1;
-        current()->symmXW = history[count-1].symmXW + d;
+        curr->symmXW = prev->symmXW + d;
 
         i=x*15+14-y;
         d = N==i? 0 : (kl[i] == kl[N]) ? -1 : 1;
-        current()->symmYW = history[count-1].symmYW + d;
+        curr->symmYW = prev->symmYW + d;
 
         i=(14-x)*15+14-y;
         d = N==i? 0 : (kl[i] == kl[N]) ? -1 : 1;
-        current()->symmXYW = history[count-1].symmXYW + d;
+        curr->symmXYW = prev->symmXYW + d;
   //end: update symmetries history
 
   //begin: update "enablers" history
-    current()->enCount = 0;
+    curr->enCount = 0;
 
     if (gameMode == 1 &&  lastMove()->age == 1) {
         for (int i=-3; i<=3; i++)
@@ -118,20 +121,23 @@ bool Cursor::forward(TMove N, TNode* node) {
                         if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[y1*fsize+x1] == 0) {
 //                              history[count].en[t++] = (7+j)*fsize+7+i;
                                 kl[y1*fsize+x1] = 1;
-                                current()->en[current()->enCount++] = y1*fsize+x1;
+                                curr->en[curr->enCount++] = y1*fsize+x1;
                         }
                 }
     } else {
-        int max = count > 1 ? 3 : 2;
-        for (int d=1; d<max; d++)
-            for (int i=-1; i<2; i++)
-              for (int j=-1; j<2; j++)
+        int max = count > 1 ? 2 : 1;
+        for (int d=1; d<=max; d++)
+            for (int i=-1; i<=1; i++)
+              for (int j=-1; j<=1; j++)
                 if ((!i)&&(!j)) continue;
                 else {
                     int x1 = x+i*d, y1 = y+j*d;
                     if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[y1*fsize+x1] == 0) {
-                        kl[y1*fsize+x1] = 1;
-                        current()->en[current()->enCount++] = y1*fsize+x1;
+                        int n = y1*fsize+x1;
+                        if (kl[n] == 0) {
+                          kl[n] = 1;
+                          curr->en[curr->enCount++] = y1*fsize+x1;
+                        }
                     }
                 }
     }
@@ -147,9 +153,10 @@ bool Cursor::back() {
   if (count == 0) {
         return false;
   }
-  kl[current()->move] = 1;
-  for(int t=0; t<current()->enCount; t++)
-        kl[current()->en[t]] = 0;
+  CursorHistory *curr = current();
+  kl[curr->move] = 1;
+  for(int t=0; t<curr->enCount; t++)
+        kl[curr->en[t]] = 0;
   --count;
   return true;
 }

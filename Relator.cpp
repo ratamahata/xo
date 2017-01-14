@@ -29,6 +29,24 @@ void Relator::calculateChilds() {
             }
         }
     }
+    if (childs.count == 0) {
+
+
+
+    for (int i = 0; i < TOTAL_CELLS; ++i) {
+        if (kl[i]==1) {
+            TNode* n = getChild(node, i);
+            if (n != NULL) {
+                childs.move[childs.count] = i;
+                childs.node[childs.count++] = n;
+            }
+        }
+    }
+
+
+
+      return;
+    }
 };
 
 
@@ -128,7 +146,7 @@ TNode* Relator::getParent(TNode *node, TMove move) {
 void Relator::findMovesToExpand() {//TODO use single iteration
     newChilds.count = 0;
     for (int i = 0; i < TOTAL_CELLS; ++i) {
-        if (kl[i]==1) {
+        if (kl[i]==1 && unique(i)) {
                 newChilds.move[newChilds.count++] = i;
         }
     }

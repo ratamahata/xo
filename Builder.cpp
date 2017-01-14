@@ -22,9 +22,21 @@ void Builder::buildTree() {
   //assert cursor==lastmove;
 
   int count0 = count;
-  while (current()->node->totalDirectChilds > 0 && count < 224) {
-    int i = chooseNodeToExpand();
+  CursorHistory *cur = current();
+
+  if (cur->node->totalDirectChilds < 0){
+    return;
+  }
+
+  int i = -2;
+
+  while (cur->node->totalDirectChilds > 0 && count < 224) {
+    i = chooseNodeToExpand();
+//    if (i == -1) {
+//        continue;
+//    }
     forward(childs.move[i], childs.node[i]);
+    cur = current();
   }
 
   expand();
@@ -101,6 +113,10 @@ int Builder::chooseNodeToExpand() {
 //        }
 //  }
 //  while(false);
+
+  if (choosen == -1) {
+        return -1;
+  }
 
   return choosen;
 };

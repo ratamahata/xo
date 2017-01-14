@@ -143,6 +143,10 @@ bool Cursor::forward(TMove N, TNode* node) {
     }
   //end: update "enablers" history
 
+  if (current()->node == NULL) {
+        return false;
+  }
+
   return true;
 };
 
@@ -158,6 +162,9 @@ bool Cursor::back() {
   for(int t=0; t<curr->enCount; t++)
         kl[curr->en[t]] = 0;
   --count;
+  if (current()->node == NULL) {
+        return false;
+  }
   return true;
 }
 

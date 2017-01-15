@@ -366,21 +366,25 @@ void __fastcall TMainForm::FormResize(TObject *Sender)
 void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
       TRect &Rect, TGridDrawState State) {
   Rect = grid->CellRect(Col,Row);
+#ifdef DEBUG_VER
+  if (Col == 7 && Row == 7) {
+        Col = 7;
+  }
+#endif
   int N = transform(Row * grid->ColCount + Col);
   bool found = false;
-  bool foundLast = false;
-  /* TODO last move
-  bool foundLast = (((TNodeLink*)(xo->history[movesCount-1].node->))->move == N);
+  bool foundLast = (xo->current()->move == N);
   if (foundLast) {
         found = true;
   } else {
-        for(int i = 0; i < movesCount-1; ++i) {
-                if (((TNodeLink*)(xo->history[i].link))->move == N) {
+        for(int i = 0; i < xo->count; ++i) {
+                if (xo->getMove(i)->move == N) {
                         found = true;
                         break;
                 }
         }
-  }*/
+  }
+  //*/
 
   switch (viewmode)
   { case 0: {

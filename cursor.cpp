@@ -29,6 +29,10 @@ inline Cursor::CursorHistory *Cursor::current() {
         return &(history[count-1]);
 }
 
+Cursor::CursorHistory *Cursor::getMove(int i) {
+        return &(history[i]);
+}
+
 TNode *Cursor::getFirstNode() {
         return history[0].node;
 }

@@ -38,8 +38,10 @@ public:
   int gameMode;//0 = Go - Moku, 1 = 5-in-a-row, 2 = Renjue
   int count;//count of moves made
 
+  inline CursorHistory *current();
   TNode *getFirstNode();
   TNode *lastMove();
+  CursorHistory *getMove(int i);
   void restart();
   bool back();
 
@@ -60,7 +62,7 @@ protected:
 
 
         Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash);
-        inline CursorHistory *current();
+
         bool forward(TMove N);
         bool forward(TMove N, TNode* node);
         bool isAlllowed(TMove N);

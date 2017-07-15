@@ -44,18 +44,17 @@ void TDebugForm::output() {
   }*/
 }
 
-void TDebugForm::tostr(TNodeLink *link, char* buf) {
-    TNode* node = link->node;
+void TDebugForm::tostr(TNode *node, char* buf) {
     sprintf(buf, "%c%c[%d,%d](%d)[%d,%d] R:%d/%d (%d/%d/%d; %d/%d/%d), childs direct/total:%d / %d%c",
-        (link->node->fixedRating?'-':' '),
-#ifdef DEBUG_VER
-        (link->isAttached?'*':' '),
-#else
+        (node->fixedRating?'-':' '),
+//#ifdef DEBUG_VER
+//        (node->isAttached?'*':' '),
+//#else
         ' ',
-#endif
-        link->move%15 - 7, link->move/15 - 7,
-        tree->simplyGen->getHash(link->move),
-        (unsigned long)link->node->hashCodeX, (unsigned long)link->node->hashCodeO,
+//#endif
+0,0,//        link->move%15 - 7, link->move/15 - 7,
+0,//        tree->simplyGen->getHash(link->move),
+        (unsigned long)node->hashCodeX, (unsigned long)node->hashCodeO,
         node->rating, node->ratingToTotalChilds(),
         (int)node->x2, (int)node->x3, (int)node->x4, (int)node->o2, (int)node->o3, (int)node->o4,
         node->totalDirectChilds,
@@ -63,37 +62,37 @@ void TDebugForm::tostr(TNodeLink *link, char* buf) {
         node->totalChilds > 2000 ? 'K' : ' ');
 }
 
-TNodeLink *TDebugForm::getRoot() {
+TNode *TDebugForm::getRoot() {
         if (tree == NULL) {
           tree = MainForm->xo;
         }
 //        return CheckBoxLM->Checked ? tree->lastmove->getLink(tree->first) : tree->first;
-return NULL;//TODO
+        return CheckBoxLM->Checked ? tree->lastMove() : tree->getFirstNode();
 }
 
-void TDebugForm::treeOutput(TNodeLink *link, int depth) {
+void TDebugForm::treeOutput(TNode *node, int depth) {
     if (depth >= CSpinEdit2->Value) {
         return;
     }
 
 //#ifdef DEBUG_VER
     char buf[200];
-    if (link == getRoot()) {
+    if (node == getRoot()) {
     	TreeView1->Items->Clear();
-        tostr(link, buf);
-        link->node->reserved = TreeView1->Items->Add(TreeView1->Selected, buf);
+        tostr(node, buf);
+        node->reserved = TreeView1->Items->Add(TreeView1->Selected, buf);
     }
 
     bool choosen[200];
     memset(choosen,0,200*sizeof(bool));
 //    bool *choosen = new bool[link->node->totalDirectChilds];
-    for(int j=0; j<link->node->totalDirectChilds; ++j) {
+    for(int j=0; j<node->totalDirectChilds; ++j) {
         short int max = -32000;
         int selected = -1;
-        for(int i=0; i<link->node->totalDirectChilds; ++i) {
+        for(int i=0; i<node->totalDirectChilds; ++i) {
             if (!choosen[i]) {
                 TNodeLink *child;
-                child = &(link->node->childs[i]);
+                child = &(node->childs[i]);
                 short int r = child->node->rating;
                 if (r > max) {
                     max = r;
@@ -106,10 +105,10 @@ void TDebugForm::treeOutput(TNodeLink *link, int depth) {
             break;
         }
         choosen[selected] = true;
-        TNodeLink *chosenChild = &(link->node->childs[selected]);
-        tostr(chosenChild, buf);
-        chosenChild->node->reserved = TreeView1->Items->AddChild((TTreeNode*)link->node->reserved, buf);
-        treeOutput(chosenChild, depth+1);
+        TNodeLink *chosenChild = &(node->childs[selected]);
+        tostr(chosenChild->node, buf);
+        chosenChild->node->reserved = TreeView1->Items->AddChild((TTreeNode*)chosenChild->node->reserved, buf);//TODO document
+        treeOutput(chosenChild->node, depth+1);
     }
 //#endif
 //    delete[] choosen;

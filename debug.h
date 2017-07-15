@@ -34,9 +34,9 @@ private:	// User declarations
 public:		// User declarations
     __fastcall TDebugForm(TComponent* Owner);
     void output();
-    void treeOutput(TNodeLink *link, int depth);
-    void tostr(TNodeLink *link, char* buf);
-    TNodeLink *getRoot();
+    void treeOutput(TNode *link, int depth);
+    void tostr(TNode *link, char* buf);
+    TNode *getRoot();
     GameBoard *tree;
 };
 //---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 object SetupForm: TSetupForm
-  Left = 797
+  Left = 799
   Top = 700
   BorderStyle = bsDialog
   Caption = 'X & O setup'

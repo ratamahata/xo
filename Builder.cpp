@@ -28,7 +28,7 @@ void Builder::buildTree() {
     return;
   }
 
-  int i = -2;
+  int i;
 
   while (cur->node->totalDirectChilds > 0 && count < 224) {
     i = chooseNodeToExpand();

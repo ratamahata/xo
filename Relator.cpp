@@ -116,7 +116,7 @@ void Relator::updateNode(TNode *node, TNode *from, int addedChilds) {
 //---------------------------------------------------------------------------
 
 TNode* Relator::getParent(TNode *node, TMove move) {
-    bool lastMoveX = 1 == count % 2;
+    bool lastMoveX = 0 == node->age % 2;
     THash lastPos = lastMoveX ? node->hashCodeX : node->hashCodeO;
     unsigned long multiplier = simplyGen->getExistingHash(move);
     THash prevPos = lastPos / multiplier;

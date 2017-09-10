@@ -20,9 +20,9 @@ __fastcall TDebugForm::TDebugForm(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 void __fastcall TDebugForm::BuildClick(TObject *Sender) {
-    for (int t = 0; t < CSpinEdit1->Value; ++t) {
-        tree->buildTree();
-    }
+//    for (int t = 0; t < CSpinEdit1->Value; ++t) {
+//        tree->buildTree();
+//    }
     output();
 //  treeOutput(tree->first);
 }

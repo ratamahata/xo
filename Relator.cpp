@@ -84,6 +84,8 @@ void Relator::updateParents(TNode *node, int depth, int removed, int maxEven, in
 };
 
 void Relator::updateNode(TNode *node, TNode *from, int addedChilds) {
+//TODO can we update only from "from", so no iteration needed ?
+/*
     short int max_rating = -32600;
     for (int i = 0; i < TOTAL_CELLS; ++i) {
         if (kl[i]==0) {
@@ -91,7 +93,7 @@ void Relator::updateNode(TNode *node, TNode *from, int addedChilds) {
         } else if (kl[i]>1) {
             bool occupied = false;
             for (int j = 0; j = count-1; ++j) {
-                if (history[j].move == i && !history[j].removed) {
+                if (history[j].move == i && !history[j].removed) {//WTf ??
                     occupied = true;
                     break;
                 }
@@ -104,8 +106,10 @@ void Relator::updateNode(TNode *node, TNode *from, int addedChilds) {
         if (child != NULL && child->rating > max_rating) {
             max_rating = child->rating;
         }
+    }*/
+    if (from->rating > -node->rating) {
+        node->rating = - from->rating;
     }
-    node->rating = - max_rating;
     node->totalChilds += addedChilds;
 }
 

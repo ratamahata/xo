@@ -45,6 +45,8 @@ void TDebugForm::output() {
 }
 
 void TDebugForm::tostr(TNode *node, char* buf) {
+sprintf(buf, "");
+/*
     sprintf(buf, "%c%c[%d,%d](%d)[%d,%d] R:%d/%d (%d/%d/%d; %d/%d/%d), childs direct/total:%d / %d%c",
         (node->fixedRating?'-':' '),
 //#ifdef DEBUG_VER
@@ -59,7 +61,7 @@ void TDebugForm::tostr(TNode *node, char* buf) {
         (int)node->x2, (int)node->x3, (int)node->x4, (int)node->o2, (int)node->o3, (int)node->o4,
         node->totalDirectChilds,
         node->totalChilds > 2000 ? node->totalChilds / 1000 : node->totalChilds,
-        node->totalChilds > 2000 ? 'K' : ' ');
+        node->totalChilds > 2000 ? 'K' : ' ');*/
 }
 
 TNode *TDebugForm::getRoot() {

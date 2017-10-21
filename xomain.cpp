@@ -373,18 +373,14 @@ void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
 #endif
   int N = transform(Row * grid->ColCount + Col);
   bool found = false;
-  bool foundLast = (xo->current()->move == N);
-  if (foundLast) {
-        found = true;
-  } else {
-        for(int i = 0; i < xo->count; ++i) {
-                if (xo->getMove(i)->move == N) {
-                        found = true;
-                        break;
-                }
-        }
+  bool foundLast;
+  for(int i = 0; i < movesCount; ++i) {
+      if (xo->getMove(i)->move == N) {
+          found = true;
+          foundLast = i == movesCount - 1;
+          break;
+      }
   }
-  //*/
 
   switch (viewmode)
   { case 0: {

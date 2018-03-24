@@ -244,8 +244,8 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
               int i2 = node->totalChilds;
 
               sprintf(f->msg1, "Childs count: %d%c / %d%c",
-                            i1 / (i1 > 2000000 ? 1000000 : i1 > 2000 ? 1000 : 1), (i1 > 2000000 ? 'M' : i1 > 2000 ? ' ' : 'K'),
-                            i2 / (i2 > 2000000 ? 1000000 : 1000), (i2 > 2000000 ? 'M' : 'K'));
+                            i1 / (i1 > 2000000 ? 1000000 : i1 > 2000 ? 1000 : 1), (i1 > 2000000 ? 'M' : i1 > 2000 ? 'K' : ' '),
+                            i2 / (i2 > 2000000 ? 1000000 : i2 > 2000 ? 1000 : 1), (i2 > 2000000 ? 'M' : i2 > 2000 ? 'K' : ' '));
 
               sprintf(f->msg2, "Rating: %d / %d",
                         f->xo->getFirstNode()->rating,

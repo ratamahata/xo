@@ -54,7 +54,7 @@ void Relator::calculateChilds() {
 //=============================================================================
 void Relator::updateParents(int addedChilds) {
     for(int i = 0; i < count-1; ++i) {
-        updateParents(current()->node, i, 0, count-2, count-1, addedChilds);
+        updateParents(current()->node, i, 0, count, count-1, addedChilds);
     }
 };
 
@@ -62,22 +62,25 @@ void Relator::updateParents(int addedChilds) {
 void Relator::updateParents(TNode *node, int depth, int removed, int maxEven, int maxOdd, int addedChilds) {
     bool odd = removed%2;
     int i = odd ? maxOdd : maxEven;
-    for(; i > 0; i -= 2) {
-        if (!history[i].removed) {
-            TNode *n = getParent(node, history[i].move);
+    for(; i > 1; i -= 2) {
+        if (!history[i-1].removed) {
+            TNode *n = getParent(node, history[i-1].move);
             if (n != NULL) {
                 if (depth > removed) {
-                    history[i].removed = true;
+                    history[i-1].removed = true;
                     if (odd) {
                         maxOdd = i-2;
                     } else {
                         maxEven = i-2;
                     }
                     updateParents(n, depth, removed+1, maxEven, maxOdd, addedChilds);
-                    history[i].removed = false;
+                    history[i-1].removed = false;
                 } else {
                     updateNode(n, node, addedChilds);
                 }
+            } else {
+            //no parent found
+            n=n;
             }
         }
     }
@@ -116,11 +119,11 @@ void Relator::updateNode(TNode *node, TNode *from, int addedChilds) {
 //---------------------------------------------------------------------------
 
 TNode* Relator::getParent(TNode *node, TMove move) {
-    bool lastMoveX = 0 == node->age % 2;
-    THash lastPos = lastMoveX ? node->hashCodeX : node->hashCodeO;
+    //bool lastMoveX = 0 == node->age % 2;
+    //THash lastPos = lastMoveX ? node->hashCodeX : node->hashCodeO;
     unsigned long multiplier = simplyGen->getExistingHash(move);
-    THash prevPos = lastPos / multiplier;
-    THash remainder = lastPos % multiplier;
+    THash prevPos = node->hashCodeO / multiplier;
+    THash remainder = node->hashCodeO % multiplier;
     if (remainder > 0) {
         unsigned long k = 0, n, t, r3;
         unsigned long m2 = THASH_MAX / multiplier;
@@ -141,8 +144,8 @@ TNode* Relator::getParent(TNode *node, TMove move) {
         //THash remainder2 = (THASH_MAX % multiplier) + 1;
         //ToDo: check that (remainder + remainder2) == multiplier
     }
-    THash hashCodeX = lastMoveX ? prevPos : node->hashCodeX;
-    THash hashCodeO = lastMoveX ? node->hashCodeO : prevPos;
+    THash hashCodeX = prevPos;
+    THash hashCodeO = node->hashCodeX;
     TNode* n = movesHash->get(hashCodeX, hashCodeO, node->age - 1);
     return n;
 };

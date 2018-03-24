@@ -152,46 +152,10 @@ TNode* Relator::getParent(TNode *node, TMove move) {
 void Relator::findMovesToExpand() {//TODO use single iteration
     newChilds.count = 0;
     for (int i = 0; i < TOTAL_CELLS; ++i) {
-        if (kl[i]==1 && unique(i)) {
+        if (kl[i]==1 && isAlllowed(i)) {
                 newChilds.move[newChilds.count++] = i;
         }
     }
 };
-
-//------------------------------------------------------------------------------
-
-inline bool Relator::unique(TMove move) {
-//        if (history[count-1].symmX && history[count-1].symmY && history[count-1].symmXY && history[count-1].symmW
-//                //&& history[count-1].symmXW && history[count-1].symmYW && history[count-1].symmXYW
-//                ) {
-//                return childCount;
-//        }
-
-                int x = move%fsize - 7;
-                int y = move/fsize - 7;
-
-                return (history[count-1].symmX  != 0 || x >= 0)
-                              && (history[count-1].symmY  != 0 || y >= 0)
-                              //&& (history[count-1].symmXY != 0 || x + y >= 0)
-                              && (history[count-1].symmW != 0 || x >= y)
-                              //&& (history[count-1].symmXW  != 0 || ((x>=0 || y<=0) && (x<=0 || y>=)0))
-                              //&& (history[count-1].symmYW != 0 || ((x>=0 || y<=0) && (x<=0 || y>=0)))
-                              && (history[count-1].symmXYW != 0 || x + y  >= 0)
-                              && (allow(move));
-}
-
-//------------------------------------------------------------------------------
-
-//initial implementation for supporting of prohibited moves for
-//balanced games, currently supported 1st player
-//to make 2nd move in central 5x5 square
-inline bool Relator::allow(int move) {
-  if (gameMode == 1 && this->lastMove()->age == 1) {
-        int x = move % 15 - 7, y = move / 15 - 7;
-        return ! (x < 3 && x > -3 && y < 3 && y > -3);
-  }
-  return true;
-}
-
 
 

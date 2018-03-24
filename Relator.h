@@ -28,8 +28,6 @@ class Relator : public Evaluator {
 
 //-------------------------------------
         private:
-        inline bool unique(TMove move);
-        inline bool allow(int move);
 
         //these are used fro parent calculation
 //        void updateParents(int childsAdded);

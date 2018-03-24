@@ -122,13 +122,14 @@ bool Cursor::forward(TMove N, TNode* node) {
             for (int j=-3; j<=3; j++)
                 if (i==-3||i==3||j==-3||j==3) {
                         int x1 = 7+i, y1 = 7+j;
-                        if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[y1*fsize+x1] == 0) {
+                        TMove move = y1*fsize+x1;
+                        if (kl[move] == 0 && isAlllowed(move)) {
                             if (curr->enCount >= MAX_ENABLERS) {
                                 curr->enCount = curr->enCount; //TODO
                             } else {
 //                              history[count].en[t++] = (7+j)*fsize+7+i;
-                                kl[y1*fsize+x1] = 1;
-                                curr->en[curr->enCount++] = y1*fsize+x1;
+                                kl[move] = 1;
+                                curr->en[curr->enCount++] = move;
                             }
                         }
                 }
@@ -140,7 +141,8 @@ bool Cursor::forward(TMove N, TNode* node) {
                 if ((!i)&&(!j)) continue;
                 else {
                     int x1 = x+i*d, y1 = y+j*d;
-                    if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[y1*fsize+x1] == 0) {
+                    TMove move = y1*fsize+x1;
+                    if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[move] == 0 && isAlllowed(move)) {
                         int n = y1*fsize+x1;
                         if (kl[n] == 0) {
                           kl[n] = 1;
@@ -182,19 +184,55 @@ bool Cursor::isAlllowed(TMove N) {
                 int x = N%fsize - 7;
                 int y = N/fsize - 7;
 
-                if ((  history[count].symmX  == 0 || history[count].symmXYW  == 0
-                   || history[count].symmXW  == 0 || history[count].symmXY  == 0) && x < 0) {
+                if ((  history[count].symmX  == 0) && x < 0) {
                    return false;
                 }
-                if ((  history[count].symmY  == 0 || history[count].symmXYW  == 0
-                   || history[count].symmYW  == 0 || history[count].symmXY  == 0) && y < 0) {
+                if ((  history[count].symmY  == 0 || history[count].symmXY  == 0) && y < 0) {
                    return false;                }
-                if ((  history[count].symmW  == 0 || history[count].symmXYW  == 0
-                   || history[count].symmXW  == 0 || history[count].symmYW  == 0) && x < y) {
+                if ((  history[count].symmW  == 0) && x < y) {
                    return false;
                 }
-                return true;
+                if ((  history[count].symmXYW  == 0) && x < -y) {
+                   return false;
+                }
+                return allow(N);
 };
+
+
+//------------------------------------------------------------------------------
+
+//bool Cursor::unique(TMove move) {
+//        if (history[count-1].symmX && history[count-1].symmY && history[count-1].symmXY && history[count-1].symmW
+//                //&& history[count-1].symmXW && history[count-1].symmYW && history[count-1].symmXYW
+//                ) {
+//                return childCount;
+//        }
+
+//                int x = move%fsize - 7;
+//                int y = move/fsize - 7;
+
+//                return (history[count-1].symmX  != 0 || x >= 0)
+//                              && (history[count-1].symmY  != 0 || y >= 0)
+//                              //&& (history[count-1].symmXY != 0 || x + y >= 0)
+//                              && (history[count-1].symmW != 0 || x >= y)
+//                              //&& (history[count-1].symmXW  != 0 || ((x>=0 || y<=0) && (x<=0 || y>=)0))
+//                              //&& (history[count-1].symmYW != 0 || ((x>=0 || y<=0) && (x<=0 || y>=0)))
+//                              && (history[count-1].symmXYW != 0 || x + y  >= 0)
+//                              && (allow(move));
+//}
+
+//------------------------------------------------------------------------------
+
+//initial implementation for supporting of prohibited moves for
+//balanced games, currently supported 1st player
+//to make 2nd move in central 5x5 square
+inline bool Cursor::allow(int move) {
+  if (gameMode == 1 && this->lastMove()->age == 1) {
+        int x = move % 15 - 7, y = move / 15 - 7;
+        return ! (x < 3 && x > -3 && y < 3 && y > -3);
+  }
+  return true;
+}
 
 
 

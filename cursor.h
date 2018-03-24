@@ -56,10 +56,10 @@ public:
 
 
 private:
+        inline bool allow(int move);
 protected:
 
-
-
+        //bool unique(TMove move);
 
         Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash);
 

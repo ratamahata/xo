@@ -664,7 +664,7 @@ void __fastcall TMainForm::FormShow(TObject *Sender)
 
   //xo = new Al_ext(SetupForm->balance);
   xo = new GameBoard(new SimplyNumbers(), new Hashtable,
-          &swapX, &swapY, &swapW,
+          &swapX, &swapY, &swapW, &swapXYW,
           (SetupForm->balance ? 1 : 0));
   movesCount = xo->count;
 //  xo->mindepth = 1;

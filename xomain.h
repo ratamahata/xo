@@ -100,7 +100,7 @@ public:		// User declarations
 
     char msgStatus[200];
 
-    bool swapX, swapY, swapW;
+    bool swapX, swapY, swapW, swapXYW;
 
 };
 //---------------------------------------------------------------------------

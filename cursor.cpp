@@ -123,9 +123,13 @@ bool Cursor::forward(TMove N, TNode* node) {
                 if (i==-3||i==3||j==-3||j==3) {
                         int x1 = 7+i, y1 = 7+j;
                         if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[y1*fsize+x1] == 0) {
+                            if (curr->enCount >= MAX_ENABLERS) {
+                                curr->enCount = curr->enCount; //TODO
+                            } else {
 //                              history[count].en[t++] = (7+j)*fsize+7+i;
                                 kl[y1*fsize+x1] = 1;
                                 curr->en[curr->enCount++] = y1*fsize+x1;
+                            }
                         }
                 }
     } else {
@@ -140,7 +144,7 @@ bool Cursor::forward(TMove N, TNode* node) {
                         int n = y1*fsize+x1;
                         if (kl[n] == 0) {
                           kl[n] = 1;
-                          curr->en[curr->enCount++] = y1*fsize+x1;
+                          curr->en[curr->enCount++] = n;
                         }
                     }
                 }
@@ -191,7 +195,6 @@ bool Cursor::isAlllowed(TMove N) {
                 }
                 return true;
 };
-
 
 
 

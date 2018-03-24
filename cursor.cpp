@@ -20,6 +20,7 @@ Cursor::CursorHistory::CursorHistory() {
 Cursor::Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash) {
         this->simplyGen = simplyGen;
         this->movesHash = movesHash;
+        memset(history,0,sizeof(CursorHistory)*TOTAL_CELLS);
         count = 0;
 };
 
@@ -82,7 +83,7 @@ bool Cursor::forward(TMove N, TNode* node) {
   ++count;
   moves [count] = N;
 
-  CursorHistory *curr = current(), *prev = &(history[count-2]);
+  CursorHistory *curr = current(), *prev = &(history[count <= 1? 0 : count-2]);
   curr->node = node;
   curr->move = N;
 
@@ -118,16 +119,14 @@ bool Cursor::forward(TMove N, TNode* node) {
     curr->enCount = 0;
 
     if (gameMode == 1 &&  lastMove()->age == 1) {
-        for (int i=-3; i<=3; i++)
-            for (int j=-3; j<=3; j++)
-                if (i==-3||i==3||j==-3||j==3) {
-                        int x1 = 7+i, y1 = 7+j;
+        for (int x1=4; x1<=10; x1++)
+            for (int y1=-4; y1<=10; y1++)
+                if (x1==4||x1==10||y1==4||y1==10) {
                         TMove move = y1*fsize+x1;
                         if (kl[move] == 0 && isAlllowed(move)) {
                             if (curr->enCount >= MAX_ENABLERS) {
                                 curr->enCount = curr->enCount; //TODO
                             } else {
-//                              history[count].en[t++] = (7+j)*fsize+7+i;
                                 kl[move] = 1;
                                 curr->en[curr->enCount++] = move;
                             }
@@ -143,10 +142,11 @@ bool Cursor::forward(TMove N, TNode* node) {
                     int x1 = x+i*d, y1 = y+j*d;
                     TMove move = y1*fsize+x1;
                     if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[move] == 0 && isAlllowed(move)) {
-                        int n = y1*fsize+x1;
-                        if (kl[n] == 0) {
-                          kl[n] = 1;
-                          curr->en[curr->enCount++] = n;
+                          if (curr->enCount >= MAX_ENABLERS) {
+                              curr->enCount = curr->enCount; //TODO
+                          } else {
+                              kl[move] = 1;
+                              curr->en[curr->enCount++] = move;
                         }
                     }
                 }
@@ -181,21 +181,20 @@ bool Cursor::back() {
 //=============================================================================
 
 bool Cursor::isAlllowed(TMove N) {
-                int x = N%fsize - 7;
-                int y = N/fsize - 7;
-
-                if ((  history[count].symmX  == 0) && x < 0) {
-                   return false;
-                }
-                if ((  history[count].symmY  == 0 || history[count].symmXY  == 0) && y < 0) {
-                   return false;                }
-                if ((  history[count].symmW  == 0) && x < y) {
-                   return false;
-                }
-                if ((  history[count].symmXYW  == 0) && x < -y) {
-                   return false;
-                }
-                return allow(N);
+    int x = N%fsize - 7;
+    int y = N/fsize - 7;
+    if ((  history[count-1].symmX  == 0) && x < 0) {
+      return false;
+    }
+    if ((  history[count-1].symmY  == 0 || history[count].symmXY  == 0) && y < 0) {
+      return false;                }
+    if ((  history[count-1].symmW  == 0) && x < y) {
+      return false;
+    }
+    if ((  history[count-1].symmXYW  == 0) && x < -y) {
+      return false;
+    }
+    return allow(N);
 };
 
 

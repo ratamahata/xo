@@ -120,7 +120,7 @@ bool Cursor::forward(TMove N, TNode* node) {
 
     if (gameMode == 1 &&  lastMove()->age == 1) {
         for (int x1=4; x1<=10; x1++)
-            for (int y1=-4; y1<=10; y1++)
+            for (int y1=4; y1<=10; y1++)
                 if (x1==4||x1==10||y1==4||y1==10) {
                         TMove move = y1*fsize+x1;
                         if (kl[move] == 0 && isAlllowed(move)) {

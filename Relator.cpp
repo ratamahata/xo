@@ -29,9 +29,8 @@ void Relator::calculateChilds() {
             }
         }
     }
+    /*
     if (childs.count == 0) {
-
-
 
     for (int i = 0; i < TOTAL_CELLS; ++i) {
         if (kl[i]==1) {
@@ -42,11 +41,8 @@ void Relator::calculateChilds() {
             }
         }
     }
-
-
-
       return;
-    }
+    }*/
 };
 
 

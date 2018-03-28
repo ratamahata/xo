@@ -225,20 +225,24 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
               int i=0;
 
               TNode *node = f->xo->lastMove();
-              /*
-              for(i=0; i < node->totalDirectChilds; ++i) {
-                int r = node->childs[i].node->chooseFactor(firstNode);
+
+              //begin hints calculation
+              f->xo->calculateChilds();
+              for(i=0; i < f->xo->childs.count; ++i) {
+                int r = f->xo->childs.node[i]->chooseFactor(firstNode);
                 if (r<min) min = r;
                 if (r>max) max = r;
               }
 
               memset(f->dkl, 0, fsize*fsize);
-              for(i=0; i<node->totalDirectChilds; ++i) {
-                TNodeLink* link = &(node->childs[i]);
-                int r = link->node->chooseFactor(firstNode);
+              for(i=0; i<f->xo->childs.count; ++i) {
+
+                int r = f->xo->childs.node[i]->chooseFactor(firstNode);
                 decr = min-1;
-                f->dkl[link->move] = 30+(r-decr)*225/(max-decr);
-              }*/
+                f->dkl[f->xo->childs.move[i]] = 30+(r-decr)*225/(max-decr);
+              }
+              //end hints calculation
+
               f->movesCount = f->xo->count;
               int i1 = firstNode->totalChilds;
               int i2 = node->totalChilds;

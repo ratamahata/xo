@@ -7,6 +7,10 @@
 
 class Relator : public Evaluator {
 
+        public:
+        void calculateChilds();
+        RelativeBucket childs;
+
 //-------------------------------------
         protected:
 
@@ -17,11 +21,9 @@ class Relator : public Evaluator {
         };
 
         Relator(SimplyNumbers*, Hashtable* );
-        RelativeBucket childs;
-        MovesBucket newChilds;
 
+        MovesBucket newChilds;
         TNode* getChild(TNode *parent, TMove childMove);
-        void calculateChilds();
         void findMovesToExpand();
         Cursor::RelativeBucket getParents(TNode *node);
         void updateParents(int addedChilds);

@@ -25,8 +25,6 @@ void Expander ::expand() {
 
   short int max_rating = -32600;
 
-  int addChilds = 0;
-
   for(int i=0; i<newChilds.count; ++i) {
 
     TMove move = newChilds.move[i];

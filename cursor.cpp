@@ -186,7 +186,7 @@ bool Cursor::isAlllowed(TMove N) {
     if ((  history[count-1].symmX  == 0) && x < 0) {
       return false;
     }
-    if ((  history[count-1].symmY  == 0 || history[count].symmXY  == 0) && y < 0) {
+    if ((  history[count-1].symmY  == 0 || history[count-1].symmXY  == 0) && y < 0) {
       return false;                }
     if ((  history[count-1].symmW  == 0) && x < y) {
       return false;

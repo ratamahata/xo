@@ -106,8 +106,8 @@ void Relator::updateNode(TNode *node, TNode *from, int addedChilds) {
             max_rating = child->rating;
         }
     }*/
-    if (from->rating > -node->rating) {
-        node->rating = - from->rating;
+    if (node->rating > -from->rating) {
+        node->rating = -from->rating;
     }
     node->totalChilds += addedChilds;
 }

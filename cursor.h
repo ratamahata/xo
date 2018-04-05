@@ -9,7 +9,7 @@
 #define fsize 15  //field size
 #define TOTAL_CELLS 225 //fsize*fsize, cells total
 
-#define MAX_ENABLERS 16
+#define MAX_ENABLERS 32
 //---------------------------------------------------------------------------
 
 class Cursor {
@@ -32,7 +32,7 @@ public:
     int symmX, symmY, symmXY, symmW, symmXW, symmYW, symmXYW;
     TNode *node;
     RelativeBucket parents;
-    bool removed;
+//    bool removed;
   };
 
   int gameMode;//0 = Go - Moku, 1 = 5-in-a-row, 2 = Renjue

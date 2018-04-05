@@ -49,40 +49,36 @@ void Relator::calculateChilds() {
 
 //=============================================================================
 void Relator::updateParents(int addedChilds) {
-    for(int i = 0; i < count-1; ++i) {
-        updateParents(current()->node, i, 0, count, count-1, addedChilds);
-    }
+    updateParents(current()->node, 0, 0, true, true, count-1, addedChilds);
 };
 
 //=============================================================================
-void Relator::updateParents(TNode *node, int depth, int removed, int maxEven, int maxOdd, int addedChilds) {
-    bool odd = removed%2;
-    int i = odd ? maxOdd : maxEven;
-    for(; i > 1; i -= 2) {
-        if (!history[i-1].removed) {
-            TNode *n = getParent(node, history[i-1].move);
-            if (n != NULL) {
-                if (depth > removed) {
-                    history[i-1].removed = true;
-                    if (odd) {
-                        maxOdd = i-2;
-                    } else {
-                        maxEven = i-2;
-                    }
-                    updateParents(n, depth, removed+1, maxEven, maxOdd, addedChilds);
-                    history[i-1].removed = false;
-                } else {
-                    updateNode(n, node, addedChilds);
-                }
-            } else {
+//Private recursive method, used to update parent nodes of "node" by stages:
+//"depth" parameter sets which parent level to update (0-parents, 1-grandparents and so on)
+//"removed" parameter sets a number of moves that was virually removed when calculating parent
+//"max" - maximum removable index
+void Relator::updateParents(TNode *node, int removed, int removedFromEnd,
+                bool onlyLastRemoved, bool updateRating, int max, int addedChilds) {
+    for(int i = max; i > 0; i -= 2) {
+        TNode *parent = getParent(node, history[i].move);
+        if (parent != NULL) {
+            updateRating = updateNode(parent, updateRating, addedChilds, removedFromEnd);
+            updateParents(parent, removed+1,
+                onlyLastRemoved&& i == max
+                    ? removedFromEnd+1
+                    : removedFromEnd,
+                onlyLastRemoved&& i == max
+                    ? true
+                    : false,
+                updateRating, i-1, addedChilds);
+        } else {
             //no parent found
-            n=n;
-            }
+                parent=parent;
         }
     }
 };
 
-void Relator::updateNode(TNode *node, TNode *from, int addedChilds) {
+bool Relator::updateNode(TNode *node, bool updateRating, int addedChilds, int removedFromEnd) {
 //TODO can we update only from "from", so no iteration needed ?
 /*
     short int max_rating = -32600;
@@ -106,10 +102,25 @@ void Relator::updateNode(TNode *node, TNode *from, int addedChilds) {
             max_rating = child->rating;
         }
     }*/
-    if (node->rating > -from->rating) {
-        node->rating = -from->rating;
+
+    bool ratingUpdated = false;
+    if (updateRating) {
+        short int max_rating = -32600;
+        for(int i = 0; i<count-removedFromEnd; ++i)
+            for(int j = 0; j<history[i].enCount; ++j) {
+            TNode *child = getChild(node, history[i].en[j]);
+            if (child != NULL && child->rating > max_rating) {
+                max_rating = child->rating;
+            }
+        }
+        if (node->rating != -max_rating) {
+            node->rating = -max_rating;
+            ratingUpdated = true;
+        }
     }
+
     node->totalChilds += addedChilds;
+    return ratingUpdated;
 }
 
 //---------------------------------------------------------------------------

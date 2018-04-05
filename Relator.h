@@ -33,8 +33,10 @@ class Relator : public Evaluator {
 
         //these are used fro parent calculation
 //        void updateParents(int childsAdded);
-        void updateParents(TNode *node, int depth, int removed, int maxEven, int maxOdd, int addedChilds);
-        void updateNode(TNode *node, TNode *from, int addedChilds);
+        void updateParents(TNode *node, int removed, int removedFromEnd,
+                bool onlyLastRemoved, bool updateRating, int max, int addedChilds);
+
+        bool updateNode(TNode *node, bool updateRating, int addedChilds, int removedFromEnd);
         TNode* getParent(TNode *node, TMove move);
         int minRemovedEven;
         int minRemovedOdd;

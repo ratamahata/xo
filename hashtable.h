@@ -14,7 +14,7 @@
     #define hashTableSizeO 902
     class Hashtable {
         private:
-        TNodeLink2 **table;
+        TNode **table;
 
         public:
         unsigned long hit, miss1, miss2, miss3, miss4;

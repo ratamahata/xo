@@ -1,9 +1,5 @@
 #include "tnode.h"
 
-TNodeLink2::TNodeLink2() {
-    next = NULL;
-}
-
 TNode::TNode() {
     totalChilds = 0;
     rating = 0;
@@ -12,6 +8,7 @@ TNode::TNode() {
     hashCodeO = 1;
     x2 = x3 = x4 = o2 = o3 = o4 = 0;
     fixedRating = false;
+    next = 0;
 };
 
 

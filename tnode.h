@@ -6,9 +6,6 @@
 
 #define NULL 0
 
-    struct TNodeLink;
-    struct TNodeLink2;
-
 typedef unsigned char TByte;
 typedef TByte TMove;
 typedef unsigned int THash;
@@ -45,14 +42,9 @@ typedef signed short int TRating;
         age;
 
       THash hashCodeX, hashCodeO;
+      TNode *next;
     };
 
-    struct TNodeLink2 {//backward (to parents) link
-        TNodeLink2();
-        TNodeLink2 *next;
-        TNode *node;
-    };
-      
 
 //---------------------------------------------------------------------------
 #endif

@@ -1,11 +1,5 @@
 #include "tnode.h"
 
-
-TNodeLink::TNodeLink() {
-    node = 0;
-    move = 255;
-}
-
 TNodeLink2::TNodeLink2() {
     next = NULL;
 }

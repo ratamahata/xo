@@ -36,7 +36,7 @@ typedef signed short int TRating;
 //      TNode *firstParent;//deprecated
 //      TNodeLink2 *nextParent;//deprecated
 //      TNodeLink *childs;//deprecated
-      void *reserved;
+//      void *reserved;
       bool fixedRating;
       TByte //move,
         totalDirectChilds,
@@ -45,16 +45,6 @@ typedef signed short int TRating;
         age;
 
       THash hashCodeX, hashCodeO;
-    };
-
-
-    struct TNodeLink {//forward (to childs) link
-        TNodeLink();
-        TNode *node;
-        TByte move;
-#ifdef DEBUG_VER
-        bool isAttached;
-#endif
     };
 
     struct TNodeLink2 {//backward (to parents) link

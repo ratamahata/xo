@@ -82,7 +82,7 @@ void TDebugForm::treeOutput(TNode *node, int depth) {
     if (node == getRoot()) {
     	TreeView1->Items->Clear();
         tostr(node, buf);
-        node->reserved = TreeView1->Items->Add(TreeView1->Selected, buf);
+        //node->reserved = TreeView1->Items->Add(TreeView1->Selected, buf);//TODO
     }
 
     bool choosen[200];
@@ -95,7 +95,7 @@ void TDebugForm::treeOutput(TNode *node, int depth) {
             if (!choosen[i]) {
                 TNodeLink *child;
                 //child = &(node->childs[i]);//TODO
-                short int r = child->node->rating;
+                short int r;// = child->node->rating;//TODO
                 if (r > max) {
                     max = r;
                     selected = i;
@@ -108,9 +108,9 @@ void TDebugForm::treeOutput(TNode *node, int depth) {
         }
         choosen[selected] = true;
         TNodeLink *chosenChild;// = &(node->childs[selected]);//TODO
-        tostr(chosenChild->node, buf);
-        chosenChild->node->reserved = TreeView1->Items->AddChild((TTreeNode*)chosenChild->node->reserved, buf);//TODO document
-        treeOutput(chosenChild->node, depth+1);
+        //tostr(chosenChild->node, buf);//TODO
+        //chosenChild->node->reserved = TreeView1->Items->AddChild((TTreeNode*)chosenChild->node->reserved, buf);//TODO document
+        //treeOutput(chosenChild->node, depth+1);//TODO
     }
 //#endif
 //    delete[] choosen;

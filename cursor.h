@@ -57,6 +57,7 @@ public:
 
 private:
         inline bool allow(int move);
+        void enable(CursorHistory *curr, int x, int y, int maxDistance);
 protected:
 
         //bool unique(TMove move);

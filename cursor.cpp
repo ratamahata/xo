@@ -134,7 +134,21 @@ bool Cursor::forward(TMove N, TNode* node) {
                 }
     } else {
         int max = count > 1 ? 2 : 1;
-        for (int d=1; d<=max; d++)
+        enable(curr, x, y, max);
+    }
+  //end: update "enablers" history
+
+  if (current()->node == NULL) {
+        return false;
+  }
+
+  return true;
+};
+
+//=============================================================================
+
+void Cursor::enable(CursorHistory *curr, int x, int y, int maxDistance) {
+        for (int d=1; d<=maxDistance; d++)
             for (int i=-1; i<=1; i++)
               for (int j=-1; j<=1; j++)
                 if ((!i)&&(!j)) continue;
@@ -150,17 +164,8 @@ bool Cursor::forward(TMove N, TNode* node) {
                         }
                     }
                 }
-    }
-  //end: update "enablers" history
 
-  if (current()->node == NULL) {
-        return false;
-  }
-
-  return true;
-};
-
-//=============================================================================
+}
 
 //set cursor to one move back
 bool Cursor::back() {

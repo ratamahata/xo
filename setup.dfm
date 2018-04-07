@@ -1,6 +1,6 @@
 object SetupForm: TSetupForm
-  Left = 803
-  Top = 700
+  Left = 463
+  Top = 316
   BorderStyle = bsDialog
   Caption = 'X & O setup'
   ClientHeight = 192
@@ -16,11 +16,11 @@ object SetupForm: TSetupForm
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 80
+    Left = 24
     Top = 16
-    Width = 198
+    Width = 295
     Height = 29
-    Caption = 'Rules of this game'
+    Caption = 'Please choose game mode'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -24

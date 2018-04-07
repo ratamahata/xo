@@ -19,6 +19,7 @@ Expander::Expander(SimplyNumbers *simplyGen, Hashtable *movesHash)
 void Expander ::expand() {
   TNode* cursor = current()->node;
   if (cursor->rating >= 32300 || cursor->rating <= -32300) {
+      ++cursor->totalDirectChilds;
         return;
   }
   findMovesToExpand();

@@ -24,17 +24,17 @@ void Builder::buildTree() {
   int count0 = count;
   CursorHistory *cur = current();
 
-  if (cur->node->totalDirectChilds < 0){
-    return;
-  }
-
   int i;
 
   while (cur->node->totalDirectChilds > 0 && count < 224) {
     i = chooseNodeToExpand();
-//    if (i == -1) {
-//        continue;
-//    }
+
+    if (i == -1) {
+        ++cur->node->totalDirectChilds;
+        back();
+        cur = current();
+        continue;
+    }
     forward(childs.move[i], childs.node[i]);
     cur = current();
   }
@@ -74,6 +74,9 @@ int Builder::chooseNodeToExpand() {
 //  do {
         for (int i = 0; i < childs.count; ++i) {
             TNode *node = childs.node[i];
+            if (node->rating <= - 32300 || node->rating >= 32300)
+                continue;
+
             int ttc = node->ratingToTotalChilds();
             int ret = (node->totalChilds > 60000) ? ttc*ttc : ttc;
             float f = ret/ (float)(1+node->totalChilds);

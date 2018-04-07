@@ -11,8 +11,8 @@
 
 typedef unsigned char TByte;
 typedef TByte TMove;
-typedef unsigned long long int THash;
-#define THASH_MAX 18446744073709551615ULL //ULLONG_MAX from <limits.h>
+typedef unsigned int THash;
+#define THASH_MAX 4294967295U //ULLONG_MAX from <limits.h>
 typedef signed short int TRating;
 
     class TNode {

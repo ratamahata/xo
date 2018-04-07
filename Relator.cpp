@@ -79,30 +79,6 @@ void Relator::updateParents(TNode *node, int removed, int removedFromEnd,
 };
 
 bool Relator::updateNode(TNode *node, bool updateRating, int addedChilds, int removedFromEnd) {
-//TODO can we update only from "from", so no iteration needed ?
-/*
-    short int max_rating = -32600;
-    for (int i = 0; i < TOTAL_CELLS; ++i) {
-        if (kl[i]==0) {
-            continue;
-        } else if (kl[i]>1) {
-            bool occupied = false;
-            for (int j = 0; j = count-1; ++j) {
-                if (history[j].move == i && !history[j].removed) {//WTf ??
-                    occupied = true;
-                    break;
-                }
-            }
-            if (occupied) {
-                continue;
-            }
-        }
-        TNode *child = getChild(node, i);
-        if (child != NULL && child->rating > max_rating) {
-            max_rating = child->rating;
-        }
-    }*/
-
     bool ratingUpdated = false;
     if (updateRating) {
         short int max_rating = -32600;
@@ -118,7 +94,6 @@ bool Relator::updateNode(TNode *node, bool updateRating, int addedChilds, int re
             ratingUpdated = true;
         }
     }
-
     node->totalChilds += addedChilds;
     return ratingUpdated;
 }
@@ -135,21 +110,17 @@ TNode* Relator::getParent(TNode *node, TMove move) {
         unsigned long k = 0, n, t, r3;
         unsigned long m2 = THASH_MAX / multiplier;
         unsigned long r1 = (THASH_MAX % multiplier) + 1;
-        unsigned long r2 = remainder % multiplier;
-        if (multiplier % r1) {
-                for(;;) {
-                         ++k;
-                         t = multiplier*k - r2;
-                         n = t / r1;
-                         r3= t % r1;
-                         if (r3 == 0) {
-                                break;
-                         }
-                }
+
+        for(;;) {
+            ++k;
+            t = r1*k + remainder;
+            n = t/multiplier;
+            r3 = t%multiplier;
+            if (0 == r3) {
+                break;
+            }
         }
-        prevPos = n*m2 + (n*r1 + prevPos) / multiplier;
-        //THash remainder2 = (THASH_MAX % multiplier) + 1;
-        //ToDo: check that (remainder + remainder2) == multiplier
+        prevPos = k*m2 + prevPos + n;
     }
     THash hashCodeX = prevPos;
     THash hashCodeO = node->hashCodeX;

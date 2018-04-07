@@ -43,8 +43,8 @@ TNode *Hashtable::get(THash h1, THash h2, int age) {
 
     while (array[0] != NULL) {
         if (array[0]->node->hashCodeX == h1 && array[0]->node->hashCodeO == h2) {
-          //int age1 = array[0]->node->getAge();
-          if (true) {
+
+          if (age == array[0]->node->age) {
                         ++hit;
                         return array[0]->node;
           } else {

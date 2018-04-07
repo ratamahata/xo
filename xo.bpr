@@ -4,7 +4,7 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="xo.exe"/>
-    <OBJFILES value="xo.obj xo_al.obj xomain.obj xo_al_ext.obj debug.obj setup.obj 
+    <OBJFILES value="xo.obj xomain.obj debug.obj setup.obj 
       hashtable.obj tnode.obj simplynumbers.obj cursor.obj Evaluator.obj 
       Builder.obj GameBoard.obj Relator.obj Expander.obj"/>
     <RESFILES value="xo.res"/>
@@ -58,10 +58,8 @@
   </LINKER>
   <FILELIST>
       <FILE FILENAME="xo.cpp" FORMNAME="" UNITNAME="xo" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="xo_al.cpp" FORMNAME="" UNITNAME="xo_al" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="xomain.cpp" FORMNAME="MainForm" UNITNAME="xomain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="xo.res" FORMNAME="" UNITNAME="xo" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="xo_al_ext.cpp" FORMNAME="" UNITNAME="xo_al_ext" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="debug.cpp" FORMNAME="DebugForm" UNITNAME="debug" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="setup.cpp" FORMNAME="SetupForm" UNITNAME="setup" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="hashtable.cpp" FORMNAME="" UNITNAME="hashtable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>

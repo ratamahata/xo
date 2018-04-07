@@ -6,7 +6,6 @@
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
-#include "xo_al_ext.h"
 #include "xomain.h"
 #include <ComCtrls.hpp>
 #include "cspin.h"

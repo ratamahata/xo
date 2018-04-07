@@ -132,6 +132,10 @@ bool Cursor::forward(TMove N, TNode* node) {
                             }
                         }
                 }
+    } else if (gameMode == 1 &&  lastMove()->age == 2) {
+        enable(curr, x, y, 1);
+        enable(curr, 7, 7, 1);
+        enable(curr, history[1].move%15, history[1].move/15, 1);
     } else {
         int max = count > 1 ? 2 : 1;
         enable(curr, x, y, max);

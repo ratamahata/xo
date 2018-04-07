@@ -11,54 +11,22 @@ TNodeLink2::TNodeLink2() {
 }
 
 TNode::TNode() {
-    childs = 0;
     totalChilds = 0;
     rating = 0;
     totalDirectChilds = 0;
     hashCodeX = 1;
     hashCodeO = 1;
     x2 = x3 = x4 = o2 = o3 = o4 = 0;
-    firstParent = NULL;
-    nextParent = NULL;
     fixedRating = false;
 };
 
-//return the number of parents
-int TNode::getAge() {
-
-    int ret = 0;
-    TNode *n = firstParent;
-    while (n != NULL) {
-        n = n->firstParent;
-        ++ret;
-    }
-    if (age != ret) {
-        age = age;
-    }
-    return age;
-}
-
-//==================================================================
-TNodeLink * TNode::getLink(TNodeLink *first) {
-    if (firstParent == NULL) {
-        return first;
-    }
-
-    for (int i = 0; i<firstParent->totalDirectChilds; ++i) {
-        if (firstParent->childs[i].node == this) {
-                return &(firstParent->childs[i]);
-        }
-    }
-
-    //should never happen
-    return NULL;
-}
 
 //==================================================================
 int TNode::chooseFactor(TNode *firstNode) {
         return rating;//ratingToTotalChilds(firstNode);
 }
 
+/*
 //==================================================================
 int TNode::removeChild(TNode *child) {
         int found = 0;
@@ -136,7 +104,9 @@ int TNode::checkChilds(int recursion) {
   }
   return violationsCount;
 }
+  */
 
+  
 //==================================================================
 
 int TNode::ratingToTotalChilds() {

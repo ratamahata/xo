@@ -25,19 +25,17 @@ typedef signed short int TRating;
       void update(short int newRating, unsigned int addedChilds);
       int chooseFactor(TNode *firstNode);
       int ratingToTotalChilds();
-      int getAge();
-      TNodeLink* getLink(TNodeLink *first);
-      int removeChild(TNode *child);
-      void remove();
-      int checkChilds(int recursion);
-      int cleanChilds(int critRating, int recursion);
+//      int removeChild(TNode *child);
+//      void remove();
+//      int checkChilds(int recursion);
+//      int cleanChilds(int critRating, int recursion);
 
 
       unsigned int totalChilds;
       TRating rating;
-      TNode *firstParent;//deprecated
-      TNodeLink2 *nextParent;//deprecated
-      TNodeLink *childs;//deprecated
+//      TNode *firstParent;//deprecated
+//      TNodeLink2 *nextParent;//deprecated
+//      TNodeLink *childs;//deprecated
       void *reserved;
       bool fixedRating;
       TByte //move,

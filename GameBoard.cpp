@@ -25,7 +25,6 @@ GameBoard::GameBoard(SimplyNumbers *simplyGen, Hashtable *movesHash,
 bool GameBoard::put(TMove N) {
                 int x = N%fsize - 7;
                 int y = N/fsize - 7;
-                int x0=x, y0=y;
                 int absX = x < 0 ? -x : x;
                 int absY = y < 0 ? -y : y;
                 bool symmW = history[count-1].symmW;

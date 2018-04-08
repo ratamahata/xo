@@ -4,9 +4,9 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="xo.exe"/>
-    <OBJFILES value="xo.obj xomain.obj debug.obj setup.obj 
-      hashtable.obj tnode.obj simplynumbers.obj cursor.obj Evaluator.obj 
-      Builder.obj GameBoard.obj Relator.obj Expander.obj"/>
+    <OBJFILES value="xo.obj xomain.obj debug.obj setup.obj hashtable.obj tnode.obj 
+      simplynumbers.obj cursor.obj Evaluator.obj Builder.obj GameBoard.obj 
+      Relator.obj Expander.obj"/>
     <RESFILES value="xo.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

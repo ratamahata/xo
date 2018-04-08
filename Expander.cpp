@@ -30,11 +30,17 @@ void Expander ::expand() {
 
     TMove move = newChilds.move[i];
 
-    TNode *node = createNode(
-        cursor->hashCodeO,
-        cursor->hashCodeX * simplyGen->getHash(move),
-        cursor->age + 1);
-    rate(cursor, node, move);
+    THash newHashX = cursor->hashCodeO;
+    THash newHashO = cursor->hashCodeX * simplyGen->getHash(move);
+
+    TNode *node = movesHash->get(newHashX, newHashO, cursor->age + 1);
+
+    if (node == NULL) {
+            node = createNode(newHashX, newHashO, cursor->age + 1);
+            rate(cursor, node, move);
+    } else {
+        node = node;
+    }
 
     if (node->rating > max_rating) max_rating = node->rating;
   }

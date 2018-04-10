@@ -20,7 +20,8 @@ void Expander ::expand() {
   TNode* cursor = current()->node;
   if (cursor->rating >= 32300 || cursor->rating <= -32300) {
       ++cursor->totalDirectChilds;
-        return;
+      logger->error("can't expand");
+      return;
   }
   findMovesToExpand();
 

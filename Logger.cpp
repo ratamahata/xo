@@ -14,6 +14,7 @@ Logger::Logger() {
         missAgeCount = 0;
         missHashCount = 0;
         missIndexCount = 0;
+        lastError = NULL;
 }
 
 void Logger::hit() {
@@ -32,7 +33,14 @@ void Logger::missIndex() {
         ++missIndexCount;
 }
 
+void Logger::error(const char* message) {
+        this->lastError = message;
+}
+
 void Logger::printLastError(char *buffer) {
-        sprintf(buffer, missAgeCount > 0
-                        ? "Hash collisions %d" : "\0", missAgeCount);
+        sprintf(buffer,
+                lastError != NULL
+                        ? lastError : missAgeCount > 0
+                        ? "Hash collisions %d"
+                        : "\0", missAgeCount);
 }

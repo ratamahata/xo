@@ -10,9 +10,9 @@
 #pragma package(smart_init)
 
 
-GameBoard::GameBoard(SimplyNumbers *simplyGen, Hashtable *movesHash, Logger *logger,
+GameBoard::GameBoard(SimplyNumbers *simplyGen, Hashtable *movesHash, 
                  bool *swapXp, bool *swapYp, bool *swapWp, bool *swapXYWp, int gameMode) : Builder(simplyGen, movesHash, gameMode) {
-        this->logger = logger;
+
         swapX = swapXp;
         swapY = swapYp;
         swapW = swapWp;

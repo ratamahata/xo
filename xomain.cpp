@@ -675,9 +675,10 @@ void __fastcall TMainForm::FormShow(TObject *Sender)
 
   //xo = new Al_ext(SetupForm->balance);
   Logger *logger = new Logger();
-  xo = new GameBoard(new SimplyNumbers(), new Hashtable(logger), logger,
+  xo = new GameBoard(new SimplyNumbers(), new Hashtable(logger),
           &swapX, &swapY, &swapW, &swapXYW,
           (SetupForm->balance ? 1 : 0));
+  xo->logger = logger;
   movesCount = xo->count;
 //  xo->mindepth = 1;
   

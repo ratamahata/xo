@@ -12,6 +12,7 @@ class Logger {
         int missAgeCount;
         int missHashCount;
         int missIndexCount;
+        const char* lastError;
 
   public:
         Logger();
@@ -19,6 +20,8 @@ class Logger {
         void missAge();
         void missHash();
         void missIndex();
+
+        void error(const char *message);
 
         void printLastError(char *buffer);
 };

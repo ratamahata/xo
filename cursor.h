@@ -45,6 +45,8 @@ public:
   void restart();
   bool back();
 
+  Logger *logger;
+
   Hashtable *movesHash;
   CursorHistory history[TOTAL_CELLS];
 

@@ -23,6 +23,9 @@ void Expander ::expand() {
       logger->error("can't expand");
       return;
   }
+//  if (logger != NULL) {
+//        logger->expand(count);
+//  }
   findMovesToExpand();
 
   short int max_rating = -32600;

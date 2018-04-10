@@ -10,16 +10,17 @@
 #pragma package(smart_init)
 
 
-GameBoard::GameBoard(SimplyNumbers *simplyGen, Hashtable *movesHash,
+GameBoard::GameBoard(SimplyNumbers *simplyGen, Hashtable *movesHash, Logger *logger,
                  bool *swapXp, bool *swapYp, bool *swapWp, bool *swapXYWp, int gameMode) : Builder(simplyGen, movesHash, gameMode) {
+        this->logger = logger;
         swapX = swapXp;
         swapY = swapYp;
         swapW = swapWp;
         swapXYW = swapXYWp;
 
-    TNode *node = createNode(1, 1, 0);
-    forward(112, node);
-    expand();
+        TNode *node = createNode(1, 1, 0);
+        forward(112, node);
+        expand();
 };
 
 bool GameBoard::put(TMove N) {

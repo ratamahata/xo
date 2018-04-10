@@ -6,7 +6,7 @@
     <PROJECT value="xo.exe"/>
     <OBJFILES value="xo.obj xomain.obj debug.obj setup.obj hashtable.obj tnode.obj 
       simplynumbers.obj cursor.obj Evaluator.obj Builder.obj GameBoard.obj 
-      Relator.obj Expander.obj"/>
+      Relator.obj Expander.obj Logger.obj"/>
     <RESFILES value="xo.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -71,6 +71,7 @@
       <FILE FILENAME="GameBoard.cpp" FORMNAME="" UNITNAME="GameBoard" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="Relator.cpp" FORMNAME="" UNITNAME="Relator" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="Expander.cpp" FORMNAME="" UNITNAME="Expander" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Logger.cpp" FORMNAME="" UNITNAME="Logger" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

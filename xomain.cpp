@@ -264,8 +264,9 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                               ? "Please wait.."
                               : "Please make your move. Or, you can give it to me, by pressing Move button.");
 
-              sprintf(f->msg4, f->xo->movesHash->miss3 > 0 || f->xo->movesHash->miss4 > 0
-                        ? "Hash collisions %d / %d" : "\0\0", f->xo->movesHash->miss3, f->xo->movesHash->miss4);
+              f->xo->logger->printLastError(f->msg4);
+//              sprintf(f->msg4, f->xo->movesHash->miss3 > 0 || f->xo->movesHash->miss4 > 0
+//                        ? "Hash collisions %d / %d" : "\0\0", f->xo->movesHash->miss3, f->xo->movesHash->miss4);
 
 /*
               double updateFreq = TNode::updatesCount
@@ -673,7 +674,8 @@ void __fastcall TMainForm::FormShow(TObject *Sender)
   CheckBoxGrow->Checked  = true;
 
   //xo = new Al_ext(SetupForm->balance);
-  xo = new GameBoard(new SimplyNumbers(), new Hashtable,
+  Logger *logger = new Logger();
+  xo = new GameBoard(new SimplyNumbers(), new Hashtable(logger), logger,
           &swapX, &swapY, &swapW, &swapXYW,
           (SetupForm->balance ? 1 : 0));
   movesCount = xo->count;

@@ -4,6 +4,7 @@
 //---------------------------------------------------------------------------
 #include "hashtable.h"
 #include "tnode.h"
+#include "Logger.h"
 
     // 10000*900 -> 0/298K collisions
     // 10002*902 -> 0/47960 collisions
@@ -15,11 +16,12 @@
     class Hashtable {
         private:
         TNode **table;
+        Logger *logger;
 
         public:
-        unsigned long hit, miss1, miss2, miss3, miss4;
 
-        Hashtable();
+
+        Hashtable(Logger *logger);
         void put(TNode *node);
         TNode *get(THash h1, THash h2, int age);
     };

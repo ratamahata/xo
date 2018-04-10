@@ -2,14 +2,10 @@
 #include "hashtable.h"
 
 //------------------------------------------------------------------
-Hashtable::Hashtable() {
+Hashtable::Hashtable(Logger *logger) {
     table = new TNode*[hashTableSizeX*hashTableSizeO];
     memset(table, 0, sizeof(TNode*)*hashTableSizeX*hashTableSizeO);
-    hit = 0;
-    miss1 = 0;
-    miss2 = 0;
-    miss3 = 0;
-    miss4 = 0;
+    this->logger = logger;
 }
 
 //------------------------------------------------------------------
@@ -44,7 +40,7 @@ TNode *Hashtable::get(THash h1, THash h2, int age) {
         if (array[0]->hashCodeX == h1 && array[0]->hashCodeO == h2) {
 
           if (age == array[0]->age) {
-                        ++hit;
+                        logger->hit();
                         return array[0];
           } else {
                 m3 = true;
@@ -56,11 +52,11 @@ TNode *Hashtable::get(THash h1, THash h2, int age) {
     }
 
     if (m3) {
-        ++miss3;
+        logger->missAge();
     } else if (m2) {
-        ++miss2;
+        logger->missHash();
     } else {
-        ++miss1;
+        logger->missIndex();
     }
     return NULL;
 };

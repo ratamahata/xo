@@ -70,8 +70,8 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
         bool medRating = (delta < 1000);
         unsigned int totalChilds = firstNode->totalChilds;
 
-        bool mediumicPlay = medRating
-                && (f->xo->count <  4
+        bool mediumicPlay = medRating;
+/*              && (f->xo->count <  4
                 || (f->xo->count <  5 && totalChilds >  500000)
                 || (f->xo->count <  6 && totalChilds >  600000)
                 || (f->xo->count <  7 && totalChilds >  700000)
@@ -85,7 +85,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                 || (f->xo->count < 19 && totalChilds >18000000)
                 || (f->xo->count < 20 && totalChilds >20000000)
                 || (f->xo->count < 21 && totalChilds >23000000)
-                );
+                );*/
 
         int childPerMove = f->CSpinEditChilds->Value*1000;
         if (wizardMode && childs0 && childs0 >= childPerMove && childs0 < childPerMove*2) {

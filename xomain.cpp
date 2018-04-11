@@ -56,18 +56,21 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
 
         bool changed = true;
 
-        short int critRating = f->xo->getFirstNode()->rating*1.8;
-        short int r = f->xo->lastMove()->rating;
-        if (critRating < 0) {
-                critRating *= -1;
-        }
-        int limit = SetupForm->balance ? 800 : 4100;
-        if (critRating < limit) {
-            critRating = limit;
-        }
         TNode *firstNode = f->xo->getFirstNode();
+
+        TRating currRating = f->xo->lastMove()->rating;
+        TRating currXRating = f->xo->count%2
+                        ? -currRating
+                        : currRating;
+
+        int delta = currXRating - firstNode->rating;
+        if (delta < 0) {
+                delta = -delta;
+        }
+        bool medRating = (delta < 4000);
         unsigned int totalChilds = firstNode->totalChilds;
-        bool mediumicPlay = r < critRating && r > -critRating
+
+        bool mediumicPlay = medRating
                 && (f->xo->count <  4
                 || (f->xo->count <  5 && totalChilds >  500000)
                 || (f->xo->count <  6 && totalChilds >  600000)
@@ -98,9 +101,9 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                 : 1;
         if (mcdf < 1) mcdf=1;
 
-        int maxChilds = r < ZONE01_RATING && r > -ZONE01_RATING
+        int maxChilds = currRating < ZONE01_RATING && currRating > -ZONE01_RATING
                 ? MAX_CHILD_PER_MOVE_ZONE0 / mcdf
-                : r < ZONE12_RATING && r > -ZONE12_RATING
+                : currRating < ZONE12_RATING && currRating > -ZONE12_RATING
                         ? MAX_CHILD_PER_MOVE_ZONE1 / mcdf
                         :f->CSpinEditChilds->Value*1000 + 1;
         if (maxChilds < childPerMove) {
@@ -130,10 +133,10 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                         || f->xo->lastMove()->totalDirectChilds == 1)) {
 
           f->moveRequested = false;
-          flowRating = r;
+          flowRating = currRating;
           f->resultRecieved = f->xo->move();
           childs0 = f->xo->lastMove()->totalChilds;
-          r = f->xo->lastMove()->rating;
+          currRating = f->xo->lastMove()->rating;
         } else if (f->takeBackRequested) {
             f->takeBackRequested = false;
 
@@ -160,13 +163,13 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                 //f->xo->lastmove = f->xo->cursorLink->node; //TODO is it needed?
             }
 
-            r = f->xo->lastMove()->rating;
+            currRating = f->xo->lastMove()->rating;
         }
 
         //********* STEP 3   autoplay stuff ***************
 
         if (f->ComboBoxMode->ItemIndex == 3 && wizardMode > 0) {//Show debuts
-                if (r > critRating) {
+                if (!medRating) {
                         if (wizardMode%5 == 0 || wizardMode%7 == 0) {
                                 f->restartRequested = true;
                         } else {
@@ -201,7 +204,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                                 f->moveRequested = true;
                                 continue;
                   } else {
-                          if (r > critRating || r < -critRating) {
+                          if (!medRating) {
                                         //bad path
                                         if (wizardMode)
                                         f->takeBackRequested = true;

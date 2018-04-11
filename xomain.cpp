@@ -60,14 +60,14 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
 
         TRating currRating = f->xo->lastMove()->rating;
         TRating currXRating = f->xo->count%2
-                        ? -currRating
-                        : currRating;
+                        ? currRating
+                        : -currRating;
 
         int delta = currXRating - firstNode->rating;
         if (delta < 0) {
                 delta = -delta;
         }
-        bool medRating = (delta < 4000);
+        bool medRating = (delta < 1000);
         unsigned int totalChilds = firstNode->totalChilds;
 
         bool mediumicPlay = medRating

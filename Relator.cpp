@@ -92,7 +92,25 @@ bool Relator::updateNode(TNode *node, bool updateRating, int addedChilds, int re
             }
         }
         if (node->rating != -max_rating) {
-            node->rating = -max_rating;
+            TRating absRatingOld = node->rating;
+            TRating absRating = node->rating = -max_rating;
+
+            if (node->totalChilds >= BIG_PARENT) {
+                if (absRatingOld < 0) absRatingOld = -absRatingOld;
+                if (absRating < 0) absRating = -absRating;
+
+                if (absRatingOld < CULL_RATING1 && absRating >= CULL_RATING1) {
+                        ++logger->bigParentsCulled1;
+                        if (node->totalChilds >= BIG_GRAND_PARENT) {
+                                ++logger->bigGrandParentsCulled1;
+                        }
+                } else if (absRatingOld < CULL_RATING2 && absRating >= CULL_RATING2) {
+                        ++logger->bigParentsCulled2;
+                        if (node->totalChilds >= BIG_GRAND_PARENT) {
+                                ++logger->bigGrandParentsCulled2;
+                        }
+                }
+            }
             ratingUpdated = true;
         }
     }
@@ -111,7 +129,7 @@ TNode* Relator::getParent(TNode *node, TMove move) {
 
     bool overflow = false;
 
-    if (remainder ==0 && multiplier==2 && node->age >=11) {
+    if (remainder ==0 && multiplier==2) {
         TNode* n = movesHash->get(prevPos, node->hashCodeX, node->age - 1);
         if (n != NULL) {
                 return n;

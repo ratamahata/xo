@@ -89,7 +89,9 @@ int GameBoard::move() {
 
   int totl = current()->node->totalDirectChilds;
   if (totl == 0) {
-        return -32600;
+        logger->error("no childs");
+        expand();
+        //return -32600;
   }
 
     TNode *node = current()->node;
@@ -108,6 +110,7 @@ int GameBoard::move() {
 
   if (choosen == NULL) {
   //should never happen??
+          logger->error("no move");
         return -32600;
   }
 

@@ -4,6 +4,7 @@
 #define RelatorH
 //---------------------------------------------------------------------------
 #include "Evaluator.h"
+#include "TNode.h"
 
 class Relator : public Evaluator {
 

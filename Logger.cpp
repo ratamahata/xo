@@ -17,6 +17,10 @@ Logger::Logger() {
         lastError = NULL;
         expandEven = 0;
         expandOdd = 0;
+        bigParentsCulled1 = 0;
+        bigParentsCulled2 = 0;
+        bigGrandParentsCulled1 = 0;
+        bigGrandParentsCulled2 = 0;
 }
 
 void Logger::hit() {
@@ -51,11 +55,14 @@ void Logger::printLastError(char *buffer) {
 
         //sprintf(buffer, "%d ", (expandEven*100 / (1+expandOdd + expandEven)));
 
+        if (lastError == NULL) {
+        sprintf(buffer, "%d/%d/%d/%d", bigParentsCulled1, bigParentsCulled2, bigGrandParentsCulled1, bigGrandParentsCulled2);
+        } else {
 
         sprintf(buffer,
                 lastError != NULL
                         ? lastError : missAgeCount > 0
                         ? "Hash collisions %d"
                         : "\0", missAgeCount);
-                        
+        }
 }

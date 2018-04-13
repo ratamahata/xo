@@ -86,10 +86,10 @@ bool Relator::updateNode(TNode *node, bool updateRating, int addedChilds, int re
         short int max_rating = -32600;
         for(int i = 0; i<count-removedFromEnd; ++i)
             for(int j = 0; j<history[i].enCount; ++j) {
-            TNode *child = getChild(node, history[i].en[j]);
-            if (child != NULL && child->rating > max_rating) {
-                max_rating = child->rating;
-            }
+                TNode *child = getChild(node, history[i].en[j]);
+                if (child != NULL && child->rating > max_rating) {
+                    max_rating = child->rating;
+                }
         }
         if (node->rating != -max_rating) {
             TRating absRatingOld = node->rating;
@@ -121,42 +121,32 @@ bool Relator::updateNode(TNode *node, bool updateRating, int addedChilds, int re
 //---------------------------------------------------------------------------
 
 TNode* Relator::getParent(TNode *node, TMove move) {
-    //bool lastMoveX = 0 == node->age % 2;
-    //THash lastPos = lastMoveX ? node->hashCodeX : node->hashCodeO;
+
     unsigned long multiplier = simplyGen->getExistingHash(move);
     THash prevPos = node->hashCodeO / multiplier;
     THash remainder = node->hashCodeO % multiplier;
 
-    bool overflow = false;
-
-    if (remainder ==0 && multiplier==2) {
+    if (remainder==0) {
         TNode* n = movesHash->get(prevPos, node->hashCodeX, node->age - 1);
-        if (n != NULL) {
+        if (n != NULL || multiplier != 2) {
                 return n;
         }
-        overflow = true;
     }
+    TNode* ret = NULL;
+    unsigned long k = 1, n, t, r3;
+    unsigned long m2 = THASH_MAX / multiplier;
+    unsigned long r1 = (THASH_MAX % multiplier) + 1;
 
-    if (remainder > 0 || overflow) {
-        unsigned long k = 0, n, t, r3;
-        unsigned long m2 = THASH_MAX / multiplier;
-        unsigned long r1 = (THASH_MAX % multiplier) + 1;
-
-        for(;;) {
-            ++k;
-            t = r1*k + remainder;
-            n = t/multiplier;
-            r3 = t%multiplier;
-            if (0 == r3) {
-                break;
-            }
+    for(;;++k) {
+        t = r1*k + remainder;
+        n = t/multiplier;
+        r3 = t%multiplier;
+        if (0 == r3) {
+            ret = movesHash->get(k*m2 + prevPos + n, node->hashCodeX, node->age - 1);
+            break;
         }
-        prevPos = k*m2 + prevPos + n;
     }
-    THash hashCodeX = prevPos;
-    THash hashCodeO = node->hashCodeX;
-    TNode* n = movesHash->get(hashCodeX, hashCodeO, node->age - 1);
-    return n;
+    return ret;
 };
 
 //----------------------------------------------------------------------------

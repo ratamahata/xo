@@ -28,8 +28,10 @@ void Expander ::expand() {
 //  }
   findMovesToExpand();
 
-  short int max_rating = -32600;
+  TRating max_rating = -32600;
 
+  int created = 0;
+  cursor->totalChilds = 0;
   for(int i=0; i<newChilds.count; ++i) {
 
     TMove move = newChilds.move[i];
@@ -40,12 +42,14 @@ void Expander ::expand() {
     TNode *node = movesHash->get(newHashX, newHashO, cursor->age + 1);
 
     if (node == NULL) {
-            node = createNode(newHashX, newHashO, cursor->age + 1);
-            rate(cursor, node, move);
+        ++created;
+        node = createNode(newHashX, newHashO, cursor->age + 1);
+        rate(cursor, node, move);
+        ++cursor->totalChilds;
     } else {
-        node = node;
-    }
+        cursor->totalChilds += (node->totalChilds+1);
 
+    }
     if (node->rating > max_rating) max_rating = node->rating;
   }
 
@@ -54,10 +58,9 @@ void Expander ::expand() {
         cursor->rating = (TRating)(0.4*(double)oldRating-0.6*(double)max_rating);
   }
 
-    cursor->totalDirectChilds = cursor->totalChilds = newChilds.count;
+  cursor->totalDirectChilds = newChilds.count;
 
-
-  updateParents(newChilds.count);
+  updateParents(created);
 // TODO:
 //  updatedParentsCounter = 0;
 //  updateParents(cursor, cursor->totalChilds, oldRating);

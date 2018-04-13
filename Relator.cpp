@@ -82,7 +82,7 @@ void Relator::updateParents(TNode *node, int removed, int removedFromEnd,
 
 bool Relator::updateNode(TNode *node, bool updateRating, int addedChilds, int removedFromEnd) {
     bool ratingUpdated = false;
-    if (updateRating) {
+    if (updateRating || addedChilds == 0) {
         short int max_rating = -32600;
         for(int i = 0; i<count-removedFromEnd; ++i)
             for(int j = 0; j<history[i].enCount; ++j) {
@@ -108,7 +108,18 @@ TNode* Relator::getParent(TNode *node, TMove move) {
     unsigned long multiplier = simplyGen->getExistingHash(move);
     THash prevPos = node->hashCodeO / multiplier;
     THash remainder = node->hashCodeO % multiplier;
-    if (remainder > 0) {
+
+    bool overflow = false;
+
+    if (remainder ==0 && multiplier==2 && node->age >=11) {
+        TNode* n = movesHash->get(prevPos, node->hashCodeX, node->age - 1);
+        if (n != NULL) {
+                return n;
+        }
+        overflow = true;
+    }
+
+    if (remainder > 0 || overflow) {
         unsigned long k = 0, n, t, r3;
         unsigned long m2 = THASH_MAX / multiplier;
         unsigned long r1 = (THASH_MAX % multiplier) + 1;

@@ -171,7 +171,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
         if (f->ComboBoxMode->ItemIndex == 3 && wizardMode > 0) {//Show debuts
                 if (!medRating) {
                         if (count%5 == 0 || count%7 == 0) {
-                                f->xo->updateParents(0);
+                                //f->xo->updateParents(0);
                                 f->restartRequested = true;
                         } else {
                                 f->takeBackRequested = true;

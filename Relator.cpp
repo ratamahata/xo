@@ -72,8 +72,10 @@ void Relator::updateParents(TNode *node, int removed, int removedFromEnd,
                     : false,
                 updateRating, i-1, addedChilds);
         } else {
-            //no parent found
-                parent=parent;
+                if (i == max && onlyLastRemoved) {
+                        logger->error("no parent found");
+                        getParent(node, history[i].move);
+                }
         }
     }
 };

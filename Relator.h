@@ -11,6 +11,7 @@ class Relator : public Evaluator {
         void calculateChilds();
         RelativeBucket childs;
 
+        void updateParents(int addedChilds);        
 //-------------------------------------
         protected:
 
@@ -26,7 +27,7 @@ class Relator : public Evaluator {
         TNode* getChild(TNode *parent, TMove childMove);
         void findMovesToExpand();
         Cursor::RelativeBucket getParents(TNode *node);
-        void updateParents(int addedChilds);
+
 
 //-------------------------------------
         private:

@@ -148,7 +148,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
                 }
                 if (wizardMode ==0) {
                 // drop to human vs comp from Comp vs comp modes if "takeback" pressed
-                        if (f->ComboBoxMode->ItemIndex >= 2) {
+                        if (f->ComboBoxMode->ItemIndex == 2) {
                                 f->restartRequested = true;
                                 f->ComboBoxMode->ItemIndex = 1;
                         }
@@ -170,11 +170,13 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
 
         if (f->ComboBoxMode->ItemIndex == 3 && wizardMode > 0) {//Show debuts
                 if (!medRating) {
-                        if (wizardMode%5 == 0 || wizardMode%7 == 0) {
+                        if (count%5 == 0 || count%7 == 0) {
+                                f->xo->updateParents(0);
                                 f->restartRequested = true;
                         } else {
                                 f->takeBackRequested = true;
                         }
+                        ++count;
                         continue;
                 }
         }

@@ -97,8 +97,9 @@ int GameBoard::move() {
     TNode *node = current()->node;
     int choosenMove;
     int rating;
+    bool mode1 = gameMode == 1 &&  count == 2;
     for (int i = 0; i < TOTAL_CELLS; ++i) {
-        if (kl[i]==1) {
+        if (mode1 ? kl[i]<=1 && isPerspectiveChildMode1(i) : isPerspectiveChild(i)) {
             TNode* n = getChild(node, i);
             if (n != NULL && (choosen == NULL || rating < n->chooseFactor(n))) {
                 choosenMove = i;

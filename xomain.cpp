@@ -67,7 +67,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
         if (delta < 0) {
                 delta = -delta;
         }
-        bool medRating = (delta < 1000);
+        bool medRating = (delta < 500);
         unsigned int totalChilds = firstNode->totalChilds;
 
         bool mediumicPlay = medRating;
@@ -328,7 +328,7 @@ __fastcall TMainForm::TMainForm(TComponent* Owner) : TForm(Owner) {
   time_lev = 1;
   setoptions();
   CheckBoxGrow->Checked = false;
-  CheckBoxGrow->Enabled = false;
+//  CheckBoxGrow->Enabled = false;
 
   DWORD   dwThreadIdArray;
 
@@ -423,7 +423,7 @@ void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
     }
     if (CheckBoxSH->Checked) {//draw hint
       grid->Canvas->Pen->Width = dkl[N] > 250 ? penW / 1.1 : penW / 1.5;
-      if (dkl[N]>=1) {
+      if (dkl[N]>=1  && xo->isAlllowed(N)) {
         int d = 255 - dkl[N];
         grid->Canvas->Pen->Color = (Graphics::TColor) RGB(d, 255, d);
         float zf = penW*2;

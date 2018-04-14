@@ -79,6 +79,7 @@ bool Cursor::forward(TMove N, TNode* node) {
 
 
   //begin: forward cursor
+  TByte prevVal = kl[N];
   kl[N] = ((count&1)+1)<<2;
   ++count;
   moves [count] = N;
@@ -86,6 +87,7 @@ bool Cursor::forward(TMove N, TNode* node) {
   CursorHistory *curr = current(), *prev = &(history[count <= 1? 0 : count-2]);
   curr->node = node;
   curr->move = N;
+  curr->previousKlValue = prevVal;
 
   //begin: update simmetries history
         int d = 0,i;
@@ -117,13 +119,13 @@ bool Cursor::forward(TMove N, TNode* node) {
 
   //begin: update "enablers" history
     curr->enCount = 0;
-
-    if (gameMode == 1 &&  lastMove()->age == 1) {
+/*
+    if (gameMode == 1 &&  count == 2) {
         for (int x1=4; x1<=10; x1++)
             for (int y1=4; y1<=10; y1++)
                 if (x1==4||x1==10||y1==4||y1==10) {
                         TMove move = y1*fsize+x1;
-                        if (kl[move] == 0 && isAlllowed(move)) {
+                        if (kl[move] == 0) {
                             if (curr->enCount >= MAX_ENABLERS) {
                                 curr->enCount = curr->enCount; //TODO
                             } else {
@@ -132,14 +134,16 @@ bool Cursor::forward(TMove N, TNode* node) {
                             }
                         }
                 }
-    } else if (gameMode == 1 &&  lastMove()->age == 2) {
+    } else if (gameMode == 1 &&  count == 3) {
         enable(curr, x, y, 1);
         enable(curr, 7, 7, 1);
         enable(curr, history[1].move%15, history[1].move/15, 1);
-    } else {
-        int max = count > 1 ? 2 : 1;
-        enable(curr, x, y, max);
-    }
+    } else */
+
+
+    int max = count > 3 ? 2 : 1;
+    enable(curr, x, y, max);
+
   //end: update "enablers" history
 
   if (current()->node == NULL) {
@@ -159,7 +163,7 @@ void Cursor::enable(CursorHistory *curr, int x, int y, int maxDistance) {
                 else {
                     int x1 = x+i*d, y1 = y+j*d;
                     TMove move = y1*fsize+x1;
-                    if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[move] == 0 && isAlllowed(move)) {
+                    if (x1>=0 && y1>=0 && x1<fsize && y1<fsize && kl[move] == 0 ) {
                           if (curr->enCount >= MAX_ENABLERS) {
                               curr->enCount = curr->enCount; //TODO
                           } else {
@@ -177,7 +181,7 @@ bool Cursor::back() {
         return false;
   }
   CursorHistory *curr = current();
-  kl[curr->move] = 1;
+  kl[curr->move] = curr->previousKlValue;
   for(int t=0; t<curr->enCount; t++)
         kl[curr->en[t]] = 0;
   --count;

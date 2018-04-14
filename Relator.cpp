@@ -20,8 +20,9 @@ TNode* Relator::getChild(TNode *parent, TMove childMove) {
 void Relator::calculateChilds() {
     childs.count = 0;
     TNode *node = current()->node;
-    for (int i = 0; i < TOTAL_CELLS; ++i) {
-        if (kl[i]==1) {
+    bool mode1 = gameMode == 1 &&  count == 2;
+    for (TMove i = 0; i < TOTAL_CELLS; ++i) {
+        if (mode1 ? kl[i]<=1 && isPerspectiveChildMode1(i) : isPerspectiveChild(i)) {
             TNode* n = getChild(node, i);
             if (n != NULL) {
                 childs.move[childs.count] = i;
@@ -84,11 +85,24 @@ bool Relator::updateNode(TNode *node, bool updateRating, int addedChilds, int re
     bool ratingUpdated = false;
     if (updateRating || addedChilds == 0) {
         short int max_rating = -32600;
-        for(int i = 0; i<count-removedFromEnd; ++i)
-            for(int j = 0; j<history[i].enCount; ++j) {
-                TNode *child = getChild(node, history[i].en[j]);
-                if (child != NULL && child->rating > max_rating) {
-                    max_rating = child->rating;
+
+        if (gameMode == 1 && node->age == 1) {
+                for (TMove i = 0; i < TOTAL_CELLS; ++i) {
+                    if (isPerspectiveChildMode1(i)) {
+                        TNode *child = getChild(node, i);
+                        if (child != NULL && child->rating > max_rating) {
+                            max_rating = child->rating;
+                        }
+                    }
+                }
+
+        } else {
+                for(int i = 0; i<count-removedFromEnd; ++i)
+                    for(int j = 0; j<history[i].enCount; ++j) {
+                        TNode *child = getChild(node, history[i].en[j]);
+                        if (child != NULL && child->rating > max_rating) {
+                            max_rating = child->rating;
+                        }
                 }
         }
         if (node->rating != -max_rating) {
@@ -153,11 +167,25 @@ TNode* Relator::getParent(TNode *node, TMove move) {
 
 void Relator::findMovesToExpand() {//TODO use single iteration
     newChilds.count = 0;
-    for (int i = 0; i < TOTAL_CELLS; ++i) {
-        if (kl[i]==1 && isAlllowed(i)) {
+    bool mode1 = gameMode == 1 &&  count == 2;
+    for (TMove i = 0; i < TOTAL_CELLS; ++i) {
+        if ((mode1 ? kl[i]<=1 && isPerspectiveChildMode1(i) : isPerspectiveChild(i))  && isAlllowed(i)) {
                 newChilds.move[newChilds.count++] = i;
         }
     }
 };
 
+//----------------------------------------------------------------------------
+bool Relator::isPerspectiveChild(TMove move) {
+    return kl[move]==1;
+}
+
+//----------------------------------------------------------------------------
+bool Relator::isPerspectiveChildMode1(TMove move) {
+        int y = move/15 - 7;
+        int x = move%15 - 7;
+        if (y<0) y =-y;
+        if (x<0) x =-x;
+        return (x==3 && y<=3 || y==3 && x<=3);
+}
 

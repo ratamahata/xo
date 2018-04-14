@@ -28,6 +28,8 @@ class Relator : public Evaluator {
         TNode* getChild(TNode *parent, TMove childMove);
         void findMovesToExpand();
         Cursor::RelativeBucket getParents(TNode *node);
+        bool isPerspectiveChild(TMove move);
+        bool isPerspectiveChildMode1(TMove move);
 
 
 //-------------------------------------
@@ -42,7 +44,6 @@ class Relator : public Evaluator {
         TNode* getParent(TNode *node, TMove move);
         int minRemovedEven;
         int minRemovedOdd;
-
 };
 
 #endif

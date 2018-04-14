@@ -32,6 +32,7 @@ public:
     int symmX, symmY, symmXY, symmW, symmXW, symmYW, symmXYW;
     TNode *node;
     RelativeBucket parents;
+    int previousKlValue;
 //    bool removed;
   };
 
@@ -55,7 +56,7 @@ public:
   TMove moves[fsize*fsize]; //ordered history of moves
 
   TMove kl[fsize*fsize]; // moves on field
-
+  bool isAlllowed(TMove N);
 
 private:
         inline bool allow(int move);
@@ -68,7 +69,7 @@ protected:
 
         bool forward(TMove N);
         bool forward(TMove N, TNode* node);
-        bool isAlllowed(TMove N);
+
 
 };
 

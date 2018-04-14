@@ -31,6 +31,8 @@ class Relator : public Evaluator {
         bool isPerspectiveChild(TMove move);
         bool isPerspectiveChildMode1(TMove move);
 
+        bool updateNode(TNode *node, TNode *from, bool updateRating, int addedChilds, int removedFromEnd);        
+
 
 //-------------------------------------
         private:
@@ -40,7 +42,7 @@ class Relator : public Evaluator {
         void updateParents(TNode *node, int removed, int removedFromEnd,
                 bool onlyLastRemoved, bool updateRating, int max, int addedChilds);
 
-        bool updateNode(TNode *node, bool updateRating, int addedChilds, int removedFromEnd);
+
         TNode* getParent(TNode *node, TMove move);
         int minRemovedEven;
         int minRemovedOdd;

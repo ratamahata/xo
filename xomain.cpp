@@ -171,7 +171,6 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
         if (f->ComboBoxMode->ItemIndex == 3 && wizardMode > 0) {//Show debuts
                 if (!medRating) {
                         if (count%5 == 0 || count%7 == 0) {
-                                f->xo->updateParents(0);
                                 f->restartRequested = true;
                         } else {
                                 f->takeBackRequested = true;
@@ -234,7 +233,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
               //begin hints calculation
               f->xo->calculateChilds();
               for(i=0; i < f->xo->childs.count; ++i) {
-                int r = f->xo->childs.node[i]->chooseFactor(firstNode);
+                int r = f->xo->childs.node[i]->rating;
                 if (r<min) min = r;
                 if (r>max) max = r;
               }
@@ -242,7 +241,7 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
               memset(f->dkl, 0, fsize*fsize);
               for(i=0; i<f->xo->childs.count; ++i) {
 
-                int r = f->xo->childs.node[i]->chooseFactor(firstNode);
+                int r = f->xo->childs.node[i]->rating;
                 decr = min-1;
                 f->dkl[f->xo->childs.move[i]] = 30+(r-decr)*225/(max-decr);
               }

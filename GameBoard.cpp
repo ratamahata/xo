@@ -87,34 +87,42 @@ int GameBoard::move() {
 
   TNode *choosen = 0;
 
-  int totl = current()->node->totalDirectChilds;
+  TNode *node = current()->node;
+  int totl = node->totalDirectChilds;
   if (totl == 0) {
         //logger->error("no childs");
         expand();
         //return -32600;
   }
 
-    TNode *node = current()->node;
+
     int choosenMove;
     int rating;
     bool mode1 = gameMode == 1 &&  count == 2;
     for (int i = 0; i < TOTAL_CELLS; ++i) {
         if (mode1 ? kl[i]<=1 && isPerspectiveChildMode1(i) : isPerspectiveChild(i)) {
             TNode* n = getChild(node, i);
-            if (n != NULL && (choosen == NULL || rating < n->chooseFactor(n))) {
+            if (n != NULL && (choosen == NULL || rating < n->rating)) {
                 choosenMove = i;
                 choosen = n;
-                rating = choosen->chooseFactor(choosen);
+                rating = choosen->rating;
             }
         }
     }
 
   if (choosen == NULL) {
-  //should never happen??
-          logger->error("no move");
+         //TODO 
+        //logger->error("no move");
         return -32600;
   }
 
+  if (node->rating!=-rating) {
+         //TODO
+         // logger->error("parents updated");
+        updateNode(node,choosen,true,0,0);
+        updateParents(0);
+  }
+
   forward(choosenMove, choosen);
-  return choosen->rating;
+  return rating;
 };

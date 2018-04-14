@@ -12,11 +12,6 @@ TNode::TNode() {
 };
 
 
-//==================================================================
-int TNode::chooseFactor(TNode *firstNode) {
-        return rating;//ratingToTotalChilds(firstNode);
-}
-
 /*
 //==================================================================
 int TNode::removeChild(TNode *child) {

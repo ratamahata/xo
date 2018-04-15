@@ -80,7 +80,7 @@ int Builder::chooseNodeToExpand() {
 
             int ttc = node->ratingToTotalChilds();
             int ret = (node->totalChilds > 60000) ? ttc*ttc : ttc;
-            float f = ret/ (float)(1+node->totalChilds);
+            float f = ret/ (float)(50+node->totalChilds);
 //            if (node->totalChilds > 500000) {
 //                f = f*ttc;
 //            }

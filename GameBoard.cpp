@@ -28,56 +28,34 @@ bool GameBoard::put(TMove N) {
                 int y = N/fsize - 7;
                 int absX = x < 0 ? -x : x;
                 int absY = y < 0 ? -y : y;
-                bool symmW = history[count-1].symmW;
+                bool symmW = history[count-1].symmW == 0;
                 bool swapped = false;
-
-                if (*swapW) {
-                        int t = x;
-                        x = y;
-                        y = t;
-                        swapped = true;
-                }
 
                 if (history[count-1].symmX  == 0) {
                     if (x < 0) {
                         x = -x;
-                        *swapX = !*swapX;
+                        if (*swapW) {
+                                *swapY = !*swapY;
+                        } else {
+                                *swapX = !*swapX;
+                        }
                     }
                 }
                 if ((  history[count-1].symmY  == 0 || history[count].symmXY  == 0) && y < 0) {
                         y = -y;
-                        *swapY = !*swapY;
+                        if (*swapW) {
+                                *swapX = !*swapX;
+                        } else {
+                                *swapY = !*swapY;
+                        }
                 }
 
-                if ( symmW  == 0 && absX < absY) {
+                if ( symmW && !swapped == x < y && x!= y) {
                         int t = x;
                         x = y;
                         y = t;
                         *swapW = !*swapW;
                 }
-
-                if (swapped) {
-                        int t = x;
-                        x = y;
-                        y = t;
-                }
-
-                //*swapX = *swapY = *swapXYW = *swapW = false;
-                        /*
-                if (x!=0 && x==-x0) {
-                  *swapX = !*swapX;
-                }
-                if (y!=0 && y==-y0) {
-                  *swapY = !*swapY;
-                }
-                if (x != y) {
-                  if (x == y0 && y == x0) {
-                    *swapW = !*swapW;
-                  }
-                  if (x == -y0 && y == -x0) {
-                    *swapXYW = !*swapXYW;
-                  }
-                }         */
 
                 return forward((y+7)*15+(x+7));
 };

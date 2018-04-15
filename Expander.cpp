@@ -18,9 +18,10 @@ Expander::Expander(SimplyNumbers *simplyGen, Hashtable *movesHash)
 //adds childs to cursor node
 void Expander ::expand() {
   TNode* cursor = current()->node;
-  if (cursor->rating >= 32300 || cursor->rating <= -32300) {
-      ++cursor->totalDirectChilds;
-      logger->error("can't expand");
+//  if (cursor->rating >= 32300 || cursor->rating <= -32300) {
+  if (cursor->rating > 32200 || cursor->rating < -32200) {
+      ++cursor->totalChilds;
+      //logger->error("can't expand");
       return;
   }
 //  if (logger != NULL) {

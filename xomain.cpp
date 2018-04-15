@@ -380,12 +380,9 @@ void __fastcall TMainForm::FormResize(TObject *Sender)
 
 void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
       TRect &Rect, TGridDrawState State) {
+
+      
   Rect = grid->CellRect(Col,Row);
-#ifdef DEBUG_VER
-  if (Col == 7 && Row == 7) {
-        Col = 7;
-  }
-#endif
   int N = transform(Row * grid->ColCount + Col);
   bool found = false;
   bool foundLast;

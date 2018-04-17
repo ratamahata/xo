@@ -11,19 +11,18 @@
     // 10004*904 -> 0/1M collisions
     // 30000*300 -> 59/23256 bad..
     // 10001*901 -> 0/10M
-    #define hashTableSizeX 10000
-    #define hashTableSizeO 902
+    #define hashTableSizeX 100
+    #define hashTableSizeO 100
+    #define hashTableSizeZ 1004
     class Hashtable {
         private:
-        TNode **table;
+        TNode ***table;
         Logger *logger;
 
         public:
-
-
         Hashtable(Logger *logger);
         void put(TNode *node);
-        TNode *get(THash h1, THash h2, int age);
+        TNode *get(THash hX, THash hO, int age);
     };
 
 //---------------------------------------------------------------------------

@@ -115,11 +115,11 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
             f->restartRequested = false;
             f->xo->restart();
         } else if (f->userMoveRequested != 255) {
-                int res,i;
-                res = f->xo->put(f->userMoveRequested);
-                if (res != -99999) {
+                int i;
+                bool res = f->xo->put(f->userMoveRequested);
+                if (res) {
                         int totl = f->xo->lastMove()->totalChilds;
-                        f->resultRecieved = res;
+                        f->resultRecieved = f->xo->lastMove()->rating;
                         if ((res < 32600)&&(f->ComboBoxMode->ItemIndex == 1)) {
                             f->moveRequested = true;
                         }

@@ -3,11 +3,11 @@
 
 //------------------------------------------------------------------
 Hashtable::Hashtable(Logger *logger) {
-    table = new TNode**[hashTableSizeX*hashTableSizeO];
+    table = new TNode*[hashTableSizeX*hashTableSizeO];
     memset(table, 0, sizeof(TNode**)*hashTableSizeX*hashTableSizeO);
     this->logger = logger;
 }
-
+/*
 //------------------------------------------------------------------
 void Hashtable::put(TNode *node) {
 
@@ -18,16 +18,15 @@ void Hashtable::put(TNode *node) {
     unsigned long h2 = node->hashCodeO % hashTableSizeO;
     unsigned long index = h1*hashTableSizeO + h2;
 
-    TNode **array = table[index];
+    TNode *array = table[index];
     if (array == NULL) {
-        table[index] = array = new TNode*[hashTableSizeZ];
-        memset(array, 0, sizeof(TNode*)*hashTableSizeZ);
+        table[index] = array = new TNode[hashTableSizeZ];
+        memset(array, 0, sizeof(TNode)*hashTableSizeZ);
     }
 
-    TNode **curr;
-    curr = &(array[zIndex]);
+    TNode *curr = &(array[zIndex]);
 
-    while (curr[0] != NULL) {
+    while (curr->hashCodeX != 0) {
 //        if (array[0]->hashCodeX == node->hashCodeX && array[0]->hashCodeO == node->hashCodeO) {
 //          return;
 //        }
@@ -35,18 +34,76 @@ void Hashtable::put(TNode *node) {
     }
     curr[0] = node;
 }
+*/
 
 //------------------------------------------------------------------
-TNode *Hashtable::get(THash hX, THash hO, int age) {
-//    unsigned long index = (h1%hashTableSizeX)*hashTableSizeO + (h2%hashTableSizeO);
-
+TNode *Hashtable::getOrCreate(THash hX, THash hO, int age, bool &created) {
     unsigned long h1 = hX / hashTableSizeZ;
     unsigned long zIndex = hX % hashTableSizeZ;
-    h1 = h1 % hashTableSizeO;
+    h1 = h1 % hashTableSizeX;
     unsigned long h2 = hO % hashTableSizeO;
     unsigned long index = h1*hashTableSizeO + h2;
 
-    TNode **array = table[index];
+    TNode *array = table[index];
+    bool m2 = false;
+    bool m3 = false;
+
+    if (hX ==0 || hO ==0) {
+        logger->error("zero hashcode");
+    }
+
+    if (array == NULL) {
+        table[index] = array = new TNode[hashTableSizeZ];
+        memset(array, 0, sizeof(TNode)*hashTableSizeZ);
+    }
+
+    TNode *curr = &(array[zIndex]);
+
+    while (curr->hashCodeX != 0) {
+        if (curr->hashCodeX == hX && curr->hashCodeO == hO) {
+          if (age == curr->age) {
+                logger->hit();
+                created = false;
+                return curr;
+          } else {
+                m3 = true;
+                logger->error("age collision");
+          }
+        } else {
+                m2 = true;
+        }
+
+        if (curr->next == NULL) {
+                curr = curr->next = new TNode();
+                break;
+        } else {
+                curr = curr->next;
+        }
+    }
+
+    curr->hashCodeX = hX;
+    curr->hashCodeO = hO;
+    curr->age=age;
+    created = true;
+
+    if (m3) {
+        logger->missAge();
+    } else if (m2) {
+        logger->missHash();
+    } else {
+        logger->missIndex();
+    }
+    return curr;
+};
+//------------------------------------------------------------------
+TNode *Hashtable::get(THash hX, THash hO, int age) {
+    unsigned long h1 = hX / hashTableSizeZ;
+    unsigned long zIndex = hX % hashTableSizeZ;
+    h1 = h1 % hashTableSizeX;
+    unsigned long h2 = hO % hashTableSizeO;
+    unsigned long index = h1*hashTableSizeO + h2;
+
+    TNode *array = table[index];
     bool m2 = false;
     bool m3 = false;
 
@@ -55,11 +112,8 @@ TNode *Hashtable::get(THash hX, THash hO, int age) {
     }
 
     if (array != NULL) {
-
-      TNode *curr = array[zIndex];
-
+      TNode *curr = &(array[zIndex]);
       while (curr != NULL) {
-
         if (curr->hashCodeX == hX && curr->hashCodeO == hO) {
           if (age == curr->age) {
                         logger->hit();
@@ -74,7 +128,6 @@ TNode *Hashtable::get(THash hX, THash hO, int age) {
       }
     }
 
-
     if (m3) {
         logger->missAge();
     } else if (m2) {
@@ -84,3 +137,6 @@ TNode *Hashtable::get(THash hX, THash hO, int age) {
     }
     return NULL;
 };
+
+
+

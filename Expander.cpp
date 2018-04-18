@@ -40,17 +40,17 @@ void Expander ::expand() {
     THash newHashX = cursor->hashCodeO;
     THash newHashO = cursor->hashCodeX * simplyGen->getHash(move);
 
-    TNode *node = movesHash->get(newHashX, newHashO, cursor->age + 1);
+    bool isCreated;
+    TNode *node = movesHash->getOrCreate(newHashX, newHashO, cursor->age + 1, isCreated);
 
-    if (node == NULL) {
+    if (isCreated) {
         ++created;
-        node = createNode(newHashX, newHashO, cursor->age + 1);
         rate(cursor, node, move);
         ++cursor->totalChilds;
     } else {
         cursor->totalChilds += (node->totalChilds+1);
-
     }
+
     if (node->rating > max_rating) max_rating = node->rating;
   }
 
@@ -70,6 +70,7 @@ void Expander ::expand() {
   if (count > max_count) max_count = count;
 };
 
+/*
 //==================================================================
 TNode* Expander ::createNode(THash hX, THash hO, TByte age) {
     TNode *node = new TNode();
@@ -79,3 +80,4 @@ TNode* Expander ::createNode(THash hX, THash hO, TByte age) {
     movesHash->put(node);
     return node;
 }
+*/

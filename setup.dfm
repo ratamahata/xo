@@ -1,6 +1,6 @@
 object SetupForm: TSetupForm
-  Left = 465
-  Top = 318
+  Left = 484
+  Top = 304
   BorderStyle = bsDialog
   Caption = 'X & O setup'
   ClientHeight = 192

@@ -6,23 +6,21 @@
 #include "tnode.h"
 #include "Logger.h"
 
-    // 10000*900 -> 0/298K collisions
-    // 10002*902 -> 0/47960 collisions
-    // 10004*904 -> 0/1M collisions
-    // 30000*300 -> 59/23256 bad..
-    // 10001*901 -> 0/10M
-    #define hashTableSizeX 100
-    #define hashTableSizeO 100
-    #define hashTableSizeZ 1004
+//103x105x331 ->623 M
+
+    #define hashTableSizeX 103
+    #define hashTableSizeO 331
+    #define hashTableSizeZ 103
     class Hashtable {
         private:
-        TNode ***table;
+        TNode **table;
         Logger *logger;
 
         public:
         Hashtable(Logger *logger);
-        void put(TNode *node);
+//        void put(TNode *node);
         TNode *get(THash hX, THash hO, int age);
+        TNode *getOrCreate(THash hX, THash hO, int age, bool &created);
     };
 
 //---------------------------------------------------------------------------

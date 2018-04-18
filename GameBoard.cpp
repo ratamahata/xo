@@ -13,21 +13,21 @@
 GameBoard::GameBoard(SimplyNumbers *simplyGen, Hashtable *movesHash, 
                  bool *swapXp, bool *swapYp, bool *swapWp, bool *swapXYWp, int gameMode) : Builder(simplyGen, movesHash, gameMode) {
 
-        swapX = swapXp;
-        swapY = swapYp;
-        swapW = swapWp;
-        swapXYW = swapXYWp;
+    swapX = swapXp;
+    swapY = swapYp;
+    swapW = swapWp;
+    swapXYW = swapXYWp;
 
-        TNode *node = createNode(1, 1, 0);
-        forward(112, node);
-        expand();
+    bool isCreated;
+    TNode *node = movesHash->getOrCreate(1, 1, 0, isCreated);
+
+    forward(112, node);
+    expand();
 };
 
 bool GameBoard::put(TMove N) {
                 int x = N%fsize - 7;
                 int y = N/fsize - 7;
-                int absX = x < 0 ? -x : x;
-                int absY = y < 0 ? -y : y;
                 bool symmW = history[count-1].symmW == 0;
                 bool swapped = false;
 

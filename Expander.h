@@ -14,7 +14,7 @@ public:
 protected:
         Expander(SimplyNumbers *simplyGen, Hashtable *movesHash);
         void expand();
-        TNode* createNode(THash hX, THash hO, TByte age);        
+//        TNode* createNode(THash hX, THash hO, TByte age);        
 
 };
 

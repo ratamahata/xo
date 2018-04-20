@@ -38,19 +38,21 @@ void Hashtable::put(TNode *node) {
 
 //------------------------------------------------------------------
 TNode *Hashtable::getOrCreate(THash hX, THash hO, int age, bool &created) {
-    unsigned long h1 = hX / hashTableSizeZ;
-    unsigned long zIndex = hX % hashTableSizeZ;
+    THash t1 = hO - 1;
+    THash t2 = hX - 1;
+    unsigned long h1 = t1 / hashTableSizeZ;
+    unsigned long zIndex = t1 % hashTableSizeZ;
     h1 = h1 % hashTableSizeX;
-    unsigned long h2 = hO % hashTableSizeO;
+    unsigned long h2 = t2 % hashTableSizeO;
     unsigned long index = h1*hashTableSizeO + h2;
 
     TNode *array = table[index];
     bool m2 = false;
     bool m3 = false;
 
-    if (hX ==0 || hO ==0) {
-        logger->error("zero hashcode");
-    }
+//    if (hX ==0 || hO ==0) {
+//        logger->error("zero hashcode");
+//    }
 
     if (array == NULL) {
         table[index] = array = new TNode[hashTableSizeZ];
@@ -97,10 +99,12 @@ TNode *Hashtable::getOrCreate(THash hX, THash hO, int age, bool &created) {
 };
 //------------------------------------------------------------------
 TNode *Hashtable::get(THash hX, THash hO, int age) {
-    unsigned long h1 = hX / hashTableSizeZ;
-    unsigned long zIndex = hX % hashTableSizeZ;
+    THash t1 = hO - 1;
+    THash t2 = hX - 1;
+    unsigned long h1 = t1 / hashTableSizeZ;
+    unsigned long zIndex = t1 % hashTableSizeZ;
     h1 = h1 % hashTableSizeX;
-    unsigned long h2 = hO % hashTableSizeO;
+    unsigned long h2 = t2 % hashTableSizeO;
     unsigned long index = h1*hashTableSizeO + h2;
 
     TNode *array = table[index];

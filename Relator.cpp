@@ -86,14 +86,14 @@ bool Relator::updateNode(TNode *node, TNode *from, bool updateRating, int addedC
     if (updateRating || addedChilds == 0) {
         short int max_rating = -32600;
 
-        bool fromFound = false;
+//        bool fromFound = false;
         if (gameMode == 1 && node->age == 1) {
                 for (TMove i = 0; i < TOTAL_CELLS; ++i) {
                     if (isPerspectiveChildMode1(i)) {
                         TNode *child = getChild(node, i);
-                        if (child == from) {
-                                fromFound = true;
-                        }
+//                        if (child == from) {
+//                                fromFound = true;
+//                        }
                         if (child != NULL && child->rating > max_rating) {
                             max_rating = child->rating;
                         }
@@ -114,22 +114,24 @@ bool Relator::updateNode(TNode *node, TNode *from, bool updateRating, int addedC
                 for (TMove i = 0; i < TOTAL_CELLS; ++i) {
                     if (kl[i]!=0) {
                         TNode *child = getChild(node, i);
-                        if (child == from) {
-                                fromFound = true;
-                        }
+//                        if (child == from) {
+//                                fromFound = true;
+//                        }
                         if (child != NULL && child->rating > max_rating) {
                             max_rating = child->rating;
                         }
                     }
                 }
         }
+
+        /*
         if (fromFound==false) {
                 logger->error("from not found");
                 if (from->rating > max_rating) {
                     max_rating = from->rating;
                 }
                 //updateNode(node, from, updateRating, addedChilds, removedFromEnd);
-        }
+        } */
 
         if (node->rating != -max_rating) {
             TRating absRatingOld = node->rating;

@@ -6,11 +6,12 @@
 #include "tnode.h"
 #include "Logger.h"
 
-//103x105x331 ->623 M
+//103x105x331 ->62 M
+//53x1009x331 ->64 M
 
-    #define hashTableSizeX 103
-    #define hashTableSizeO 331
-    #define hashTableSizeZ 103
+    #define hashTableSizeX 53
+    #define hashTableSizeO 1009
+    #define hashTableSizeZ 331
     class Hashtable {
         private:
         TNode **table;

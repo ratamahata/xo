@@ -14,12 +14,12 @@ TMainForm *MainForm;
 
 #define MAX_CHILDS_WIZARD  40000000
 
-#define MAX_CHILD_PER_MOVE_ZONE0  6000000
+#define MAX_CHILD_PER_MOVE_ZONE0  10000000
 #define MAX_CHILD_PER_MOVE_ZONE1  1000000
 
 #define MAX_CHILD_DECREASE_FACTOR 6
-#define MAX_CHILD_DECREASE_SINCE 16000000
-#define MAX_CHILD_DECREASE_TILL 32000000
+#define MAX_CHILD_DECREASE_SINCE 50000000
+#define MAX_CHILD_DECREASE_TILL 90000000
 
 #define ZONE01_RATING 5700
 #define ZONE12_RATING 10000
@@ -135,6 +135,8 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
           f->moveRequested = false;
           flowRating = currRating;
           f->resultRecieved = f->xo->move();
+          if (f->resultRecieved == -32600)
+                f->restartRequested = true;
           childs0 = f->xo->lastMove()->totalChilds;
           currRating = f->xo->lastMove()->rating;
         } else if (f->takeBackRequested) {

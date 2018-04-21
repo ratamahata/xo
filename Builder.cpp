@@ -30,7 +30,7 @@ void Builder::buildTree() {
     i = chooseNodeToExpand();
 
     if (i == -1) {
-        logger->error("builder fallback");
+        //logger->error("builder fallback");
         ++cur->node->totalDirectChilds;
         back();
         cur = current();

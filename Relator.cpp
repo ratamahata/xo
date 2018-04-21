@@ -72,18 +72,19 @@ void Relator::updateParents(TNode *node, int removed, int removedFromEnd,
                     ? true
                     : false,
                 updateRating, i-1, addedChilds);
-        } else {
-                if (i == max && onlyLastRemoved) {
-                        logger->error("no parent found");
-                        getParent(node, history[i].move);
-                }
+//        } else {
+//                if (i == max && onlyLastRemoved) {
+//                        logger->error("no parent found");
+//                        getParent(node, history[i].move);
+//                }
         }
     }
 };
 
 bool Relator::updateNode(TNode *node, TNode *from, bool updateRating, int addedChilds, int removedFromEnd) {
     bool ratingUpdated = false;
-    if (updateRating || addedChilds == 0) {
+//    if (!node->fixedRating && (updateRating || addedChilds == 0)) {
+    if ((updateRating || addedChilds == 0)) {
         short int max_rating = -32600;
 
 //        bool fromFound = false;
@@ -136,6 +137,9 @@ bool Relator::updateNode(TNode *node, TNode *from, bool updateRating, int addedC
         if (node->rating != -max_rating) {
             TRating absRatingOld = node->rating;
             TRating absRating = node->rating = -max_rating;
+            if (node->age == 0) {
+                movesHash->medRating = absRating;
+            }
 
             if (node->totalChilds >= BIG_PARENT) {
                 if (absRatingOld < 0) absRatingOld = -absRatingOld;
@@ -179,7 +183,7 @@ TNode* Relator::getParent(TNode *node, TMove move) {
     unsigned long m2 = THASH_MAX / multiplier;
     unsigned long r1 = (THASH_MAX % multiplier) + 1;
 
-    for(;;++k) {
+    for(;k<multiplier;++k) {
         t = r1*k + remainder;
         n = t/multiplier;
         r3 = t%multiplier;

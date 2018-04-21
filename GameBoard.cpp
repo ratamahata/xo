@@ -57,8 +57,23 @@ bool GameBoard::put(TMove N) {
                         *swapW = !*swapW;
                 }
 
-                return forward((y+7)*15+(x+7));
+                return forceForward((y+7)*15+(x+7));
 };
+
+bool GameBoard::forceForward(TMove N) {
+  TNode *node = current()->node;
+
+  THash hashCodeX = node->hashCodeO;
+  THash hashCodeO = node->hashCodeX * simplyGen->getHash(N);
+
+  bool created = false;
+  TNode *nextNode = movesHash->getOrCreate(hashCodeX, hashCodeO, node->age + 1, created);
+  if (created) {
+        rate(node, nextNode, N);
+  }
+
+  return forward(N, nextNode);
+}
 
 
 int GameBoard::move() {
@@ -90,7 +105,11 @@ int GameBoard::move() {
 
   if (choosen == NULL) {
          //TODO 
-        //logger->error("no move");
+        logger->error("no move");
+
+//        node->rating = -
+        updateParents(0);
+
         return -32600;
   }
 

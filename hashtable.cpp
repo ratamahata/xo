@@ -6,6 +6,7 @@ Hashtable::Hashtable(Logger *logger) {
     table = new TNode*[hashTableSizeX*hashTableSizeO];
     memset(table, 0, sizeof(TNode**)*hashTableSizeX*hashTableSizeO);
     this->logger = logger;
+    medRating = 0;
 }
 /*
 //------------------------------------------------------------------
@@ -60,6 +61,8 @@ TNode *Hashtable::getOrCreate(THash hX, THash hO, int age, bool &created) {
     }
 
     TNode *curr = &(array[zIndex]);
+    TNode *choosen = 0;
+    int maxDeviate = 0;
 
     while (curr->hashCodeX != 0) {
         if (curr->hashCodeX == hX && curr->hashCodeO == hO) {
@@ -73,10 +76,22 @@ TNode *Hashtable::getOrCreate(THash hX, THash hO, int age, bool &created) {
           }
         } else {
                 m2 = true;
+                int deviate = curr->rating - medRating;
+                if (deviate < 0) deviate = -deviate;
+                if (deviate > maxDeviate && curr->age>=11 && curr->age>=age) {
+                        maxDeviate = deviate;
+                        choosen = curr;
+                }
+
         }
 
         if (curr->next == NULL) {
-                curr = curr->next = new TNode();
+                if (choosen != 0) {
+                        curr = choosen;
+                        logger->hashOverwrite();
+                } else {
+                        curr = curr->next = new TNode();
+                }
                 break;
         } else {
                 curr = curr->next;

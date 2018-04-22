@@ -134,6 +134,9 @@ bool Relator::updateNode(TNode *node, TNode *from, bool updateRating, int addedC
                 //updateNode(node, from, updateRating, addedChilds, removedFromEnd);
         }
 
+        if (max_rating > 30000) --max_rating;
+        else if (max_rating < -30000) ++max_rating;
+
         if (node->rating != -max_rating) {
             TRating absRatingOld = node->rating;
             TRating absRating = node->rating = -max_rating;

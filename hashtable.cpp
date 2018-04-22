@@ -78,7 +78,7 @@ TNode *Hashtable::getOrCreate(THash hX, THash hO, int age, bool &created) {
                 m2 = true;
                 int deviate = curr->rating - medRating;
                 if (deviate < 0) deviate = -deviate;
-                if (deviate > maxDeviate && curr->age>=11 && curr->age>=age) {
+                if (deviate > maxDeviate && deviate > RATING_OVERWRITE_DELTA){// && curr->age>=11 && curr->age>=age) {
                         maxDeviate = deviate;
                         choosen = curr;
                 }

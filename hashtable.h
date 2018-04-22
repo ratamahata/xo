@@ -13,7 +13,7 @@
 #define hashTableSizeO 1009
 #define hashTableSizeZ 331
 
-#define RATING_OVERWRITE_DELTA 5000
+#define RATING_OVERWRITE_DELTA 8000
 
 class Hashtable {
         private:

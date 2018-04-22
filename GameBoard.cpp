@@ -61,6 +61,7 @@ bool GameBoard::put(TMove N) {
 };
 
 bool GameBoard::forceForward(TMove N) {
+  if (kl[N] > 1) return false;
   TNode *node = current()->node;
 
   THash hashCodeX = node->hashCodeO;

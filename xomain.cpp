@@ -409,11 +409,11 @@ void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
     }
     grid->Canvas->Pen->Width = penW;
     if (found && xo->kl[N]&8) {//draw 'o'
-      grid->Canvas->Pen->Color = foundLast ? (Graphics::TColor) RGB(255, 136, 136) : clRed;
+      grid->Canvas->Pen->Color = foundLast ? (Graphics::TColor) RGB(255, 160, 160) : clRed;
       grid->Canvas->Ellipse(Rect.Left+2,Rect.Top+2,Rect.Right-2,Rect.Bottom-2);
     }
     if (found && xo->kl[N]&4) {//draw 'x'
-      grid->Canvas->Pen->Color = foundLast ? (Graphics::TColor) RGB(136, 136, 255) : clBlue;
+      grid->Canvas->Pen->Color = foundLast ? (Graphics::TColor) RGB(168, 168, 255) : clBlue;
       grid->Canvas->MoveTo(Rect.Left+2,Rect.Top+2);
       grid->Canvas->LineTo(Rect.Right-3,Rect.Bottom-3);
       grid->Canvas->MoveTo(Rect.Right-3,Rect.Top+2);

@@ -14,6 +14,7 @@
 #define hashTableSizeZ 331
 
 #define RATING_OVERWRITE_DELTA 8000
+#define SUPPRESS_OVERWRITE_DELTA 2000
 
 class Hashtable {
         private:
@@ -21,7 +22,9 @@ class Hashtable {
         Logger *logger;
 
         public:
-        TRating medRating;
+        TRating medRating;//rating of first move
+        TRating lastMoveRating;//these values are used for OVERWRITE LOGIC
+
         Hashtable(Logger *logger);
 //        void put(TNode *node);
         TNode *get(THash hX, THash hO, int age);

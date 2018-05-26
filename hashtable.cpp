@@ -7,6 +7,7 @@ Hashtable::Hashtable(Logger *logger) {
     memset(table, 0, sizeof(TNode**)*hashTableSizeX*hashTableSizeO);
     this->logger = logger;
     medRating = 0;
+    lastMoveRatingDiff = 0;
 }
 /*
 //------------------------------------------------------------------
@@ -38,6 +39,13 @@ void Hashtable::put(TNode *node) {
 */
 
 //------------------------------------------------------------------
+
+void Hashtable::setLastMoveRating(TRating r) {
+    lastMoveRatingDiff = medRating - r;
+    if (lastMoveRatingDiff < 0) lastMoveRatingDiff = -lastMoveRatingDiff;
+}
+
+//------------------------------------------------------------------
 TNode *Hashtable::getOrCreate(THash hX, THash hO, int age, bool &created) {
     THash t1 = hO - 1;
     THash t2 = hX - 1;
@@ -54,6 +62,9 @@ TNode *Hashtable::getOrCreate(THash hX, THash hO, int age, bool &created) {
 //    if (hX ==0 || hO ==0) {
 //        logger->error("zero hashcode");
 //    }
+
+//    midRating
+
 
     if (array == NULL) {
         table[index] = array = new TNode[hashTableSizeZ];
@@ -79,7 +90,7 @@ TNode *Hashtable::getOrCreate(THash hX, THash hO, int age, bool &created) {
                 int expected = curr->age % 2 ? -medRating : medRating;
                 int deviate = expected - curr->rating;
 
-                if (deviate > maxDeviate && deviate > RATING_OVERWRITE_DELTA && curr->totalChilds == 0){// && curr->age>=11 && curr->age>=age) {
+                if (deviate > maxDeviate && deviate > RATING_OVERWRITE_DELTA && curr->totalChilds == 0 && lastMoveRatingDiff <= SUPPRESS_OVERWRITE_DELTA){// && curr->age>=11 && curr->age>=age) {
                         maxDeviate = deviate;
                         choosen = curr;
                 }
@@ -91,7 +102,8 @@ TNode *Hashtable::getOrCreate(THash hX, THash hO, int age, bool &created) {
                         curr = choosen;
                         logger->hashOverwrite();
                 } else {
-                        curr = curr->next = new TNode();
+                        curr->next = new TNode();
+                        curr = curr->next;
                 }
                 break;
         } else {

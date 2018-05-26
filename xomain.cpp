@@ -197,8 +197,8 @@ DWORD WINAPI __stdcall grow(LPVOID lpParam) {
         //********* STEP 4   tree grow ***************
 
         if (lastCount <  maxChilds
-                        && currRating < 32300
-                        && currRating > -32300
+                        && currRating < 32500
+                        && currRating > -32500
                         && f->CheckBoxGrow->Checked) {
           f->xo->buildTree();
           changed = false;

@@ -20,11 +20,11 @@ class Hashtable {
         private:
         TNode **table;
         Logger *logger;
+        int lastMoveRatingDiff; //these values are used for OVERWRITE LOGIC
 
         public:
-        TRating medRating;//rating of first move
-        TRating lastMoveRating;//these values are used for OVERWRITE LOGIC
-
+        TRating medRating; //rating of first move
+        void setLastMoveRating(TRating r);
         Hashtable(Logger *logger);
 //        void put(TNode *node);
         TNode *get(THash hX, THash hO, int age);

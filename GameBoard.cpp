@@ -77,7 +77,7 @@ bool GameBoard::forceForward(TMove N) {
         if (created || 0 == nextNode->totalDirectChilds) {
                 expand();
         }
-        movesHash->lastMoveRating = nextNode->rating;
+        movesHash->setLastMoveRating(nextNode->rating);
         return true;
   }
   return false;
@@ -129,6 +129,6 @@ int GameBoard::move() {
   }
 
   forward(choosenMove, choosen);
-  movesHash->lastMoveRating = choosen->rating;
+  movesHash->setLastMoveRating(choosen->rating);
   return rating;
 };

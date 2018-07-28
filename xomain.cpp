@@ -450,7 +450,9 @@ void __fastcall TMainForm::gridClick  (TObject *Sender)
     else ButtonAClick(NULL);
     return;
   }
-  userMoveRequested = transform(grid->Row * grid->ColCount + grid->Col);
+  if (!moveRequested) {
+        userMoveRequested = transform(grid->Row * grid->ColCount + grid->Col);
+  }
 }
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::ButtonTBClick(TObject *Sender) {

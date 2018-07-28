@@ -407,11 +407,11 @@ void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
     }
     grid->Canvas->Pen->Width = penW;
     if (found && xo->kl[N]&8) {//draw 'o'
-      grid->Canvas->Pen->Color = foundLast ? (Graphics::TColor) RGB(255, 136, 136) : clRed;
+      grid->Canvas->Pen->Color = foundLast ? (Graphics::TColor) RGB(255, 144, 144) : clRed;
       grid->Canvas->Ellipse(Rect.Left+2,Rect.Top+2,Rect.Right-2,Rect.Bottom-2);
     }
     if (found && xo->kl[N]&4) {//draw 'x'
-      grid->Canvas->Pen->Color = foundLast ? (Graphics::TColor) RGB(136, 136, 255) : clBlue;
+      grid->Canvas->Pen->Color = foundLast ? (Graphics::TColor) RGB(144, 144, 255) : clBlue;
       grid->Canvas->MoveTo(Rect.Left+2,Rect.Top+2);
       grid->Canvas->LineTo(Rect.Right-3,Rect.Bottom-3);
       grid->Canvas->MoveTo(Rect.Right-3,Rect.Top+2);
@@ -566,11 +566,11 @@ void __fastcall TMainForm::ButtonAClick(TObject *Sender)
     c->LineTo(x*0.12,x*0.192);
     c->Pen->Color = clRed;
     c->Ellipse(x*0.28,x*0.075,x*0.35,x*0.193);
-    c->TextOut(x*0.425 - x*x*0.00003,x*0.125,"v e r   2.1");
+    c->TextOut(x*0.425 - x*x*0.00003,x*0.125,"v e r   2.2");
     c->Font->Height = x*0.06;
     c->TextOut(x*0.15,x*0.544,"R  O  M  A  N      M  A  K  A  R  O  V");
     c->Font->Height = x*0.05;
-    c->TextOut(x*0.608,x*0.223,"  a u g u s t  2 0 1 6");
+    c->TextOut(x*0.608,x*0.223,"   j u l y   2 0 1 8");
     c->TextOut(x*0.075,x*0.484,"w r i t t e n   b y");
     c->TextOut(x*0.2,x*0.888,"e-mail:   partorgg@gmail.com");
     c->Font->Color = RGB(80,0,150);

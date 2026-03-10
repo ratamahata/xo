@@ -9,8 +9,10 @@
 class Grower : public GameBoard {
 
 public:
+        unsigned char dkl[fsize*fsize];
+
         Grower(SimplyNumbers *simplyGen, Hashtable *movesHash, int gameMode);
-        void grow();
+        void grow(int playMode);
         void gridClick(int Col, int Row);
         int  getRResult();
         void restartClick();
@@ -28,20 +30,19 @@ public:
         char* getMsg9();
         char* getMsgStatus();
 
-protected:
         volatile int userMoveRequested;
-        int resultRecieved;
-
-private:
 
         bool restartRequested;
         bool takeBackRequested;
         bool exitRequested;
         bool moveRequested;
 
+        int resultRecieved;
+
         int movesCount;
 
-        unsigned char dkl[fsize*fsize];
+
+private:
 
         char msg1[200];
         char msg2[200];

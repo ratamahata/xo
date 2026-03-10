@@ -328,13 +328,6 @@ void Expander::findMovesToExpand(int startPass) {
             // Логирование промахов...   printed as   miss5Count, miss4oCount, miss4Count, miss3oCount, miss3Count,
             if (curr->x4 > 0)  {
                 logger->miss5();
-                if (cnt < 10) {
-                    ++cnt;
-                    char msg7[200];
-                    curr->printPosition(msg7, 200);
-                    std::cout << "Miss5: " << msg7 << " from: " << startIdx << " to: " << i << " \n";
-                    printHistory();
-                }
             }
             else if (curr->o4 > 0) logger->miss4o();
             else if (curr->x3 > 0) logger->miss4();

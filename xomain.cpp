@@ -28,7 +28,16 @@ TMainForm *MainForm;
 DWORD WINAPI __stdcall grow(LPVOID lpParam) {
  TMainForm *f =(TMainForm*)lpParam;
  while (!f->exitRequested) {
-        f->xo->grow();
+
+         if (f->xo == NULL) {
+          Sleep(100);
+          continue;
+        }
+
+
+        f->xo->grow(f->ComboBoxMode->ItemIndex);
+        f->Invalidate();
+        f->grid->Invalidate();
  }
 }
 
@@ -41,12 +50,7 @@ __fastcall TMainForm::TMainForm(TComponent* Owner) : TForm(Owner) {
         this->Button1->Visible = false;
         this->LabelAverages->Visible = false;
 #endif
-  resultRecieved = 0;
-  restartRequested = false;
-  takeBackRequested = false;
   exitRequested = false;
-  moveRequested = false;
-  userMoveRequested = 255;
   viewmode = 0;
 
   lang = 1;
@@ -69,24 +73,7 @@ __fastcall TMainForm::TMainForm(TComponent* Owner) : TForm(Owner) {
 
 int TMainForm::transform(int move) {
   int x = move % 15, y = move / 15;
-  if (swapX) {
-        x = 14-x;
-  }
-  if (swapY) {
-        y = 14-y;
-  }
-  if (swapW) {
-        int t = x;
-        x = y;
-        y = t;
-  }
-//  if (swapXYW) {
-//        int t = x;
-//        x = 14-y;
-//        y = 14-t;
-//  }
-
-  return y*15+x;
+  return xo->transform(x,y);
 }
 //---------------------------------------------------------------------------
 
@@ -112,10 +99,10 @@ void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
   int N = transform(Row * grid->ColCount + Col);
   bool found = false;
   bool foundLast;
-  for(int i = 0; i < movesCount; ++i) {
+  for(int i = 0; i < xo->movesCount; ++i) {
       if (xo->getMove(i)->move == N) {
           found = true;
-          foundLast = i == movesCount - 1;
+          foundLast = i == xo->movesCount - 1;
           break;
       }
   }
@@ -144,12 +131,12 @@ void __fastcall TMainForm::gridDrawCell(TObject *Sender, int Col, int Row,
       grid->Canvas->LineTo(Rect.Left+2,Rect.Bottom-3);
     }
     if (CheckBoxSH->Checked) {//draw hint
-      grid->Canvas->Pen->Width = dkl[N] > 250 ? penW / 1.1 : penW / 1.5;
-      if (dkl[N]>=1  && xo->isAlllowed(N)) {
-        int d = 255 - dkl[N];
+      grid->Canvas->Pen->Width = xo->dkl[N] > 250 ? penW / 1.1 : penW / 1.5;
+      if (xo->dkl[N]>=1  && xo->isAlllowed(N)) {
+        int d = 255 - xo->dkl[N];
         grid->Canvas->Pen->Color = (Graphics::TColor) RGB(d, 255, d);
         float zf = penW*2;
-        if (movesCount%2) {
+        if (xo->movesCount%2) {
                 grid->Canvas->Ellipse(Rect.Left + zf, Rect.Top + zf,
                         Rect.Right - zf, Rect.Bottom - zf);
         } else {
@@ -176,11 +163,11 @@ void __fastcall TMainForm::gridClick  (TObject *Sender)
     else ButtonAClick(NULL);
     return;
   }
-  userMoveRequested = transform(grid->Row * grid->ColCount + grid->Col);
+  xo->userMoveRequested = transform(grid->Row * grid->ColCount + grid->Col);
 }
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::ButtonTBClick(TObject *Sender) {
-  takeBackRequested = true;/*
+    xo->takeBackRequested = true;/*
 if (xo->count)
   { xo->takeback();
     int i;
@@ -201,18 +188,18 @@ if (xo->count)
 }
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::ButtonMClick(TObject *Sender) {
-  moveRequested = true;
+    xo->moveRequested = true;
 }
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::aftermove()
 {
-  int res = resultRecieved;
-  resultRecieved = 0;
+  int res =     xo->resultRecieved;
+  xo->resultRecieved = 0;
   char f[] = "o.wav\0         \0";
-  if (xo->count%2) f[0] = 'x';
+  if (xo->movesCount%2) f[0] = 'x';
 //  Application->ProcessMessages();
   PlaySound(f,NULL,SND_FILENAME|SND_ASYNC);
-  StatusBar->Panels->Items[0]->Text = (AnsiString)(xo->count%2 ? 'O':'X')
+  StatusBar->Panels->Items[0]->Text = (AnsiString)(xo->movesCount%2 ? 'O':'X')
                                   + DBank->Items->Strings[21 + lang];
   if (res >= 32600)
   { PlaySound("gameover.wav",NULL,SND_FILENAME|SND_ASYNC);
@@ -242,7 +229,7 @@ void __fastcall TMainForm::aftermove()
 //---------------------------------------------------------------------------
 
 void __fastcall TMainForm::ButtonRClick(TObject *Sender) {
-  restartRequested = true;
+  xo->restartRequested = true;
 }
 
 //---------------------------------------------------------------------------
@@ -361,25 +348,30 @@ void __fastcall TMainForm::FormDestroy(TObject *Sender)
 
 void __fastcall TMainForm::FormPaint(TObject *Sender) {
 
-        if (resultRecieved != 0) {
+        if (xo->resultRecieved != 0) {
                 aftermove();
         }
 
-        Label1->Caption = msg1;
-        Label2->Caption = msg2;
-        Label3->Caption = msg3;
-        Label8->Caption = msg4;
-        LabelAverages->Caption = msg5;
-        StatusBar->Panels->Items[1]->Text = msgStatus;
+        Label1->Caption = xo->getMsg1();
+        Label2->Caption = xo->getMsg2();
+        Label3->Caption = xo->getMsg3();
+        Label8->Caption = xo->getMsg4();
+        LabelAverages->Caption = xo->getMsg5();
+        StatusBar->Panels->Items[1]->Text = xo->getMsgStatus();
 
 
         int r=0, b=0;
 
         if (cbVisualRating->Checked) {
-                if (this->xRating > 0) {
-                        r = 90*this->xRating/32600;
+                short int xRating =
+                          xo->movesCount%2
+                        ? xo->lastMove()->rating
+                        : -xo->lastMove()->rating;
+
+                if (xRating > 0) {
+                        r = 90*xRating/32600;
                 } else {
-                        b = -90*this->xRating/32600;
+                        b = -90*xRating/32600;
                 }
         }
 
@@ -406,9 +398,10 @@ void __fastcall TMainForm::FormShow(TObject *Sender)
   SimplyNumbers *sn = new SimplyNumbers();
   Hashtable *ht = new Hashtable(logger);
 
-  xo = new Grower(sn,ht,(SetupForm->balance ? 1 : 0));
+  xo = getXBoard(SetupForm->balance ? 1 : 0);
+
   xo->logger = logger;
-  movesCount = xo->count;
+  
 //  xo->mindepth = 1;
   
 }

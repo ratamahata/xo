@@ -39,7 +39,6 @@ Logger::Logger() {
         parents5Culled1 = 0;
         parents5Culled2 = 0;
 
-        persister = new Persister();
 }
 
 void Logger::hit() {
@@ -164,5 +163,4 @@ void Logger::cull(TRating ratingOld, TRating max_rating, TNode *node) {
     } else return;
 
     node->setFixedRating(true);
-    persister->save(node);
 }

@@ -5,8 +5,8 @@
 
 #include "Grower.h"
 #include <cstring>
-#include <thread>
-#include <chrono>
+//#include <thread>
+//#include <chrono>
 
 //---------------------------------------------------------------------------
 
@@ -21,6 +21,7 @@ Grower::Grower(SimplyNumbers *simplyGen, Hashtable *movesHash,
     userMoveRequested = 255;
     forward(112, node);
     expand(1, node);
+    movesCount = count;
 };
 
 
@@ -38,19 +39,17 @@ Grower::Grower(SimplyNumbers *simplyGen, Hashtable *movesHash,
 #define ZONE12_RATING 10000
 
 
-void Grower::grow() {
+void Grower::grow(int playMode) {
   static int count;
 
   int wizardMode = 1000;
   short int flowRating = 0;
 
-//   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL)) 
+//   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL))
 
   int childs0 = 0;
-  int playMode = 1;//0= Human vs Human, 1= Comp vs Human, 2= Comp vs Comp, 3= Debuts calc
-   
-//  unsigned long beginTime = GetTickCount();
-  while (!exitRequested) {
+  //int playMode = 1;//0= Human vs Human, 1= Comp vs Human, 2= Comp vs Comp, 3= Debuts calc
+
 
         //********* STEP 1   initialize ***************
 
@@ -178,7 +177,7 @@ void Grower::grow() {
                                 takeBackRequested = true;
                         }
                         ++count;
-                        continue;
+                        return;
                 }
         }
 
@@ -188,7 +187,7 @@ void Grower::grow() {
                                         ? childPerMove
                                         : 20000))) {
                 moveRequested = true;
-                continue;
+                return;
         }
 
         //********* STEP 4   tree grow ***************
@@ -200,8 +199,8 @@ void Grower::grow() {
           changed = false;
           ++count;
         } else {
-          
-          std::this_thread::sleep_for(std::chrono::nanoseconds(500000000));
+            Sleep(500);
+//          std::this_thread::sleep_for(std::chrono::nanoseconds(500000000));
           if (wizardMode) {
 
               if (mediumicPlay || playMode == 2) { //Comp vs Comp
@@ -211,7 +210,7 @@ void Grower::grow() {
               {
                     takeBackRequested = true;
               }
-              continue;
+              return;
           }
         }
 
@@ -242,7 +241,7 @@ void Grower::grow() {
               }
               //end hints calculation
 
-              movesCount = count;
+              movesCount = getMovesCount();
               int i1 = firstNode->totalChilds;
               int i2 = node->totalChilds;
 
@@ -281,8 +280,8 @@ void Grower::grow() {
 
               logger->printMissStats(msg6);
 
-              node->printPosition(msg7, 200);
-              node->printScores(msg8, 200);
+//              node->printPosition(msg7, 200);
+//              node->printScores(msg8, 200);
               //current()->printAttacks(msg9, 200);
 
 /* TODO
@@ -300,7 +299,6 @@ void Grower::grow() {
                 : -lastMove()->rating;
 
         }
-  }
 }
 
 

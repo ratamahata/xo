@@ -82,26 +82,17 @@ public:		// User declarations
     void __fastcall setoptions();
     //DWORD WINAPI __stdcall grow(LPVOID lpParam);
 
-    bool restartRequested;
-    bool takeBackRequested;
+//    bool restartRequested;
+//    bool takeBackRequested;
     bool exitRequested;
-    bool moveRequested;
-    int resultRecieved;
-    int userMoveRequested;
-    int movesCount;
+//    bool moveRequested;
+//    int resultRecieved;
+//    int userMoveRequested;
+//    int movesCount;
 
-    unsigned char dkl[fsize*fsize];
-    
-    char msg1[200];
-    char msg2[200];
-    char msg3[200];
-    char msg4[200];
-    char msg5[200];
-    short int xRating;
+//    char msgStatus[200];
 
-    char msgStatus[200];
-
-    bool swapX, swapY, swapW, swapXYW;
+//    bool swapX, swapY, swapW, swapXYW;
 
 };
 //---------------------------------------------------------------------------

@@ -3,17 +3,21 @@
 
 //#pragma hdrstop
 
-#include <mem.h>
-#include "cursor.h"
+#include <iostream>
+#include <memory.h>
+#include "Cursor.h"
 
 
 //---------------------------------------------------------------------------
 
 //#pragma package(smart_init)
 
-Cursor::CursorHistory::CursorHistory() {
-        setmem((void*)en, 0, sizeof(CursorHistory));
+CursorHistory::CursorHistory() {
+        memset((void*)en, 0, sizeof(CursorHistory));
 };
+
+#include <cstdio> // Для snprintf
+
 
 //-------------------------------  CURSOR -----------------------------------
 
@@ -22,15 +26,19 @@ Cursor::Cursor(SimplyNumbers *simplyGen, Hashtable *movesHash) {
         this->movesHash = movesHash;
         memset(history,0,sizeof(CursorHistory)*TOTAL_CELLS);
         count = 0;
+        count0 = 0;
+        building = false;
+        cnt = 0;
 };
 
 //=============================================================================
 
-inline Cursor::CursorHistory *Cursor::current() {
+//inline
+CursorHistory *Cursor::current() {
         return &(history[count-1]);
 }
 
-Cursor::CursorHistory *Cursor::getMove(int i) {
+CursorHistory *Cursor::getMove(int i) {
         return &(history[i]);
 }
 
@@ -60,9 +68,19 @@ bool Cursor::forward(TMove N) {
   THash hashCodeX = node->hashCodeO;
   THash hashCodeO = node->hashCodeX * simplyGen->getHash(N);
 
-  TNode *nextNode = movesHash->get(hashCodeX, hashCodeO, node->age + 1);
+  bool created = false;
+  TNode *nextNode = movesHash->getOrCreate(hashCodeX, hashCodeO, node->age + 1, created);
   if (nextNode == NULL) {
-        return false;//no entry, return error
+    logger->log("Error creating node.");
+    return false;
+}
+  if (created) {
+
+    rate(node, nextNode, N);
+    ++node->totalChilds;
+
+    logger->missNode(nextNode);
+    logger->log("Warning: not existed node.");
   }
 
   return forward(N, nextNode);
@@ -71,12 +89,8 @@ bool Cursor::forward(TMove N) {
 //=============================================================================
 bool Cursor::forward(TMove N, TNode* node) {
 
-//  if (kl[N] > 3) {//TODO
-//    return (bool)N / 0;
-//  }
 
   int x = N % 15, y = N / 15;
-
 
   //begin: forward cursor
   TByte prevVal = kl[N];
@@ -88,6 +102,7 @@ bool Cursor::forward(TMove N, TNode* node) {
   curr->node = node;
   curr->move = N;
   curr->previousKlValue = prevVal;
+
 
   //begin: update simmetries history
         int d = 0,i;
@@ -247,4 +262,47 @@ inline bool Cursor::allow(int move) {
 }
 
 
+//------------------------------------------------------------------------------
 
+int Cursor::getMovesCount() {
+  return count0 > 0 && count0<=count ? count0 : count;
+}
+
+
+//------------------------------------------------------------------------------
+
+void Cursor::printHistory(const char* pref, TNode *node) {
+    char buf[200];
+    node->printPosition(buf, 200);
+    std::cout << pref << buf << " \n";
+    std::cout << "nChilds=" << node->totalChilds
+        << " Direct " << (int)(node->totalDirectChilds)
+        << " Rage Def " << node->isRageDef()
+        << " Rage Attk " << node->isRageAttack()
+        << " Rating " << node->rating
+        << " Attacks count (self)  " << (int)node->o4 << "+" << (int)node->o3 << "+" << (int)node->o2
+        << " Attacks count (op)  " << (int)node->x4 << "+" << (int)node->x3 << "+" << (int)node->x2
+        << "\n";
+    printHistory();
+}
+
+void Cursor::printHistory() {
+    // 1. Собираем ходы X (Крестики) - теперь это 2-й, 4-й ходы партии (индексы 0, 2, 4...)
+    std::cout << "X: ";
+    bool firstX = true;
+    for (int i = 0; i < count; i += 2) {
+        if (!firstX) std::cout << ", ";
+        std::cout << (int)history[i].move;
+        firstX = false;
+    }
+
+    // 2. Собираем ходы O (Нолики) - теперь это 3-й, 5-й ходы партии (индексы 1, 3, 5...)
+    std::cout << " | O: ";
+    bool firstO = true;
+    for (int i = 1; i < count; i += 2) {
+        if (!firstO) std::cout << ", ";
+        std::cout << (int)history[i].move;
+        firstO = false;
+    }
+    std::cout << std::endl;
+}

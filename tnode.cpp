@@ -1,16 +1,77 @@
-#include "tnode.h"
+#include <iostream>
+
+#include "TNode.h"
+
+// Define and optionally initialize the static members
+volatile double TNode::avgDiff = 0.0;
+volatile double TNode::avgSquareDiff = 0.0;
+volatile long long TNode::updatesCount = 0;
+volatile long long TNode::skippedCount = 0;
+volatile long long TNode::maxUpdated = 0;
+volatile TNode* TNode::first = NULL;
 
 TNode::TNode() {
+    //std::cout << "TNode Start!\n";
     totalChilds = 0;
     rating = 0;
+    flags = 0;
     totalDirectChilds = 0;
     hashCodeX = 1;
     hashCodeO = 1;
     x2 = x3 = x4 = o2 = o3 = o4 = 0;
-    fixedRating = false;
     next = 0;
+    ownAttacks = 0;
+    attacks[0].l = attacks[0].r = 0;
+    if (first == NULL) first = this;
 };
 
+
+#include <cstdio>
+#include <string>
+
+void TNode::printPosition(char* buffer, size_t size) {
+    // 1. Печатаем хеши
+    int offset = snprintf(buffer, size, "Hash %llu / %llu",
+                          (unsigned long long)hashCodeX,
+                          (unsigned long long)hashCodeO);
+
+    // Проверяем, есть ли вообще атаки (хотя бы первая пара не нулевая)
+    if (attacks[0].l != 0 || attacks[0].r != 0) {
+        offset += snprintf(buffer + offset, size - offset, " | Atks: ");
+    }
+
+    // 2. Проходим по массиву атак
+    for (int i = 0; i < MAX_ATTACK_2; ++i) {
+        if (attacks[i].l == 0 && attacks[i].r == 0) break; // Конец списка
+        if (offset >= size - 10) break; // Запас для предотвращения обрезания
+
+        bool isOwn = (i < ownAttacks); // Первые ownAttacks элементов — наши
+
+        // Формат вывода: [L-R] для своих, (L-R) для чужих
+        // Если L == R, выводим одно число для экономии места
+        char open = isOwn ? '[' : '(';
+        char close = isOwn ? ']' : ')';
+
+        int written;
+        if (attacks[i].l == attacks[i].r) {
+            written = snprintf(buffer + offset, size - offset, "%c%hhu%c ",
+                               open, (unsigned char)attacks[i].l, close);
+        } else {
+            written = snprintf(buffer + offset, size - offset, "%c%hhu-%hhu%c ",
+                               open, (unsigned char)attacks[i].l, (unsigned char)attacks[i].r, close);
+        }
+
+
+        offset += written;
+    }
+}
+
+// Метод 2: Счетчики x и o
+void TNode::printScores(char* buffer, size_t size) {
+    snprintf(buffer, size, "%d+%d+%d / %d+%d+%d",
+             (int)o4, (int)o3, (int)o2,
+             (int)x4, (int)x3, (int)x2);
+}
 
 /*
 //==================================================================
@@ -128,7 +189,7 @@ int TNode::ratingToTotalChilds() {
 
 
 //==================================================================
-
+#define MANY_CHILDS 3000
 void TNode::update(short int newRating, unsigned int addedChilds) {
     totalChilds += addedChilds;
 
@@ -136,39 +197,74 @@ void TNode::update(short int newRating, unsigned int addedChilds) {
 
         if (rating == 0) {
             rating = newRating;
-        } else if ((rating <= - 16000 && newRating > rating) ||
-                (rating >= 16000 && newRating < rating)) {
+//        } else if ((rating <= - 16000 && newRating > rating) ||
+//                (rating >= 16000 && newRating < rating)) {
                 //suppress decreasing of rating
-                if (totalChilds > 150000) {
-                        ++skippedCount;
-                }
+//                if (totalChilds > 150000) {
+//                        ++TNode::skippedCount;
+//                }
         } else {
-                if (totalChilds > 150000) {
-                    double diff = (newRating - rating)*100.0;
+                if (this==first){//
+                    double diff = (newRating - rating);
                     double sqDiff = diff > 0 ? diff : -diff;
                     avgDiff = (avgDiff*updatesCount + diff)/(updatesCount+1);
                     avgSquareDiff = (avgSquareDiff*updatesCount + sqDiff)/(updatesCount+1);
                     ++updatesCount;
+                    maxUpdated = totalChilds;
                 }
 
-                if (newRating > 16384) {
-                        rating = newRating - 1;
-                } else if (newRating < -16384) {
-                        rating = newRating + 1;
-//                } else if (totalChilds < 50000) {
-                } else {
-                        if (!fixedRating) {
+//                if (newRating > 16384) {
+//                        rating = newRating - 1;
+//                } else if (newRating < -16384) {
+//                        rating = newRating + 1;
+////                } else if (totalChilds < 50000) {
+//                } else {
+                        if (!isFixedRating()) {
                                 rating = newRating;
                         }
 //                } else if (totalChilds < 150000) {
 //                        rating = (short int)floor(0.5 + 0.99*newRating + 0.01*rating);
 //                } else {
 //                        rating = (short int)floor(0.5 + 0.98*newRating + 0.02*rating);
-                }
+//                }
         }
     } else {
-        if (totalChilds > 150000) {
+        if (this==first){//totalChilds > MANY_CHILDS) {
                 ++skippedCount;
         }
     }
 };
+
+
+//==================================================================
+
+void TNode::setFixedRating(bool set) {
+    if (set) flags |= FLAG_FIXED_RATING;
+    else flags &= ~FLAG_FIXED_RATING;
+};
+bool TNode::isFixedRating() {
+    return (flags & FLAG_FIXED_RATING) != 0;
+};
+
+// --- Управление флагом Атаки ---
+void TNode::setRageAttack(bool set) {
+    if (set) flags |= FLAG_RAGE_ATTACK;
+    else flags &= ~FLAG_RAGE_ATTACK;
+}
+bool TNode::isRageAttack() {
+    return (flags & FLAG_RAGE_ATTACK) != 0;
+}
+
+// --- Управление флагом Защиты ---
+void TNode::setRageDef(bool set) {
+    if (set) flags |= FLAG_RAGE_DEF;
+    else flags &= ~FLAG_RAGE_DEF;
+}
+bool TNode::isRageDef() {
+    return (flags & FLAG_RAGE_DEF) != 0;
+}
+
+// Общий метод (если нужно проверить, является ли узел "форсированным" в принципе)
+bool TNode::isRageAny() {
+    return (flags & (FLAG_RAGE_ATTACK | FLAG_RAGE_DEF)) != 0;
+}

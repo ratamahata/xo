@@ -1,0 +1,64 @@
+//---------------------------------------------------------------------------
+
+#ifndef GrowerH
+#define GrowerH
+//---------------------------------------------------------------------------
+
+#include "GameBoard.h"
+
+class Grower : public GameBoard {
+
+public:
+        Grower(SimplyNumbers *simplyGen, Hashtable *movesHash, int gameMode);
+        void grow();
+        void gridClick(int Col, int Row);
+        int  getRResult();
+        void restartClick();
+        void takeBackClick();
+        void moveClick();
+
+        char* getMsg1();
+        char* getMsg2();
+        char* getMsg3();
+        char* getMsg4();
+        char* getMsg5();
+        char* getMsg6();
+        char* getMsg7();
+        char* getMsg8();
+        char* getMsg9();
+        char* getMsgStatus();
+
+protected:
+        volatile int userMoveRequested;
+        int resultRecieved;
+
+private:
+
+        bool restartRequested;
+        bool takeBackRequested;
+        bool exitRequested;
+        bool moveRequested;
+
+        int movesCount;
+
+        unsigned char dkl[fsize*fsize];
+
+        char msg1[200];
+        char msg2[200];
+        char msg3[200];
+        char msg4[200];
+        char msg5[200];
+        char msg6[200];
+        char msg7[200];
+        char msg8[200];
+        char msg9[200];
+        short int xRating;
+
+        char msgStatus[200];
+
+};
+
+Grower* getXBoard(int gameMode);
+
+#endif
+ 

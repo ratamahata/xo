@@ -2,27 +2,60 @@
 #ifndef tnodeH
 #define tnodeH
 //---------------------------------------------------------------------------
-#include "tnode.h"
+#include "TNode.h"
 
-#define NULL 0
+#include <stdint.h>
+#include <cstddef>
+
+//#define NULL 0
 
 typedef unsigned char TByte;
 typedef TByte TMove;
-typedef unsigned int THash;
-#define THASH_MAX 4294967295U //ULLONG_MAX from <limits.h>
-#define BIG_PARENT 200
-#define BIG_GRAND_PARENT 10000
-#define CULL_RATING1 10000
-#define CULL_RATING2 20000
+typedef uint32_t THash;
+#define THASH_MAX 4294967295U //ULONG_MAX from <limits.h>
+
+#define BIG_PARENT1    7000
+#define BIG_PARENT2   14000
+#define BIG_PARENT3   28000
+#define BIG_PARENT4   60000
+#define BIG_PARENT5  120000
+
+#define CULL_RATING1 8000
+#define CULL_RATING2 13000
+
+#define MAX_ATTACK_1 6
+#define MAX_ATTACK_2 7
+
 typedef signed short int TRating;
+
+#define FLAG_FIXED_RATING 1 // 00000001
+#define FLAG_RAGE_ATTACK 2 // 00000010
+#define FLAG_RAGE_DEF    4 // 00000100
+
+    class TAttack
+    {
+        public:
+        TMove l,r;
+    };
 
     class TNode {
       public:
-      static double avgDiff, avgSquareDiff;
-      static long long updatesCount;
-      static long long skippedCount;
+      volatile static double avgDiff, avgSquareDiff;
+      volatile static long long updatesCount;
+      volatile static long long skippedCount;
+      volatile static long long maxUpdated;
+      volatile static TNode* first;
 
       TNode();
+      void setFixedRating(bool);
+      bool isFixedRating();
+
+    void setRageAttack(bool set);
+    bool isRageAttack();
+    void setRageDef(bool set);
+    bool isRageDef();
+    bool isRageAny();
+
       void update(short int newRating, unsigned int addedChilds);
       int ratingToTotalChilds();
 //      int removeChild(TNode *child);
@@ -32,12 +65,16 @@ typedef signed short int TRating;
 
 
       unsigned int totalChilds;
-      TRating rating;
+      volatile TRating rating;
 //      TNode *firstParent;//deprecated
 //      TNodeLink2 *nextParent;//deprecated
 //      TNodeLink *childs;//deprecated
 //      void *reserved;
-      bool fixedRating;
+
+      TByte flags;
+      TByte ownAttacks;
+      TAttack attacks[MAX_ATTACK_2]{};
+
       TByte //move,
         totalDirectChilds,
         x2,x3,x4,//checks after this move of opponent
@@ -46,6 +83,10 @@ typedef signed short int TRating;
 
       THash hashCodeX, hashCodeO;
       TNode *next;
+
+      void printPosition(char* buffer, size_t size);
+      void printScores(char* buffer, size_t size);
+
     };
 
 

@@ -9,9 +9,10 @@
 
 #pragma package(smart_init)
 
-Relator::Relator(SimplyNumbers* sn, Hashtable* ht) : Evaluator(sn, ht){};
+Relator::Relator(SimplyNumbers* sn, Hashtable* ht) : Evaluator(sn, ht) {};
 
 TNode* Relator::getChild(TNode *parent, TMove childMove) {
+   if (childMove == 112) return NULL;
    THash hashCodeX = parent->hashCodeO;
    THash hashCodeO = parent->hashCodeX * simplyGen->getHash(childMove);
    return movesHash->get(hashCodeX, hashCodeO, parent->age + 1);
@@ -56,7 +57,7 @@ void Relator::updateParents(int addedChilds) {
 //=============================================================================
 //Private recursive method, used to update parent nodes of "node" by stages:
 //"depth" parameter sets which parent level to update (0-parents, 1-grandparents and so on)
-//"removed" parameter sets a number of moves that was virually removed when calculating parent
+//"removed" parameter sets a number of moves that was virtually removed when calculating parent
 //"max" - maximum removable index
 void Relator::updateParents(TNode *node, int removed, int removedFromEnd,
                 bool onlyLastRemoved, bool updateRating, int max, int addedChilds) {
@@ -133,28 +134,22 @@ bool Relator::updateNode(TNode *node, TNode *from, bool updateRating, int addedC
                 //updateNode(node, from, updateRating, addedChilds, removedFromEnd);
         } */
 
+        if (max_rating < -5000) max_rating += 1;
+        else if (max_rating > 5000) max_rating -= 1;
+
         if (node->rating != -max_rating) {
-            TRating absRatingOld = node->rating;
-            TRating absRating = node->rating = -max_rating;
+            TRating ratingOld = node->rating;
+            node->update(-max_rating, addedChilds);
 
-            if (node->totalChilds >= BIG_PARENT) {
-                if (absRatingOld < 0) absRatingOld = -absRatingOld;
-                if (absRating < 0) absRating = -absRating;
+            if (node->totalChilds >= BIG_PARENT1 && !node->isFixedRating()) {
 
-                if (absRatingOld < CULL_RATING1 && absRating >= CULL_RATING1) {
-                        ++logger->bigParentsCulled1;
-                        if (node->totalChilds >= BIG_GRAND_PARENT) {
-                                ++logger->bigGrandParentsCulled1;
-                        }
-                } else if (absRatingOld < CULL_RATING2 && absRating >= CULL_RATING2) {
-                        ++logger->bigParentsCulled2;
-                        if (node->totalChilds >= BIG_GRAND_PARENT) {
-                                ++logger->bigGrandParentsCulled2;
-                        }
-                }
+                logger->cull(ratingOld, max_rating, node);
             }
-            ratingUpdated = true;
+
+            return ratingUpdated = true;
         }
+        node->update(-max_rating, addedChilds);
+        return false;
     }
     node->totalChilds += addedChilds;
     return ratingUpdated;
@@ -189,18 +184,6 @@ TNode* Relator::getParent(TNode *node, TMove move) {
         }
     }
     return ret;
-};
-
-//----------------------------------------------------------------------------
-
-void Relator::findMovesToExpand() {//TODO use single iteration
-    newChilds.count = 0;
-    bool mode1 = gameMode == 1 &&  count == 2;
-    for (TMove i = 0; i < TOTAL_CELLS; ++i) {
-        if ((mode1 ? kl[i]<=1 && isPerspectiveChildMode1(i) : isPerspectiveChild(i))  && isAlllowed(i)) {
-                newChilds.move[newChilds.count++] = i;
-        }
-    }
 };
 
 //----------------------------------------------------------------------------

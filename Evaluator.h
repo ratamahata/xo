@@ -10,17 +10,21 @@
 
 class Evaluator : public Cursor {
 
-        private:
-        int cnt;
-        inline bool comp(int x, int y, unsigned char c);
-        void addAttackPair(TNode* destNode, int x1, int y1, int x2, int y2, int &totalAttacks);
+        public:
+        Evaluator(SimplyNumbers* sn, Hashtable* ht);
+        void rate(TNode *src, TNode *destNode, TMove move); //fills {totalRating,x3,x4,o3,o4} of dest;
 
         protected:
         bool  scanlines(int BlNo, int &lines, int N);
         int scanlines(int BlNo, int &lines, int N, TNode *destNode, int &nAttacks);
 
-        public:
-        Evaluator(SimplyNumbers* sn, Hashtable* ht);
-        void rate(TNode *src, TNode *destNode, TMove move); //fills {totalRating,x3,x4,o3,o4} of dest;
+        private:
+        int cnt;
+        inline bool comp(int x, int y, unsigned char c);
+        void addAttackPair(TNode* destNode, int x1, int y1, int x2, int y2, int &totalAttacks);
+	bool isMoveBlockingAttack(const TAttack& atk, TMove m);
+	TMove findNextFreeInward(TMove from, TMove target);
+	void updateRange(int cIndex, int sdv, int x, int y, int vx, int vy, 
+                  int &firstC, int &lastC);	
 };
 #endif

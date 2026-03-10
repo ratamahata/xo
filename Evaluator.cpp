@@ -131,6 +131,24 @@ void Evaluator::addAttackPair(TNode* destNode, int x1, int y1, int x2, int y2, i
 
 
 
+// Добавьте это объявление в заголовочный файл в секцию private класса Evaluator:
+/*
+void updateRange(int cIndex, int sdv, int x, int y, int vx, int vy, 
+                  int &firstC, int &lastC);
+*/
+
+// Реализация вспомогательного метода
+void Evaluator::updateRange(int cIndex, int sdv, int x, int y, int vx, int vy, 
+                             int &firstC, int &lastC) {
+    if (cIndex < 0 || cIndex >= 9) return;
+    
+    // Вычисляем координаты для проверки
+    if (comp(x + vx * (cIndex - sdv), y + vy * (cIndex - sdv), 2)) {
+        if (firstC == -1 || cIndex < firstC) firstC = cIndex;
+        if (lastC == -1 || cIndex > lastC) lastC = cIndex;
+    }
+}
+
 int Evaluator::scanlines(int BlNo, int &lines, int N, TNode *destNode, int &totalAttacks) {
     static const int bl[18] = {0, 1, 2, 6, 16, 21, 30, 6, 21, 30, 43, 53, 54, 9, 11, 30, 53};
     static const int vec[4][2] = {{1, 1}, {-1, 1}, {1, 0}, {0, 1}};
@@ -153,7 +171,8 @@ int Evaluator::scanlines(int BlNo, int &lines, int N, TNode *destNode, int &tota
                             unsigned char pChar = line[id][nline][c];
                             if (!pChar) break;
                             if (!comp(x + vx * (c - sdv), y + vy * (c - sdv), pChar & 63)) {
-                                match = false; break;
+                                match = false; 
+                                break;
                             }
                         }
 
@@ -163,39 +182,43 @@ int Evaluator::scanlines(int BlNo, int &lines, int N, TNode *destNode, int &tota
 
                             if (destNode) {
                                 int firstC = -1, lastC = -1;
-                                auto updateRange = [&](int cIndex) {
-                                    if (cIndex < 0 || cIndex >= 9) return;
-                                    if (comp(x + vx * (cIndex - sdv), y + vy * (cIndex - sdv), 2)) {
-                                        if (firstC == -1 || cIndex < firstC) firstC = cIndex;
-                                        if (lastC == -1 || cIndex > lastC) lastC = cIndex;
-                                    }
-                                };
 
                                 if (BlNo == 10 && (nline == bl[10] || nline == bl[10] + 1)) {
                                     int xPos = -1;
-                                    for (int c = 0; c < 9; c++) if (line[0][nline][c] == 4) { xPos = c; break; }
+                                    for (int i = 0; i < 9; i++) {
+                                        if (line[0][nline][i] == 4) { xPos = i; break; }
+                                    }
                                     if (xPos != -1) {
-                                        int leftEnd = (xPos < sdv) ? xPos : sdv;
+                                        int leftEnd  = (xPos < sdv) ? xPos : sdv;
                                         int rightEnd = (xPos > sdv) ? xPos : sdv;
                                         int dist = (xPos > sdv) ? (xPos - sdv) : (sdv - xPos);
-                                        if (dist == 1) { updateRange(leftEnd-1); updateRange(leftEnd-2); updateRange(rightEnd+1); updateRange(rightEnd+2); }
-                                        else if (dist == 2) { updateRange(leftEnd+1); updateRange(leftEnd-1); updateRange(rightEnd+1); }
-                                        else if (dist == 3) { updateRange(leftEnd+1); updateRange(leftEnd+2); }
+                                        
+                                        if (dist == 1) { 
+                                            updateRange(leftEnd-1, sdv, x, y, vx, vy, firstC, lastC); 
+                                            updateRange(leftEnd-2, sdv, x, y, vx, vy, firstC, lastC); 
+                                            updateRange(rightEnd+1, sdv, x, y, vx, vy, firstC, lastC); 
+                                            updateRange(rightEnd+2, sdv, x, y, vx, vy, firstC, lastC); 
+                                        }
+                                        else if (dist == 2) { 
+                                            updateRange(leftEnd+1, sdv, x, y, vx, vy, firstC, lastC); 
+                                            updateRange(leftEnd-1, sdv, x, y, vx, vy, firstC, lastC); 
+                                            updateRange(rightEnd+1, sdv, x, y, vx, vy, firstC, lastC); 
+                                        }
+                                        else if (dist == 3) { 
+                                            updateRange(leftEnd+1, sdv, x, y, vx, vy, firstC, lastC); 
+                                            updateRange(leftEnd+2, sdv, x, y, vx, vy, firstC, lastC); 
+                                        }
                                     }
                                 } else if (BlNo == 2 || BlNo == 4 || BlNo == 5 || BlNo == 10) {
-                                    for (int c = 0; c < 9; c++)
-                                        if (c != sdv && (line[id][nline][c] & 64)) updateRange(c);
+                                    for (int c = 0; c < 9; c++) {
+                                        if (c != sdv && (line[id][nline][c] & 64)) {
+                                            updateRange(c, sdv, x, y, vx, vy, firstC, lastC);
+                                        }
+                                    }
 
-                                    // --- ЛОГИКА ДЛЯ ШАБЛОНА "__XXX_" (BlNo 5, индекс 1) ---
                                     if (BlNo == 5 && nline == bl[5] + 1) {
-                                        // Находим границы текущего совпадения в цикле sdv
-                                        // Шаблон "__XXX_" имеет длину 6. Он занимает индексы от 0 до 5 относительно начала.
-                                        // Но нам проще проверить клетки сразу ЗА границами найденных атак.
-                                        if (firstC != -1) {
-                                            // Проверяем клетку СПРАВА от последней найденной атаки
-                                            if (lastC < 8) {
-                                                updateRange(lastC + 1);
-                                            }
+                                        if (firstC != -1 && lastC < 8) {
+                                            updateRange(lastC + 1, sdv, x, y, vx, vy, firstC, lastC);
                                         }
                                     }
                                 }
@@ -217,11 +240,43 @@ int Evaluator::scanlines(int BlNo, int &lines, int N, TNode *destNode, int &tota
     return totalFound;
 }
 
+
 //==============================================================================
 
+bool Evaluator::isMoveBlockingAttack(const TAttack& atk, TMove m) {
+    if (atk.l == 0) return false;
+    if (m == atk.l || m == atk.r) return true;
+    
+    int x1 = atk.l % fsize, y1 = atk.l / fsize;
+    int x2 = atk.r % fsize, y2 = atk.r / fsize;
+    int mx = m % fsize, my = m / fsize;
+    
+    bool withinX = (mx >= x1 && mx <= x2) || (mx >= x2 && mx <= x1);
+    bool withinY = (my >= y1 && my <= y2) || (my >= y2 && my <= y1);
+    
+    // Проверка коллинеарности через векторное произведение (целочисленное)
+    bool collinear = (my - y1) * (x2 - x1) == (y2 - y1) * (mx - x1);
+    
+    return collinear && withinX && withinY;
+}
+
+TMove Evaluator::findNextFreeInward(TMove from, TMove target) {
+    int x = from % fsize, y = from / fsize;
+    int tx = target % fsize, ty = target / fsize;
+    int dx = (tx > x) ? 1 : (tx < x ? -1 : 0);
+    int dy = (ty > y) ? 1 : (ty < y ? -1 : 0);
+
+    while (x != tx || y != ty) {
+        x += dx;
+        y += dy;
+        if (comp(x, y, 2)) return (TMove)(x + y * fsize);
+    }
+    return 0;
+}
+
 void Evaluator::rate(TNode *src, TNode *destNode, TMove move) {
-    // 1. Поиск границ атак в src
     int srcTotal = src->ownAttacks;
+    // В 2000-х MAX_ATTACK_2 должен быть константой или макросом
     while (srcTotal < MAX_ATTACK_2 && (src->attacks[srcTotal].l != 0 || src->attacks[srcTotal].r != 0)) {
         srcTotal++;
     }
@@ -229,36 +284,7 @@ void Evaluator::rate(TNode *src, TNode *destNode, TMove move) {
     destNode->ownAttacks = 0;
     int nAttacks = 0;
 
-    // Вспомогательная лямбда для проверки блокировки точки на отрезке
-    auto isMoveBlockingAttack = [&](const TAttack& atk, TMove m) {
-        if (atk.l == 0) return false;
-        if (m == atk.l || m == atk.r) return true;
-        int x1 = atk.l % fsize, y1 = atk.l / fsize;
-        int x2 = atk.r % fsize, y2 = atk.r / fsize;
-        int mx = m % fsize, my = m / fsize;
-        bool withinX = (mx >= x1 && mx <= x2) || (mx >= x2 && mx <= x1);
-        bool withinY = (my >= y1 && my <= y2) || (my >= y2 && my <= y1);
-        bool collinear = (my - y1) * (x2 - x1) == (y2 - y1) * (mx - x1);
-        return collinear && withinX && withinY;
-    };
-
-    // Обновленная лямбда: ищет свободную клетку ВКЛЮЧАЯ target
-    auto findNextFreeInward = [&](TMove from, TMove target) -> TMove {
-        int x = from % fsize, y = from / fsize;
-        int tx = target % fsize, ty = target / fsize;
-        int dx = (tx > x) ? 1 : (tx < x ? -1 : 0);
-        int dy = (ty > y) ? 1 : (ty < y ? -1 : 0);
-
-        // Шагаем от move в сторону target, пока не дойдем до цели (включительно)
-        while (x != tx || y != ty) {
-            x += dx;
-            y += dy;
-            if (comp(x, y, 2)) return (TMove)(x + y * fsize);
-        }
-        return 0;
-    };
-
-    // 2. Атаки оппонента становятся НАШИМИ (Удаляем, если попал ход, т.к. пересоздадим)
+    // 2. Атаки оппонента становятся НАШИМИ
     for (int i = src->ownAttacks; i < srcTotal; ++i) {
         if (destNode->ownAttacks < MAX_ATTACK_1) {
             if (!isMoveBlockingAttack(src->attacks[i], move)) {
@@ -278,19 +304,16 @@ void Evaluator::rate(TNode *src, TNode *destNode, TMove move) {
         if (isMoveBlockingAttack(atk, move)) {
             if (move == atk.l || move == atk.r) {
                 TMove other = (move == atk.l) ? atk.r : atk.l;
-
-                // Ищем новую свободную границу вместо заблокированной 'move'
                 TMove nextFree = findNextFreeInward(move, other);
 
                 if (nextFree == 0) {
-                    keep = false; // Все позиции заняты или атака схлопнулась
+                    keep = false;
                 } else {
                     if (move == atk.l) atk.l = nextFree; else atk.r = nextFree;
                 }
             } else {
                 // Ход в центр интервала
                 if (src->o3 > 0 && comp(atk.l % fsize, atk.l / fsize, 2) && comp(atk.r % fsize, atk.r / fsize, 2)) {
-                    // Пытаемся подрезать с одной из сторон, ища свободную клетку
                     if (move - atk.l < atk.r - move) {
                         TMove next = findNextFreeInward(move, atk.r);
                         if (next != 0) atk.l = next; else keep = false;
@@ -309,9 +332,10 @@ void Evaluator::rate(TNode *src, TNode *destNode, TMove move) {
         }
     }
 
-    if (nAttacks < MAX_ATTACK_2) destNode->attacks[nAttacks] = {0, 0};
-
-    // ... остальной код (scanlines и т.д.)
+    if (nAttacks < MAX_ATTACK_2) {
+        destNode->attacks[nAttacks].l = 0;
+        destNode->attacks[nAttacks].r = 0;
+    }
 
   static const int vec[4][2] = {{1,1},{-1,1},{1,0},{0,1}};
 

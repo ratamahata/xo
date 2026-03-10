@@ -4,8 +4,7 @@
 #define LoggerH
 #include <stdio.h>
 //---------------------------------------------------------------------------
-#include <TNode.h>
-#include <Persister.h>
+#include "TNode.h"
 
 class Logger {
 
@@ -28,7 +27,6 @@ class Logger {
         int expandOdd;
         int reserved;
 
-        Persister *persister;
   public:
 
         int parents1Culled1;

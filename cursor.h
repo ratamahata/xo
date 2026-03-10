@@ -37,25 +37,29 @@ class Cursor {
 
 public:
 
+  TMove kl[fsize*fsize]; // moves on field
+  int count;  //count of moves made (may include additional moves of AI, if called while in calculation phase)  
   Logger *logger;
   int getMovesCount();
   virtual void rate(TNode *src, TNode *destNode, TMove move) = 0;
-
+  bool isAlllowed(TMove N);
+  CursorHistory *getMove(int i);
+  TNode *lastMove();
+  TNode *getFirstNode();
+  
   void printHistory();
   void printHistory(const char* pref, TNode *node);
 
 protected:
 
   int gameMode;//0 = Go - Moku, 1 = 5-in-a-row, 2 = Renjue
-  int count;  //count of moves made (may include additional moves of AI, if called while in calculation phase)
+
   int count0; //count of moves made (only by players)
   bool building; //indicates that some moves made by AI while executing buildTree() function, which will be taken back
 
   //inline
   CursorHistory *current();
-  TNode *getFirstNode();
-  TNode *lastMove();
-  CursorHistory *getMove(int i);
+
   void restart();
 
   Hashtable *movesHash;
@@ -64,9 +68,6 @@ protected:
 
   SimplyNumbers *simplyGen;
   TMove moves[fsize*fsize]; //ordered history of moves
-
-  TMove kl[fsize*fsize]; // moves on field
-  bool isAlllowed(TMove N);
 
 private:
         int cnt;

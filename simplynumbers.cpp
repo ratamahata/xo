@@ -14,6 +14,7 @@ SimplyNumbers::SimplyNumbers() {
 }
 
 void SimplyNumbers::init() {
+/*
     std::ifstream fin(PRIMES_FILE);
     if (!fin.is_open()) return;
 
@@ -24,7 +25,7 @@ void SimplyNumbers::init() {
         getHash((TMove)moveValue);
         fin >> comma; // consume the comma
     }
-    fin.close();
+    fin.close();*/
 }
 
 unsigned long SimplyNumbers::getExistingHash(TMove move) {
@@ -60,6 +61,7 @@ unsigned long SimplyNumbers::getHash(TMove move) {
         hashValues[move] = next;
         b = next;
 
+        /*
         if (!isInit) {
             // Persist the move to the file only if it's a new assignment
             // (Prevents duplicates during the init() loop itself)
@@ -68,7 +70,7 @@ unsigned long SimplyNumbers::getHash(TMove move) {
                 fout << (int)move << ", ";
                 fout.close();
             }
-        }
+        }*/
     }
 
     return b;

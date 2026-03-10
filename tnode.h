@@ -73,7 +73,7 @@ typedef signed short int TRating;
 
       TByte flags;
       TByte ownAttacks;
-      TAttack attacks[MAX_ATTACK_2]{};
+      TAttack attacks[MAX_ATTACK_2];
 
       TByte //move,
         totalDirectChilds,
@@ -83,10 +83,6 @@ typedef signed short int TRating;
 
       THash hashCodeX, hashCodeO;
       TNode *next;
-
-      void printPosition(char* buffer, size_t size);
-      void printScores(char* buffer, size_t size);
-
     };
 
 

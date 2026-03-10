@@ -273,7 +273,7 @@ int Cursor::getMovesCount() {
 
 void Cursor::printHistory(const char* pref, TNode *node) {
     char buf[200];
-    node->printPosition(buf, 200);
+    //node->printPosition(buf, 200);
     std::cout << pref << buf << " \n";
     std::cout << "nChilds=" << node->totalChilds
         << " Direct " << (int)(node->totalDirectChilds)

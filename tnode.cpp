@@ -21,57 +21,14 @@ TNode::TNode() {
     x2 = x3 = x4 = o2 = o3 = o4 = 0;
     next = 0;
     ownAttacks = 0;
-    attacks[0].l = attacks[0].r = 0;
+    for (int i=0; i<MAX_ATTACK_2; ++i)
+        attacks[i].l = attacks[i].r = 0;
     if (first == NULL) first = this;
 };
 
 
 #include <cstdio>
 #include <string>
-
-void TNode::printPosition(char* buffer, size_t size) {
-    // 1. Печатаем хеши
-    int offset = snprintf(buffer, size, "Hash %llu / %llu",
-                          (unsigned long long)hashCodeX,
-                          (unsigned long long)hashCodeO);
-
-    // Проверяем, есть ли вообще атаки (хотя бы первая пара не нулевая)
-    if (attacks[0].l != 0 || attacks[0].r != 0) {
-        offset += snprintf(buffer + offset, size - offset, " | Atks: ");
-    }
-
-    // 2. Проходим по массиву атак
-    for (int i = 0; i < MAX_ATTACK_2; ++i) {
-        if (attacks[i].l == 0 && attacks[i].r == 0) break; // Конец списка
-        if (offset >= size - 10) break; // Запас для предотвращения обрезания
-
-        bool isOwn = (i < ownAttacks); // Первые ownAttacks элементов — наши
-
-        // Формат вывода: [L-R] для своих, (L-R) для чужих
-        // Если L == R, выводим одно число для экономии места
-        char open = isOwn ? '[' : '(';
-        char close = isOwn ? ']' : ')';
-
-        int written;
-        if (attacks[i].l == attacks[i].r) {
-            written = snprintf(buffer + offset, size - offset, "%c%hhu%c ",
-                               open, (unsigned char)attacks[i].l, close);
-        } else {
-            written = snprintf(buffer + offset, size - offset, "%c%hhu-%hhu%c ",
-                               open, (unsigned char)attacks[i].l, (unsigned char)attacks[i].r, close);
-        }
-
-
-        offset += written;
-    }
-}
-
-// Метод 2: Счетчики x и o
-void TNode::printScores(char* buffer, size_t size) {
-    snprintf(buffer, size, "%d+%d+%d / %d+%d+%d",
-             (int)o4, (int)o3, (int)o2,
-             (int)x4, (int)x3, (int)x2);
-}
 
 /*
 //==================================================================

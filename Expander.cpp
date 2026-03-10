@@ -62,22 +62,8 @@ void Expander ::expand() {
   cursor->totalDirectChilds = newChilds.count;
 
   updateParents(created);
-// TODO:
-//  updatedParentsCounter = 0;
-//  updateParents(cursor, cursor->totalChilds, oldRating);
-//  current()->
 
   if (count > max_count) max_count = count;
 };
 
-/*
-//==================================================================
-TNode* Expander ::createNode(THash hX, THash hO, TByte age) {
-    TNode *node = new TNode();
-    node->hashCodeX = hX;
-    node->hashCodeO = hO;
-    node->age = age;
-    movesHash->put(node);
-    return node;
-}
-*/
+
